@@ -1,0 +1,87 @@
+<div class="conteudo_controller">
+    <div class="row-fluid">
+        <div class="span12">
+            <div class="well">
+                <div class="page-header">
+                    <h4>Visualização de Transporte > Veículo</h4>
+                </div>
+                <dl class="dl-horizontal">
+                    <dt>Id:</dt>
+                    <dd><?php echo $this->registro->getId(); ?></dd>
+                </dl>
+                <dl class="dl-horizontal">
+                    <dt>Transporte:</dt>
+                    <dd><?php echo $this->registro->findParentRow("TbTransporte")->toString(); ?></dd>
+                </dl>
+                <dl class="dl-horizontal">
+                    <dt>Data Cadastro:</dt>
+                    <dd><?php echo Escola_Util::formatData($this->registro->data_cadastro); ?></dd>
+                </dl>
+                <dl class="dl-horizontal">
+                    <dt>Processo:</dt>
+                    <dd><?php echo $this->registro->mostrar_processo(); ?></dd>
+                </dl>
+<?php if ($this->veiculo) { ?>
+                <dl class="dl-horizontal">
+                    <dt>Tipo de Veículo:</dt>
+                    <dd><?php echo $this->veiculo->findParentRow("TbVeiculoTipo")->toString(); ?></dd>
+                </dl>
+                <dl class="dl-horizontal">
+                    <dt>Chassi:</dt>
+                    <dd><?php echo $this->veiculo->chassi; ?></dd>
+                </dl>
+                <dl class="dl-horizontal">
+                    <dt>Placa:</dt>
+                    <dd><?php echo $this->veiculo->mostrar_placa(); ?></dd>
+                </dl>
+                <dl class="dl-horizontal">
+                    <dt>Fabricante:</dt>
+                    <dd><?php echo $this->veiculo->findParentRow("TbFabricante")->toString(); ?></dd>
+                </dl>
+                <dl class="dl-horizontal">
+                    <dt>Ano Modelo:</dt>
+                    <dd><?php echo $this->veiculo->ano_modelo; ?></dd>
+                </dl>
+                <dl class="dl-horizontal">
+                    <dt>Estado:</dt>
+                    <dd><?php echo $this->veiculo->findParentRow("TbUf")->toString(); ?></dd>
+                </dl>
+                <dl class="dl-horizontal">
+                    <dt>Município:</dt>
+                    <dd><?php echo $this->veiculo->findParentRow("TbMunicipio")->toString(); ?></dd>
+                </dl>
+<?php } ?>
+                <dl class="dl-horizontal">
+                    <dt>Status:</dt>
+                    <dd><?php echo $this->registro->findParentRow("TbTransporteVeiculoStatus")->toString(); ?></dd>
+                </dl>
+            </div>
+<?php if ($this->baixa) { ?>
+            <div class="well">
+                <div class="page-header">
+                    <h4>Registro de Baixa</h4>
+                </div>
+                <dl class="dl-horizontal">
+                    <dt>Data da Baixa:</dt>
+                    <dd><?php echo Escola_Util::formatData($this->baixa->baixa_data); ?></dd>
+                </dl>
+                <dl class="dl-horizontal">
+                    <dt>Efetuado Por:</dt>
+                    <dd><?php echo $this->baixa->findParentRow("TbUsuario")->toString(); ?></dd>
+                </dl>
+                <dl class="dl-horizontal">
+                    <dt>Motivo:</dt>
+                    <dd><?php echo $this->baixa->findParentRow("TbBaixaMotivo")->toString(); ?></dd>
+                </dl>
+<?php if ($this->baixa->motivo) { ?>
+                <dl class="dl-horizontal">
+                    <dt>Observações:</dt>
+                    <dd><?php echo $this->baixa->motivo; ?></dd>
+                </dl>
+<?php } ?>                
+            </div>
+<?php } ?>
+<?php if ($this->veiculo) { echo $this->veiculo->mostrarTabelaNotificacao(); } ?>
+        </div>
+    </div>
+</div>

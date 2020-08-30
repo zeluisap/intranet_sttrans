@@ -1,0 +1,38 @@
+<div id="lista_noticias">
+<div class="titulo_">Visualizar Documento</div>
+<br />
+	<table width="100%">
+		<tr>
+			<td width="200px" align="right">Número: </td>
+			<td><strong><?php echo $this->registro->numprotocolo; ?></strong></td>
+		</tr>
+		<tr>
+			<td align="right">Procedência: </td>
+			<td><strong><?php echo $this->registro->procedencia; ?></strong></td>
+		</tr>
+	</table>
+<?php if ($this->tramites) { ?>
+<div class="titulo_">Trâmites</div>
+	<table class="lista">
+		<tr>
+			<th width="100px">Data / Hora</th>
+			<th width="150px">Setor</th>
+			<th>Despacho</th>
+		</tr>
+<?php 
+foreach ($this->tramites as $tramite) {
+	$data = new Zend_Date($tramite->dtentrada);
+?>
+		<tr>
+			<td align="center"><?php echo $data->get("dd/MM/yyyy"); ?></td>
+			<td align="center"><?php echo $tramite->descricao; ?></td>
+			<td><?php echo $tramite->despacho; ?></td>
+		</tr>
+<?php } ?>
+	</table>
+<?php } ?>
+	<br /><br />
+	<p align="center">
+	<a href="<?php echo $this->url(array("action" => "protocolo")); ?>">Voltar</a>
+	</p>
+</div>

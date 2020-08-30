@@ -1,0 +1,50 @@
+<div class="conteudo_controller">
+    <div class="row-fluid">
+        <div class="span12">
+            <form action="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(), "action" => "editar")); ?>" method="post" id="formulario" class="formulario form-horizontal">
+                <input type="hidden" name="id" id="id" value="<?php echo $this->registro->getId(); ?>" />
+                <div class="well">
+                    <fieldset>
+                        <legend>CADASTRO DE TIPO DE DOCUMENTO: </legend>
+                <?php if ($this->registro->getId()) { ?>
+                        <dl class="dl-horizontal">
+                            <dt>Código:</dt>
+                            <dd><?php echo $this->registro->getId(); ?></dd>
+                        </dl>
+                <?php } ?>
+                <?php
+                $ctrl = new Escola_Form_Element_Select_Table("id_documento_tipo_target");
+                $ctrl->setModel("TbDocumentoTipoTarget");
+                $ctrl->setPkName("id_documento_tipo_target");
+                $ctrl->setValue($this->registro->id_documento_tipo_target);
+                $ctrl->setLabel("Tipo");
+                echo $ctrl->render($this);
+                ?>
+                        <div class="control-group">
+                            <label for="chave" class="control-label">Chave:</label>
+                            <div class="controls">
+                                <input type="text" name="chave" id="chave" size="10" maxlength="10" value="<?php echo $this->registro->chave; ?>" />
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label for="descricao" class="control-label">Descrição:</label>
+                            <div class="controls">
+                                <input type="text" name="descricao" id="descricao" size="60" maxlength="60" value="<?php echo $this->registro->descricao; ?>" />
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label for="possui_numero" class="control-label">Possui Número:</label>
+                            <div class="controls">
+                                <select name="possui_numero" id="possui_numero">
+                                    <option value="" <?php echo (!$this->registro->possui_numero)?"selected":""; ?>>==> SELECIONE <==</option>
+                                    <option value="S" <?php echo ($this->registro->possui_numero == "S")?"selected":""; ?>>SIM</option>
+                                    <option value="N" <?php echo ($this->registro->possui_numero == "N")?"selected":""; ?>>NÃO</option>
+                                </select>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

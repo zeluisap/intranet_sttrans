@@ -1,0 +1,39 @@
+<style>
+
+    .block {
+        max-width: 200px;
+        min-width: 200px;
+        margin-right: 20px;
+    }
+
+    .flex {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: flex-start;
+    }
+
+</style>
+
+<form id="formulario" class="formulario form-horizontal">
+<div class="conteudo_controller">
+<?php if (!$this->documentos_por_ano) { ?>
+<?php echo $this->alert("NENHUM ARQUIVO ENVIADO."); ?>
+<?php } else { ?>
+
+<div class="flex">
+    <?php foreach ($this->documentos_por_ano as $doc) { ?>
+        <a href="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(), "action" => "arquivo", "ano" => $doc->ano)); ?>">
+            <div class="block">
+                    <p class="block-heading block-heading-14"><?php echo $doc->ano; ?></p>
+                    <div class="block-body">
+                        <p><strong>Total de Arquivos: </strong><?php echo $doc->quantidade; ?></p>
+                    </div>
+                    
+            </div>
+        </a>
+<?php } ?>
+        </div>
+<?php } ?>
+</div>
+
+</form>

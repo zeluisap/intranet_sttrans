@@ -1,0 +1,33 @@
+<div class="conteudo_controller">
+    <div class="row-fluid">
+        <div class="span12">
+            <form action="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(), "action" => "editar")); ?>" method="post" id="formulario" class="formulario form-horizontal">
+                <input type="hidden" name="id" id="id" value="<?php echo $this->registro->getId(); ?>" />
+                <div class="well">
+                    <fieldset>
+                        <legend>CRIANDO CHAMADO: </legend>
+                <?php if ($this->registro->getId()) { ?>
+                        <dl class="dl-horizontal">
+                            <dt>Código:</dt>
+                            <dd><?php echo $this->registro->getId(); ?></dd>
+                        </dl>
+                <?php } 
+                    $ctrl = new Escola_Form_Element_Select_Table("id_chamado_tipo");
+                    $ctrl->setPkName("id_chamado_tipo");
+                    $ctrl->setModel("TbChamadoTipo");
+                    $ctrl->setValue($this->registro->id_chamado_tipo);
+                    $ctrl->setLabel("Tipo: ");
+                    echo $ctrl->render($this);
+                ?>
+                        <div class="control-group">
+                            <label for="descricao_problema" class="control-label">Descrição do Problema:</label>
+                            <div class="controls">
+                                <textarea name="descricao_problema" id="descricao_problema" rows="6" class="span5"><?php echo $this->registro->descricao_problema; ?></textarea>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

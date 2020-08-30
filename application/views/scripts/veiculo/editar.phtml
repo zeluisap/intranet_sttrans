@@ -1,0 +1,152 @@
+<div class="conteudo_controller">
+    <div class="row-fluid">
+        <div class="span12">
+            <form action="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(), "action" => "editar")); ?>" method="post" id="formulario" class="formulario form-horizontal">
+                <input type="hidden" name="id" id="id" value="<?php echo $this->registro->getId(); ?>" />
+                <div class="well">
+                    <fieldset>
+                        <legend>CADASTRO DE VEÍCULOS: </legend>
+                        <?php if ($this->registro->getId()) { ?>
+                            <dl class="dl-horizontal">
+                                <dt>Código:</dt>
+                                <dd><?php echo $this->registro->getId(); ?></dd>
+                            </dl>
+                        <?php } ?>
+                        <div class="control-group">
+                            <label for="chassi" class="control-label">Chassi:</label>
+                            <div class="controls">
+                                <input type="text" name="chassi" id="chassi" maxlength="30" value="<?php echo $this->registro->chassi; ?>" class="span2" />
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label for="placa" class="control-label">Placa:</label>
+                            <div class="controls">
+                                <input type="text" name="placa" id="placa" maxlength="10" value="<?php echo $this->registro->placa; ?>" class="span2" />
+                            </div>
+                        </div>
+                        <?php
+                        $ctrl = new Escola_Form_Element_Select_Table_Crud_VeiculoTipo("id_veiculo_tipo");
+                        $ctrl->setPkName("id_veiculo_tipo");
+                        $ctrl->setModel("TbVeiculoTipo");
+                        $ctrl->setValue($this->registro->id_veiculo_tipo);
+                        $ctrl->setLabel("Tipo: ");
+                        echo $ctrl->render($this);
+
+                        $ctrl = new Escola_Form_Element_Select_Table_Crud_VeiculoEspecie("id_veiculo_especie");
+                        $ctrl->setPkName("id_veiculo_especie");
+                        $ctrl->setModel("TbVeiculoEspecie");
+                        $ctrl->setValue($this->registro->id_veiculo_especie);
+                        $ctrl->setLabel("Espécie: ");
+                        echo $ctrl->render($this);
+
+                        $ctrl = new Escola_Form_Element_Select_Table_Crud_VeiculoCategoria("id_veiculo_categoria");
+                        $ctrl->setPkName("id_veiculo_categoria");
+                        $ctrl->setModel("TbVeiculoCategoria");
+                        $ctrl->setValue($this->registro->id_veiculo_categoria);
+                        $ctrl->setLabel("Categoria: ");
+                        echo $ctrl->render($this);
+
+                        $ctrl = new Escola_Form_Element_Select_Table_Pessoa("proprietario_id_pessoa");
+                        $ctrl->setValue($this->registro->proprietario_id_pessoa);
+                        $ctrl->setLabel("Proprietário: ");
+                        echo $ctrl->render($this);
+
+                        $ctrl = new Escola_Form_Element_Select_Table("id_uf");
+                        $ctrl->setPkName("id_uf");
+                        $ctrl->setModel("TbUf");
+                        $ctrl->setValue($this->registro->id_uf);
+                        $ctrl->setLabel("Estado: ");
+                        echo $ctrl->render($this);
+
+                        $ctrl = new Escola_Form_Element_Select_Table_Crud_Municipio("id_municipio");
+                        $ctrl->setPkName("id_municipio");
+                        $ctrl->setModel("TbMunicipio");
+                        $ctrl->setValue($this->registro->id_municipio);
+                        $ctrl->setLabel("Município: ");
+                        $ctrl->set_id_uf("id_uf");
+                        echo $ctrl->render($this);
+
+                        $ctrl = new Escola_Form_Element_Select_Table_Crud_Combustivel("id_combustivel");
+                        $ctrl->setPkName("id_combustivel");
+                        $ctrl->setModel("TbCombustivel");
+                        $ctrl->setValue($this->registro->id_combustivel);
+                        $ctrl->setLabel("Combustível: ");
+                        echo $ctrl->render($this);
+
+                        $ctrl = new Escola_Form_Element_Select_Table_Crud_Cor("id_cor");
+                        $ctrl->setPkName("id_cor");
+                        $ctrl->setModel("TbCor");
+                        $ctrl->setValue($this->registro->id_cor);
+                        $ctrl->setLabel("Cor: ");
+                        echo $ctrl->render($this);
+
+                        $ctrl = new Escola_Form_Element_Select_Table_Crud_Fabricante("id_fabricante");
+                        $ctrl->setPkName("id_fabricante");
+                        $ctrl->setModel("TbFabricante");
+                        $ctrl->setValue($this->registro->id_fabricante);
+                        $ctrl->setLabel("Fabricante: ");
+                        echo $ctrl->render($this);
+                        ?>
+                        <div class="control-group">
+                            <label for="modelo" class="control-label">Modelo:</label>
+                            <div class="controls">
+                                <input type="text" name="modelo" id="modelo" maxlength="100" value="<?php echo $this->registro->modelo; ?>" class="span5" />
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label for="ano_fabricacao" class="control-label">Ano Fabricação:</label>
+                            <div class="controls">
+                                <input type="text" name="ano_fabricacao" id="ano_fabricacao" maxlength="10" value="<?php echo $this->registro->ano_fabricacao; ?>" class="span1" />
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label for="ano_modelo" class="control-label">Ano Modelo:</label>
+                            <div class="controls">
+                                <input type="text" name="ano_modelo" id="ano_modelo" maxlength="10" value="<?php echo $this->registro->ano_modelo; ?>" class="span1" />
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label for="data_aquisicao" class="control-label">Data Aquisição:</label>
+                            <div class="controls">
+                                <input type="text" name="data_aquisicao" id="data_aquisicao" maxlength="10" value="<?php echo $this->registro->data_aquisicao; ?>" class="span2 data" />
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label for="renavan" class="control-label">Renavan:</label>
+                            <div class="controls">
+                                <input type="text" name="renavan" id="renavan" maxlength="30" value="<?php echo $this->registro->renavan; ?>" class="span2" />
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label for="dut" class="control-label">DUT:</label>
+                            <div class="controls">
+                                <input type="text" name="dut" id="dut" maxlength="30" value="<?php echo $this->registro->dut; ?>" class="span2" />
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label for="tara" class="control-label">Tara (Kg):</label>
+                            <div class="controls">
+                                <input type="text" name="tara" id="tara" maxlength="30" value="<?php echo $this->registro->tara; ?>" class="span2 moeda" />
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label for="lotacao" class="control-label">Lotação:</label>
+                            <div class="controls">
+                                <input type="text" name="lotacao" id="lotacao" maxlength="30" value="<?php echo $this->registro->lotacao; ?>" class="span2" />
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label for="isento" class="control-label">Isento:</label>
+                            <div class="controls">
+                                <select name="isento" id="isento">
+                                    <option value="" <?php echo (!$this->registro->isento) ? "selected" : ""; ?>>==> SELECIONE <==</option> <option value="S" <?php echo ($this->registro->isento == "S") ? "selected" : ""; ?>>SIM</option>
+                                    <option value="N" <?php echo ($this->registro->isento == "N") ? "selected" : ""; ?>>NÃO</option>
+                                </select>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

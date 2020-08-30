@@ -1,0 +1,64 @@
+<div class="conteudo_controller">
+    <div class="row-fluid">
+        <div class="span12">
+            <form action="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(), "action" => $this->getRequest()->getActionName())); ?>" method="post" id="formulario" class="formulario form-horizontal">
+                <input type="hidden" name="id" id="id" value="<?php echo $this->registro->getId(); ?>" />
+                <div class="well">
+                    <fieldset>
+                        <legend>CADASTRO DE ÍTEM DE AMPARO LEGAL: </legend>
+                <?php if ($this->registro->getId()) { ?>
+                        <dl class="dl-horizontal">
+                            <dt>Código:</dt>
+                            <dd><?php echo $this->registro->getId(); ?></dd>
+                        </dl>
+                <?php } ?>
+                        <dl class="dl-horizontal">
+                            <dt>Amparo Legal:</dt>
+                            <dd><?php echo $this->amparo_legal->toString(); ?></dd>
+                        </dl>
+                        <div class="control-group">
+                            <label for="codigo" class="control-label">Código:</label>
+                            <div class="controls">
+                                <input type="text" name="codigo" id="codigo" maxlength="4" value="<?php echo $this->registro->codigo; ?>" class="span2" />
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label for="descricao" class="control-label">Descrição:</label>
+                            <div class="controls">
+                                <input type="text" name="descricao" id="descricao" value="<?php echo $this->registro->descricao; ?>" class="span5" />
+                            </div>
+                        </div>
+<?php if ($this->moedas) { ?>
+                        <div class="control-group">
+                            <label for="id_moeda" class="control-label">Moeda:</label>
+                            <div class="controls">
+                                <select name="id_moeda" id="id_moeda" class="span5">
+                                    <option value="" <?php echo (!$this->valor->id_moeda)?"selected":""; ?>>==> SELECIONE <==</option>
+<?php foreach ($this->moedas as $moeda) { ?>
+                                    <option value="<?php echo $moeda->getId(); ?>" <?php echo ($this->valor->id_moeda == $moeda->getId())?"selected":""; ?> rel="<?php echo $moeda->simbolo; ?>"><?php echo $moeda->toString(); ?> (<?php echo $moeda->simbolo; ?>)</option>
+<?php } ?>
+                                </select>
+                            </div>
+                        </div>
+<?php } ?>
+                        <div class="control-group">
+                            <label for="valor" class="control-label">Valor:</label>
+                            <div class="controls">
+                                <div class="input-prepend span2">
+                                    <span class="add-on addonvalor"></span>
+                                    <input type="text" name="valor" id="valor" maxlength="20" value="<?php echo Escola_Util::number_format($this->valor->valor); ?>" class="span12 moeda" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label for="pontuacao" class="control-label">Pontuação:</label>
+                            <div class="controls">
+                                <input type="text" name="pontuacao" id="pontuacao" maxlength="4" value="<?php echo $this->registro->pontuacao; ?>" class="span2" />
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

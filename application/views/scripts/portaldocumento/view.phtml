@@ -1,0 +1,26 @@
+<div class="conteudo_controller">
+    <div class="row-fluid">
+        <div class="span12">
+            <div class="well">
+<?php if ($this->arquivo) { ?>
+                <div class="text-right" style="float:right; width: 250px;"><?php echo $this->arquivo->miniatura(array("width" => 100, "link" => true)); ?></div>
+<?php } ?>
+                <div class="page-header">
+                    <h4>Cadastro de Portal > Documento</h4>
+                </div>
+                <dl class="dl-horizontal">
+                    <dt>Código:</dt>
+                    <dd><?php echo $this->registro->getId(); ?></dd>
+                </dl>
+                <dl class="dl-horizontal">
+                    <dt>Tipo:</dt>
+                    <dd><?php echo $this->registro->findParentRow("TbDocumentoTipo")->toString(); ?></dd>
+                </dl>
+                <dl class="dl-horizontal">
+                    <dt>Descrição:</dt>
+                    <dd><?php echo $this->registro->resumo; ?></dd>
+                </dl>
+            </div>
+        </div>
+    </div>
+</div>

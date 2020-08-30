@@ -1,0 +1,30 @@
+<div class="conteudo_controller">
+    <div class="row-fluid">
+        <div class="span12">
+            <div class="well">
+                <form action="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(), "action" => "editar")); ?>" method="post" id="formulario" class="formulario">
+                    <input type="hidden" name="id" id="id" value="<?php echo $this->registro->getId(); ?>" />
+                    <fieldset>
+                        <legend>CADASTRO DE TIPOS DE ARQUIVO: </legend>
+                        <dl class="dl-horizontal">
+                            <dt>Código:</dt>
+                            <dd><?php echo $this->registro->getId(); ?></dd>
+                        </dl>
+                        <dl class="dl-horizontal">
+                            <dt>Descrição:</dt>
+                            <dd><?php echo $this->registro->descricao; ?></dd>
+                        </dl>
+                        <dl class="dl-horizontal">
+                            <dt>Mime Type:</dt>
+                            <dd><?php echo $this->registro->mime_type; ?></dd>
+                        </dl>
+                        <dl class="dl-horizontal">
+                            <dt>Extensão:</dt>
+                            <dd><?php echo $this->registro->extensao; ?></dd>
+                        </dl>
+                    </fieldset>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,72 @@
+<?php
+$lote = false;
+$txt_vinculo = $txt_lote = $txt_tipo = $txt_bolsa_tipo = "--";
+if (isset($this->lote)) {
+    $lote = $this->lote;
+    if ($lote) {
+        $txt_lote = $lote->toStringMenor();
+        $vinculo = $lote->findParentRow("TbVinculo");
+        if ($vinculo) {
+            $txt_vinculo = $vinculo->toString();
+        }
+    }
+}
+if (isset($this->tipo) && $this->tipo) {
+    $txt_tipo = $this->tipo->toString();
+}
+if (isset($this->bolsa_tipo) && $this->bolsa_tipo) {
+    $txt_bolsa_tipo = $this->bolsa_tipo->toString();
+}
+?>
+<script type="text/javascript">
+    $(document).ready(function() {
+        $("#descricao").focus();
+    });
+</script>
+<div class="conteudo_controller">
+    <div class="row-fluid">
+        <div class="span12">
+            <form action="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(), "action" => $this->getRequest()->getActionName())); ?>" method="post" id="formulario" class="formulario form-horizontal" enctype="multipart/form-data">                
+<?php if ($this->obj->getId()) { ?>
+                <input type="hidden" name="id_lote_prestacao_conta" id="id_lote_prestacao_conta" value="<?php echo $this->obj->getId();; ?>" />
+<?php } ?>
+                <input type="hidden" name="id_vinculo_lote" id="id_vinculo_lote" value="<?php echo $this->lote->getId();; ?>" />
+                <input type="hidden" name="id_previsao_tipo" id="id_previsao_tipo" value="<?php echo $this->tipo->getId();; ?>" />
+                <input type="hidden" name="id_bolsa_tipo" id="id_bolsa_tipo" value="<?php echo $this->bolsa_tipo->getId();; ?>" />
+                <div class="well">
+                    <fieldset>
+                        <legend>VÍNCULO > LOTE > PRESTÇAO DE CONTAS: </legend>
+                        <dl class="dl-horizontal">
+                            <dt>Vínculo:</dt>
+                            <dd><?php echo $txt_vinculo; ?></dd>
+                        </dl>
+                        <dl class="dl-horizontal">
+                            <dt>Lote:</dt>
+                            <dd><?php echo $txt_lote; ?></dd>
+                        </dl>
+                        <dl class="dl-horizontal">
+                            <dt>Tipo de Despesa:</dt>
+                            <dd><?php echo $txt_tipo; ?></dd>
+                        </dl>
+                        <dl class="dl-horizontal">
+                            <dt>Tipo de Ítem de Lote:</dt>
+                            <dd><?php echo $txt_bolsa_tipo; ?></dd>
+                        </dl>
+                        <div class="control-group">
+                            <label for="descricao" class="control-label">Descriçao do Documento:</label>
+                            <div class="controls">
+                                <textarea name="descricao" id="descricao" class="span6" rows="6"><?php echo $this->obj->descricao; ?></textarea>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label for="arquivo" class="control-label">Arquivo de Comprovação:</label>
+                            <div class="controls">
+                                <input type="file" name="arquivo" id="arquivo" />
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

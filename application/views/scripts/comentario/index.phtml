@@ -1,0 +1,110 @@
+<div id="janela_confirmacao" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h4 id="myModalLabel">Modal header</h4>
+    </div>
+    <div class="modal-body">
+        
+    </div>
+    <div class="modal-footer">
+        <button class="btn" data-dismiss="modal" aria-hidden="true">Fechar</button>
+        <button class="btn btn-primary" id="bt_confirmar">Confirmar</button>
+    </div>
+</div>
+
+<div class="conteudo_controller">
+    <div class="row-fluid">
+        <div class="span12">
+            <form action="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(), "action" => "index")); ?>" method="post" id="formulario" class="formulario form-horizontal">
+            <div class="well well-small" id="idPesquisa">
+                <fieldset>
+                    <legend>Opções de Pesquisa</legend>
+            <?php
+            $ctrl = new Escola_Form_Element_Select_Table("filtro_id_comentario_status");
+            $ctrl->setModel("TbComentarioStatus");
+            $ctrl->setPkName("id_comentario_status");
+            $ctrl->setValue($this->dados["filtro_id_comentario_status"]);
+            $ctrl->setAttrib("class", "filtro");
+            $ctrl->setLabel("Status:");
+            echo $ctrl->render($this);
+            ?>
+                    <div class="control-group">
+                        <label for="filtro_nome" class="control-label">Nome:</label>
+                        <div class="controls">
+                            <input type="text" class="filtro span5" name="filtro_nome" id="filtro_nome" size="50" value="<?php echo $this->getRequest()->getPost("filtro_nome"); ?>" />
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <div class="controls">
+                            <input type="submit" value="Pesquisar" class="btn btn-primary" />
+                            <input type="button" value="Limpar Filtro" id="idLimparPesquisa" class="btn" />
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
+                <table class="table table-striped table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Data / Hora</th>
+                            <th>Informação</th>
+                            <th>Nome</th>
+                            <th>E-Mail</th>
+                            <th>Comentário</th>
+                            <th>Status</th>
+                            <th width="20px">Operações</th>
+                        </tr>
+                    </thead>
+            <?php if ($this->registros && count($this->registros)) { ?>
+                    <tbody>
+            <?php
+                foreach ($this->registros as $registro) {
+            ?>
+                        <tr>
+                            <td>
+                                    <?php echo Escola_Util::formatData($registro->data); ?> <?php echo $registro->hora; ?>
+                            </td>
+                            <td>
+                                <?php echo $registro->findParentRow("TbInfo")->toString(); ?>
+                            </td>
+                            <td>
+                                <?php echo $registro->nome; ?>
+                            </td>
+                            <td>
+                                <?php echo $registro->email; ?>
+                            </td>
+                            <td>
+                                <?php echo $registro->comentario; ?>
+                            </td>
+                            <td>
+                                <?php echo $registro->findParentRow("TbComentarioStatus")->toString(); ?>
+                            </td>
+                            <td>
+                                <div class="btn-group">
+            <?php if (!$registro->permitido()) { ?>					
+                                    <a href="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(),
+                                                                         "action" => "permitir",
+                                                                         "id" => $registro->getId())); ?>" class="btn link_confirmar" title="Autorizar">
+                                        <i class="icon-thumbs-up"></i>
+                                    </a>
+            <?php } ?>
+            <?php if (!$registro->negado()) { ?>
+                                    <a href="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(),
+                                                                         "action" => "negar",
+                                                                         "id" => $registro->getId())); ?>" class="btn link_negar" title="Negar">
+                                        <i class="icon-thumbs-down"></i>
+                                    </a>
+                                </div>
+            <?php } ?>
+                            </td>
+                        </tr>
+            <?php } ?>
+                    </tbody>
+            <?php } ?>
+                </table>
+            </form>
+<?php if ($this->registros && count($this->registros)) { ?>
+<?php echo $this->paginationControl($this->registros, "sliding", "minha_paginacao_control.phtml"); ?>
+<?php } ?>
+        </div>
+    </div>
+</div>

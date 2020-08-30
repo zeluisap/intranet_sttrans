@@ -1,0 +1,127 @@
+<?php
+$info = false;
+if ($this->registro->getId()) {
+	$info = $this->registro->findParentRow("TbMenuTipo")->info();
+}
+?>
+<div class="conteudo_controller">
+    <div class="row-fluid">
+        <div class="span12">
+            <form action="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(), "action" => "editar")); ?>" method="post" id="formulario" class="formulario form-horizontal" enctype="multipart/form-data">
+                
+<div id="janela_add" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <input type="hidden" name="id_info" id="id_info" value="<?php echo ($info)?$this->registro->url:""; ?>" />
+    <input type="hidden" name="jan_pagina" id="jan_pagina" />
+    <input type="hidden" name="operacao" id="operacao" />
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h4 id="myModalLabel">Localizar Informação</h4>
+    </div>
+    <div class="modal-body">
+        <div class="well well-small">
+            <fieldset>
+            <?php
+            $ctrl = new Escola_Form_Element_Select_Table("jan_filtro_id_info_tipo");
+            $ctrl->setModel("TbInfoTipo");
+            $ctrl->setPkName("id_info_tipo");
+            $ctrl->setLabel("Tipo: ");
+            echo $ctrl->render($this);
+            ?>
+                <div class="control-group">
+                    <label for="filtro_titulo" class="control-label">Título:</label>
+                    <div class="controls">
+                        <input type="text" name="filtro_titulo" id="filtro_titulo" class="span7" />
+                    </div>
+                </div>
+            </fieldset>
+        </div>
+        <table class="table table-striped table-bordered" id="tabela_lista">
+            <thead>
+                <tr>
+                    <th>Data</th>
+                    <th>Tipo</th>
+                    <th>Título</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+    <div class="modal-footer">
+        <button class="btn" data-dismiss="modal" aria-hidden="true">Fechar</button>
+        <input type="button" value="Limpar Filtro" id="jan_filtro_limpar" class="btn" />
+        <input type="submit" value="Procurar" class="btn btn-primary" />
+    </div>
+</div>
+                
+                <input type="hidden" name="id" id="id" value="<?php echo $this->registro->getId(); ?>" />
+                <div class="well">
+                    <fieldset>
+                        <legend>CADASTRO DE MENU DO SITE: </legend>
+                <?php if ($this->registro->getId()) { ?>
+                        <dl class="dl-horizontal">
+                            <dt>Código:</dt>
+                            <dd><?php echo $this->registro->getId(); ?></dd>
+                        </dl>
+                <?php } ?>
+                <?php
+                $ctrl = new Escola_Form_Element_Select_Table("id_menu_tipo");
+                $ctrl->setModel("TbMenuTipo");
+                $ctrl->setPkName("id_menu_tipo");
+                $ctrl->setValue($this->registro->id_menu_tipo);
+                $ctrl->setLabel("Tipo: ");
+                echo $ctrl->render($this);
+
+                $ctrl = new Escola_Form_Element_Select_Table("id_menu_posicao");
+                $ctrl->setModel("TbMenuPosicao");
+                $ctrl->setPkName("id_menu_posicao");
+                $ctrl->setValue($this->registro->id_menu_posicao);
+                $ctrl->setLabel("Posição: ");
+                echo $ctrl->render($this);
+                ?>
+                        <div class="control-group">
+                            <label for="descricao" class="control-label">Descrição:</label>
+                            <div class="controls">
+                                <input type="text" name="descricao" id="descricao" maxlength="60" value="<?php echo $this->registro->descricao; ?>" class="span5" />
+                            </div>
+                        </div>
+                        <div class="url_texto control-group">
+                            <label for="url" class="control-label">URL:</label>
+                            <div class="controls">
+                                <input type="text" name="url" id="url" maxlength="100" value="<?php echo $this->registro->url; ?>" class="span5" />
+                            </div>
+                        </div>
+                        <div class="url_info control-group">
+                            <label for="url" class="control-label">INFORMAÇÃO:</label>
+                            <div class="controls">
+                                <div class="input-append">
+                                    <input type="text" name="url_show_info" id="url_show_info" maxlength="100" value="<?php echo ($info)?$this->registro->mostrarUrl():""; ?>" disabled class="input-xxlarge" />
+                                        <a href="#" id="link_localizar" title="Localizar Informação" class="btn add-on">
+                                            <i class="icon-search icon-large"></i>
+                                        </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="linha_arquivo" class="control-group" style="display:none">
+                            <label for="arquivo" class="control-label">Arquivo Ícone:</label>
+                            <div class="controls">
+                                <input type="file" name="arquivo" id="arquivo" />
+                            </div>
+                        </div>
+                <?php if ($this->menus) { ?>
+                        <div class="control-group">
+                            <label for="id_menu_superior" class="control-label">Menu Superior:</label>
+                            <div class="controls">
+                                <select name="id_menu_superior" id="id_menu_superior">
+                                    <option value="0" <?php echo (!$this->registro->id_menu_superior)?"selected":""; ?>>==> SELECIONE <==</option>
+                    <?php foreach ($this->menus as $menu) { ?>
+                                    <option value="<?php echo $menu->getId(); ?>" <?php echo ($this->registro->id_menu_superior == $menu->getId())?"selected":""; ?>><?php echo $menu->toStringCompleto(); ?></option>
+                    <?php } ?>
+                                </select>
+                            </div>
+                        </div>
+                <?php } ?>
+                    </fieldset>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

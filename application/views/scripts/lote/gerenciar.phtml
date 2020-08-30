@@ -1,0 +1,98 @@
+<div class="conteudo_controller">
+    <div class="row-fluid">
+        <div class="span12">
+<form action="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(), "action" => "gerenciar")); ?>" method="post" id="formulario" class="formulario form-horizontal" enctype="multipart/form-data">
+    <div class="well">
+        <dl class="dl-horizontal">
+            <dt>Vinculo: </dt>
+            <dd><?php echo $this->lote->toString(); ?></dd>
+        </dl>
+        <dl class="dl-horizontal">
+            <dt>Valor do Lote: </dt>
+            <dd><?php echo Escola_Util::number_format($this->lote->pega_valor_total()); ?></dd>
+        </dl>
+        <dl class="dl-horizontal">
+            <dt>Valor da Previsão: </dt>
+            <dd><?php echo Escola_Util::number_format($this->lote->pega_valor_previsao()); ?></dd>
+        </dl>
+        <dl class="dl-horizontal">
+            <dt>Status do Lote: </dt>
+            <dd><?php echo $this->lote->findParentRow("TbVinculoLoteStatus")->toString(); ?></dd>
+        </dl>
+    </div>
+	<table class="table table-striped table-bordered">
+		<thead>
+			<tr>
+                <th>Tipo de Ítem de Lote</th>
+                <th>Tipo de Bolsa</th>
+				<th>Quantidade</th>
+                <th>Valor Vinculado</th>
+                <th>Valor Previsão</th>
+				<th>Mensagem</th>
+				<th width="20px">Operações</th>
+			</tr>
+		</thead>
+<?php if ($this->tipos && count($this->tipos)) { ?>
+		<tbody>
+<?php
+    $tb = new TbVinculoLoteItem();
+    $array_tipos = $tb->listar_tipo();
+    foreach ($this->tipos as $tipo) {
+        $mensagem = $this->lote->pega_mensagem(array("tipo_item" => $tipo->tipo, "id_bolsa_tipo" => $tipo->id_bolsa_tipo));
+        $total = $tipo->valor;
+        $previsao = $this->lote->pega_valor_previsao(array("tipo_item" => $tipo->tipo, "id_bolsa_tipo" => $tipo->id_bolsa_tipo));
+        $bolsa_tipo_descricao = "";
+        $bt = TbBolsaTipo::pegaPorId($tipo->id_bolsa_tipo);
+        if ($bt) {
+            $bolsa_tipo_descricao = $bt->toString();
+        }
+?>
+			<tr>
+				<td>
+					<?php echo $array_tipos[$tipo->tipo]; ?>
+				</td>
+				<td>
+					<?php echo $bolsa_tipo_descricao; ?>
+				</td>
+				<td width="50px">
+                    <div align="center">
+                        <?php echo $tipo->quantidade; ?>
+                    </div>
+				</td>
+				<td>
+                    <div align="center">
+                        <?php echo $total; ?>
+                    </div>
+				</td>
+				<td>
+                    <div align="center">
+                        <?php echo Escola_Util::number_format($previsao); ?>
+                    </div>
+				</td>
+				<td>
+                    <div class="text-error">
+                        <?php echo $mensagem; ?>
+                    </div>
+				</td>
+				<td width="20px">
+                    <div class="btn-group">
+						<a href="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(),
+															 "action" => "loteitem",
+															 "id" => $this->lote->getId(),
+                                                             "tipo" => $tipo->tipo,
+                                                             "id_bolsa_tipo" => $tipo->id_bolsa_tipo)); ?>" class="btn" title="Gerenciar Ítens">
+							<i class="icon-group"></i>
+						</a>
+                    </div>
+				</td>
+			</tr>
+<?php } ?>
+		</tbody>
+<?php } ?>
+	</table>
+</form>
+        </div>
+    </div>
+</div>
+
+<?php echo $this->lote->janelaResumo();

@@ -1,0 +1,152 @@
+<?php 
+$tb = new TbMoeda();
+$moeda = $tb->pega_padrao();
+?>
+<div class="conteudo_controller">
+    <div class="row-fluid">
+        <div class="span12">
+<form action="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(), "action" => "movimento")); ?>" method="post" id="formulario" class="formulario form-horizontal" enctype="multipart/form-data">
+    <div class="well well-small">
+        <dl class="dl-horizontal">
+            <dt>Vínculo:</dt>
+            <dd><?php echo $this->vinculo->toString(); ?></dd>
+        </dl>
+        <dl class="dl-horizontal">
+            <dt>Conta Bancária:</dt>
+            <dd><?php
+if ($this->ibs && (count($this->ibs) > 1)) {
+?>
+                <select name="id_info_bancaria" id="id_info_bancaria" class="span7">
+<?php foreach ($this->ibs as $ib) { ?>
+                    <option value="<?php echo $ib->getId(); ?>" <?php echo ($ib->getId() == $this->info_bancaria->getId())?"selected":""; ?>><?php echo $ib->toString(); ?></option>
+<?php } ?>
+                </select>
+<?php 
+} else {
+    echo $this->info_bancaria->toString(); 
+}
+?></dd>
+        </dl>
+        <dl class="dl-horizontal">
+            <dt>Saldo Atual:</dt>
+            <dd><?php echo $moeda->simbolo . " " . Escola_Util::number_format($this->info_bancaria->pegaSaldo()); ?></dd>
+        </dl>
+    </div>
+	<table class="table table-striped table-bordered">
+		<thead>
+			<tr>
+                <th>Data</th>
+                <th>Tipo</th>
+                <th>Valor</th>
+                <th>Observação</th>
+                <th>Forma Pagamento</th>
+                <th>Documento</th>
+                <th>Anexo</th>
+                <th>Saldo</th>
+                <th></th>
+			</tr>
+		</thead>
+<?php 
+if ($this->registros && count($this->registros)) { 
+    $class_saldo = "text-info";
+    $txt_saldo_anterior = 0;
+    $primeiro = $this->registros->getItem(0);
+    $valor_anterior = $primeiro->pega_valor_anterior();
+    if ($valor_anterior) {
+        if ($valor_anterior->valor < 0) {
+            $class_saldo = "text-error";
+        }
+        $txt_saldo_anterior = Escola_Util::number_format($valor_anterior->valor);
+    } else {
+        $txt_saldo_anterior = Escola_Util::number_format(0);
+    }
+    $txt_saldo_anterior = $moeda->simbolo . " " . $txt_saldo_anterior;
+?>
+		<tbody>
+                    <tr>
+                        <td colspan="7">SALDO ANTERIOR</td>
+                        <td><div class="<?php echo $class_saldo; ?> text-right"><strong><?php echo $txt_saldo_anterior; ?></strong></div></td>
+                        <td></td>
+                    </tr>
+<?php
+    $tb = new TbVinculoMovimento();
+	foreach ($this->registros as $registro) {
+            $txt_forma_pagamento = $txt_forma_numero = $txt_doc_confirmacao = "--";
+            $action = "addreceita";
+
+            $class_saldo = $class = "text-info";
+
+            $obj = $tb->getPorId($registro->getId());
+            if ($obj) {
+                $registro = $obj;
+            }
+            $txt_data_movimento = $txt_movimento_tipo = $txt_valor = $txt_descricao = $txt_saldo = "--";
+            $txt_data_movimento = Escola_Util::formatData($registro->data_movimento);
+            $mt = $registro->findParentRow("TbVinculoMovimentoTipo");
+            if ($mt) {
+                $txt_movimento_tipo = $mt->toString();
+                if ($mt->despesa()) {
+                    $class = "text-error";
+                    $dt = $registro->findParentRow("TbDespesaTipo");
+                    if ($dt && $dt->getId() && $dt->despesa_bancaria()) {
+                        $txt_movimento_tipo = $dt->toString();
+                    }
+                    $action = "adddespesa";
+                }
+            }
+            $valor = $registro->pega_valor();
+            if ($valor) {
+                $txt_valor = $valor->toString();
+            }
+            $txt_descricao = $registro->descricao;
+            $valor_posterior = $registro->pega_valor_posterior();
+            if ($valor_posterior < 0) {
+                $class_saldo = "text-error";
+            }
+            $txt_saldo = $moeda->simbolo . " " . Escola_Util::number_format($valor_posterior);
+            
+            $fp = $registro->findParentRow("TbFormaPagamento");
+            if ($fp) {
+                $txt_forma_pagamento = $fp->toString();
+            }
+            if ($registro->numero_documento) {
+                $txt_forma_numero = $registro->numero_documento;
+            }
+            $arquivo = $registro->pegaDocComprovacao();
+            if ($arquivo) {
+                $txt_doc_confirmacao = $arquivo->miniatura(array("width" => "50", "link" => true));
+            }
+?>
+			<tr>
+				<td><div class="text-center"><?php echo $txt_data_movimento; ?></div></td>
+				<td><div class="<?php echo $class; ?>"><strong><?php echo $txt_movimento_tipo; ?></strong></div></td>
+                <td><div class="<?php echo $class; ?> text-right"><strong><?php echo $txt_valor; ?></strong></div></td>
+                <td><?php echo $txt_descricao; ?></td>
+                <td><div class="text-center"><?php echo $txt_forma_pagamento; ?></div></td>
+                <td><div class="text-center"><?php echo $txt_forma_numero; ?></div></td>
+                <td><div class="text-center"><?php echo $txt_doc_confirmacao; ?></div></td>
+                <td><div class="<?php echo $class_saldo; ?> text-right"><strong><?php echo $txt_saldo; ?></strong></div></td>
+                <td width="30px">
+                    <div class="btn-group">
+                        <a href="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(),
+                                                             "action" => $action,
+                                                             "id" => $registro->getId())); ?>" class="btn" title="Editar">
+                            <i class="icon-cog"></i>
+                        </a>
+                        <a href="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(),
+                                                            "action" => "excluirmovimento",
+                                                            "id" => $registro->getId())); ?>" class="btn link_excluir" title="Excluir">
+                                <i class="icon-trash"></i>
+                        </a>
+                    </div>
+                </td>
+			</tr>
+<?php } ?>
+		</tbody>
+<?php } ?>
+	</table>
+</form>
+<?php echo $this->paginationControl($this->registros, "sliding", "minha_paginacao_control.phtml"); ?>
+        </div>
+    </div>
+</div>

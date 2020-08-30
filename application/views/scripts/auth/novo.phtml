@@ -1,0 +1,29 @@
+<div class="form-login">
+	
+	<ul class="tabs">
+		<li><a href="<?php echo $this->url(array("controller" => "index")); ?>">Login</a></li>
+		<li  class="selected"><a href="<?php echo $this->url(array("controller" => "auth", "action" => "novo")); ?>">Cadastre-se</a></li>
+		<li><a href="<?php echo $this->url(array("controller" => "auth", "action" => "recuperasenha")); ?>">Recuperar senha</a></li>
+	</ul>	
+	
+
+	<form action="<?php echo $this->url(array("controller" => "auth", "action" => "novo")); ?>" method="post" id="formulario">
+		
+		<fieldset>
+			<div>
+				<label for="cpf">CPF: </label>
+				<input type="text" name="cpf" id="cpf" class="cpf w40" size="15" value="<?php echo $this->getRequest()->getPost("cpf"); ?>" />
+			</div>
+			<div>
+				<label><br /></label>
+				<input type="submit" value="CADASTRAR" class="acao"/>
+				<input type="button" value="CANCELAR" class="cancelar" onclick="window.location='<?php echo $this->url(array("controller" => "index")); ?>'" />
+			</div>
+			
+
+			
+		</fieldset>
+		
+	</form>
+	
+</div>

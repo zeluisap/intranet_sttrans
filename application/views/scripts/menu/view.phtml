@@ -1,0 +1,40 @@
+<div class="conteudo_controller">
+    <div class="row-fluid">
+        <div class="span12">
+            <div class="well">
+                <div class="page-header">
+                    <h4>Cadastro de Menus do Site</h4>
+                </div>
+                <dl class="dl-horizontal">
+                    <dt>Código:</dt>
+                    <dd><?php echo $this->registro->getId(); ?></dd>
+                </dl>
+                <dl class="dl-horizontal">
+                    <dt>Ordem:</dt>
+                    <dd><?php echo $this->registro->ordem; ?></dd>
+                </dl>
+                <dl class="dl-horizontal">
+                    <dt>Posição:</dt>
+                    <dd><?php echo $this->registro->findParentRow("TbMenuPosicao")->toString(); ?></dd>
+                </dl>
+                <dl class="dl-horizontal">
+                    <dt>Descrição:</dt>
+                    <dd><?php echo $this->registro->descricao; ?></dd>
+                </dl>
+                <dl class="dl-horizontal">
+                    <dt>URL:</dt>
+                    <dd><?php echo $this->registro->mostrarUrl(); ?></dd>
+                </dl>
+        <?php
+        $superior = $this->registro->pegaSuperior();
+        if ($superior) { 
+        ?>
+                <dl class="dl-horizontal">
+                    <dt>Superior:</dt>
+                    <dd><?php echo $superior->toStringCompleto(); ?></dd>
+                </dl>
+        <?php } ?>
+            </div>
+        </div>
+    </div>
+</div>

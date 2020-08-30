@@ -1,0 +1,77 @@
+<div class="conteudo_controller">
+    <div class="row-fluid">
+        <div class="span12">
+            <form action="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(), "action" => "ocorrencia")); ?>" method="post" id="formulario" class="formulario">
+            <input type="hidden" name="id" id="id" value="<?php echo $this->funcionario->getId(); ?>" />
+            <div class="well well-small">
+                <dl class="dl-horizontal">
+                    <dt>Funcionário: </dt>
+                    <dd><?php echo $this->funcionario->toString(); ?></dd>
+                </dl>
+            </div>
+                <table class="table table-striped table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Tipo</th>
+                            <th>Data Inicial</th>
+                            <th>Data Final</th>
+                            <th>Observações</th>
+                            <th width="20px">Operações</th>
+                        </tr>
+                    </thead>
+            <?php if ($this->registros && count($this->registros)) { ?>
+                    <tbody>
+            <?php
+                foreach ($this->registros as $registro) {
+                    $funcionario = $registro->findParentRow("TbFuncionario");
+            ?>
+                        <tr>
+                            <td>
+                                <a href="<?php echo $this->url(array("action" => "viewocorrencia", "id_funcionario_ocorrencia" => $registro->getId())); ?>">
+                                <?php echo $registro->findParentRow("TbFuncionarioOcorrenciaTipo")->toString(); ?>
+                                </a>
+                            </td>
+                            <td>
+                                <a href="<?php echo $this->url(array("action" => "viewocorrencia", "id_funcionario_ocorrencia" => $registro->getId())); ?>">
+                                <?php echo Escola_Util::formatData($registro->data_inicio); ?>
+                                </a>
+                            </td>
+                            <td>
+                                <a href="<?php echo $this->url(array("action" => "viewocorrencia", "id_funcionario_ocorrencia" => $registro->getId())); ?>">
+                                <?php echo Escola_Util::formatData($registro->data_final); ?>
+                                </a>
+                            </td>
+                            <td>
+                                <a href="<?php echo $this->url(array("action" => "viewocorrencia", "id_funcionario_ocorrencia" => $registro->getId())); ?>">
+                                <?php echo $registro->observacoes; ?>
+                                </a>
+                            </td>
+                            <td width="20px">
+                                <div class="btn-group">	
+                                    <a href="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(),
+                                                                         "action" => "viewocorrencia",
+                                                                         "id_funcionario_ocorrencia" => $registro->getId())); ?>" class="btn" title="Visualizar">
+                                        <i class="icon-search"></i>
+                                    </a>
+                                    <a href="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(),
+                                                                         "action" => "editarocorrencia",
+                                                                         "id_funcionario_ocorrencia" => $registro->getId())); ?>" class="btn" title="Editar">
+                                        <i class="icon-cog"></i>
+                                    </a>
+                                    <a href="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(),
+                                                                         "action" => "excluirocorrencia",
+                                                                         "id_funcionario_ocorrencia" => $registro->getId())); ?>" class="btn link_excluir" title="Excluir">
+                                        <i class="icon-trash"></i>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+            <?php } ?>
+                    </tbody>
+            <?php } ?>
+                </table>
+            <?php //echo $this->paginationControl($this->registros, "sliding", "minha_paginacao_control.phtml"); ?>
+            </form>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,43 @@
+<div class="conteudo_controller">
+    <div class="row-fluid">
+        <div class="span12">
+            <form action="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(), "action" => $this->getRequest()->getActionName())); ?>" method="post" id="formulario" class="formulario form-horizontal" enctype="multipart/form-data">
+                <input type="hidden" name="id" id="id" value="<?php echo $this->registro->getId(); ?>" />
+                <div class="well">
+                    <fieldset>
+                        <legend>CADASTRO DE PORTAL > DOCUMENTO: </legend>
+                <?php if ($this->registro->getId()) { ?>
+                        <dl class="dl-horizontal">
+                            <dt>Código:</dt>
+                            <dd><?php echo $this->registro->getId(); ?></dd>
+                        </dl>
+                <?php } ?>
+                        <div class="control-group">
+                            <label for="id_documento_tipo" class="control-label">Tipo:</label>
+                            <div class="controls">
+                                <select name="id_documento_tipo" id="id_documento_tipo">
+                                    <option value="" <?php echo (!$this->registro->id_documento_tipo)?"selected":""; ?>>==> SELECIONE <==</option>
+<?php foreach ($this->dts as $dt) { ?>
+                                    <option value="<?php echo $dt->getId(); ?>" <?php echo ($dt->getId() == $this->registro->id_documento_tipo)?"selected":""; ?>><?php echo $dt->toString(); ?></option>
+<?php } ?>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label for="resumo" class="control-label">Resumo:</label>
+                            <div class="controls">
+                                <textarea name="resumo" id="resumo" rows="5" class="span5"><?php echo $this->registro->resumo; ?></textarea>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label for="arquivo" class="control-label">Arquivo:</label>
+                            <div class="controls">
+                                <input type="file" name="arquivo" id="arquivo" />
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

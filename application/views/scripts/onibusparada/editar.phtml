@@ -1,0 +1,182 @@
+<style type="text/css">
+    #map {
+        width: 100%;
+        height: 500px;
+    }
+</style>
+<div class="conteudo_controller">
+    <div class="row-fluid">
+        <div class="span12">
+            <form action="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(), "action" => "editar")); ?>" method="post" id="formulario" class="formulario form-horizontal">
+                <input type="hidden" name="id" id="id" value="<?php echo $this->registro->getId(); ?>" />
+                <input type="hidden" name="latitude" id="latitude" value="<?php echo $this->registro->latitude; ?>" />
+                <input type="hidden" name="longitude" id="longitude" value="<?php echo $this->registro->longitude; ?>" />
+                <div class="well">
+                    <fieldset>
+                        <legend>CADASTRO PARADA DE ÔNIBUS: </legend>
+                <?php if ($this->registro->getId()) { ?>
+                        <dl class="dl-horizontal">
+                            <dt>Código:</dt>
+                            <dd><?php echo $this->registro->getId(); ?></dd>
+                        </dl>
+                <?php } ?>
+<?php	
+    $ctrl = new Escola_Form_Element_Select_Table("id_onibus_parada_tipo");
+    $ctrl->setPkName("id_onibus_parada_tipo");
+    $ctrl->setModel("TbOnibusParadaTipo");
+    $ctrl->setValue($this->registro->id_onibus_parada_tipo);
+    $ctrl->setLabel("Tipo: ");
+    echo $ctrl->render($this);
+?>
+                        <div class="control-group">
+                            <label for="descricao" class="control-label">Descrição:</label>
+                            <div class="controls">
+                                <input type="text" name="descricao" id="descricao" size="5" value="<?php echo $this->registro->descricao; ?>" class="span5" />
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label for="endereco" class="control-label">Endereço:</label>
+                            <div class="controls">
+                                <textarea name="endereco" id="endereco" class="span5" cols="20" rows="5"><?php echo $this->registro->endereco; ?></textarea>
+                                <div style="height: 5px;"></div><input type="button" value="Localizar no Mapa" id="btn_busca_endereco" class="btn btn-default" />
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label for="" class="control-label">Localização:</label>
+                            <div class="controls">
+                                <div>Dê um Duplo clique para Marcar o local do Ponto de Ônibus.</div>
+                                <div id='map'></div>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+var styles = [{
+    featureType: "poi",
+    elementType: "all",
+    stylers: [
+        { visibility: "off" }
+    ]
+},{
+    featureType: "transit.station",
+    elementType: "all",
+    stylers: [
+        { visibility: "off" }
+    ]
+}];
+
+var map;
+var marker = false;
+var geocoder;
+
+function criaMarcador(position) {
+    if (!marker) {
+      marker = new google.maps.Marker({
+          title: '<?php echo $this->registro->descricao; ?>',
+          map: map
+      });
+    }
+    marker.setPosition(position);
+    map.setZoom(16);
+    map.setCenter(marker.getPosition());
+    
+    jQuery("#latitude").val(position.lat());
+    jQuery("#longitude").val(position.lng());    
+}
+
+function initialize() {
+  var mapOptions = {
+    zoom: 13,
+    streetViewControl: false,
+    mapTypeControl: false,
+    disableDoubleClickZoom: true,
+    panControl: false,
+    zoomControl: false,
+<?php if (!$this->registro->possuiMapa()) { ?>
+    center: new google.maps.LatLng(-0.006158351886326997, -51.08242359012365)
+<?php } else { ?>
+    center: new google.maps.LatLng(<?php echo $this->registro->latitude; ?>, <?php echo $this->registro->longitude; ?>)
+<?php } ?>
+  };
+  map = new google.maps.Map(document.getElementById('map'),
+      mapOptions);
+  
+  google.maps.event.addListener(map, "dblclick", function(ev) {
+      criaMarcador(ev.latLng);
+  });
+  
+  geocoder = new google.maps.Geocoder();
+  
+<?php if ($this->registro->possuiMapa()) { ?>
+    marker = new google.maps.Marker({
+        title: '<?php echo $this->descricao; ?>',
+        map: map,
+        position: new google.maps.LatLng(<?php echo $this->registro->latitude; ?>, <?php echo $this->registro->longitude; ?>)
+    });
+<?php } ?>
+  map.setOptions( { "styles" : styles } );
+}
+
+google.maps.event.addDomListener(window, 'load', initialize);
+
+jQuery(document).ready(function() {
+    jQuery("#btn_busca_endereco").click(function() {
+        if (jQuery("#endereco").val().length) {
+            geocoder.geocode({ 'address': jQuery("#endereco").val() + ', Brasil', 'region': 'BR' }, function (results, status) {
+                if (status == google.maps.GeocoderStatus.OK) {
+                    console.log(results);
+                    if (results[0]) {
+                        var latitude = results[0].geometry.location.lat();
+                        var longitude = results[0].geometry.location.lng();
+                        var location = new google.maps.LatLng(latitude, longitude);
+                        criaMarcador(location);
+                    }
+                }
+            });
+        }
+    });
+});
+</script>
+<?php 
+/* 
+<script>
+var marker = false;
+var marker_options = {
+    'marker-size': 'large',
+    'marker-symbol': 'bus',
+    'marker-color': '#000'
+};
+L.mapbox.accessToken = 'pk.eyJ1IjoiemVsdWlzYXAiLCJhIjoiME45VDdEbyJ9.AzAZGZWdq8EzpRCL7EOmtg';
+var map = L.mapbox.map('map', 'examples.map-i86nkdio', {
+    "doubleClickZoom" : false
+})
+<?php if (!$this->registro->possuiMapa()) { ?>
+.setView([0.0013732910154828147, -51.12333297729492], 12)
+<?php } else { ?>
+.setView([<?php echo $this->registro->latitude; ?>, <?php echo $this->registro->longitude; ?>], 15)
+<?php } ?>
+.on('dblclick', function(e) {
+    var lat_long = e.latlng;
+    if (!marker) {
+        marker = L.marker(lat_long, {
+            icon: L.mapbox.marker.icon(marker_options)
+        }).addTo(map);  
+    }
+    marker.setLatLng(lat_long);
+    map.setView(lat_long, 15);
+    console.log(lat_long);
+    jQuery("#latitude").val(lat_long.lat);
+    jQuery("#longitude").val(lat_long.lng);
+});
+<?php if ($this->registro->possuiMapa()) { ?>
+    marker = L.marker([<?php echo $this->registro->latitude; ?>, <?php echo $this->registro->longitude; ?>], {
+        icon: L.mapbox.marker.icon(marker_options)
+    }).addTo(map);      
+<?php } ?>
+</script>
+ * 
+ */

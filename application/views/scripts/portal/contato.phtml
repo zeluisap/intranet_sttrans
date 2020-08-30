@@ -1,0 +1,42 @@
+<span class="">
+                <p class="text-warning">
+                    A FUNPEA terá grande satisfação em tirar suas dúvidas, entre em contato nos telefones: (91) 3274-6615 ou 2374-6311. Caso contrário, preencha o formulário abaixo e você será contatado o mais breve possível.
+Por favor, preencha todos os campos obrigatórios.
+                </p>
+            </span>
+            
+           <form class="form-horizontal" method="post" enctype="multipart/form-data" id="formulario" action="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(), "action" => $this->getRequest()->getActionName())); ?>">
+               <fieldset>
+                   <legend>Contato</legend>
+                <div class="control-group">
+                  <label class="control-label" for="">Nome: </label>
+                  <div class="controls">
+                    <input type="text" id="nome" name="nome" placeholder="Nome" class="span6 field" value="<?php echo $this->getRequest()->getParam("nome"); ?>">
+                  </div>
+                </div>
+               <div class="control-group">
+                  <label class="control-label" for="">Email: </label>
+                  <div class="controls">
+                    <input type="text" id="email" name="email" placeholder="Email" class="span6 field" value="<?php echo $this->getRequest()->getParam("email"); ?>">
+                  </div>
+                </div>
+                <div class="control-group">
+                  <label class="control-label" for="">Telefone: </label>
+                  <div class="controls">
+                     <input type="text" id="telefone" name="telefone" placeholder="Telefone" class="span4 field" value="<?php echo $this->getRequest()->getParam("telefone"); ?>">
+                  </div>
+                </div>
+               <div class="control-group">
+                  <label class="control-label" for="">Mensagem: </label>
+                  <div class="controls">
+                    <textarea name="mensagem" id="mensagem" rows="5" class="span6 field" placeholder="Mensagem"><?php echo $this->getRequest()->getParam("mensagem"); ?></textarea>
+                  </div>
+                </div>
+                <div class="control-group">
+                  <div class="controls">
+                    <button type="submit" class="btn btn-success">Enviar</button>
+                    <button type="button" class="btn btn-danger" id="btn_limpar">Limpar</button>
+                  </div>
+                </div>
+                </fieldset>
+              </form>

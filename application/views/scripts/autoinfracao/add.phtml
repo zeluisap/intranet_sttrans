@@ -1,0 +1,38 @@
+<style type="text/css">
+    .caracter {
+        width: 40px;
+        margin-right: 4px;
+    }
+</style>
+<div class="conteudo_controller">
+    <div class="row-fluid">
+        <div class="span12">
+            <form action="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(), "action" => $this->getRequest()->getActionName())); ?>" method="post" id="formulario" class="formulario form-horizontal">
+                <div class="well">
+                    <fieldset>
+                        <legend>ADICIONAR AUTO DE INFRAÇÃO: </legend>
+<?php 
+$ctrl = new Escola_Form_Element_Select_Table("id_servico_tipo");
+$ctrl->setPkName("id_servico_tipo");
+$ctrl->setModel("TbServicoTipo");
+$ctrl->setLabel("Tipo:");
+echo $ctrl->render($this);
+?>
+                        <div class="control-group">
+                            <label for="codigo_inicio" class="control-label">Início da Numeração:</label>
+                            <div class="controls">
+                                <input type="text" name="caracter" id="caracter" class="span1 caracter" value="A" /><input type="text" name="codigo_inicio" id="codigo_inicio" size="5" value="" class="span2" />
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label for="codigo_final" class="control-label">Final da Numeração:</label>
+                            <div class="controls">
+                                <input type="text" name="caracter_final" id="caracter_final" disabled class="caracter" /><input type="text" name="codigo_final" id="codigo_final" size="5" value="" class="span2" />
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

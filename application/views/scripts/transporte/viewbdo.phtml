@@ -1,0 +1,101 @@
+<?php
+$txt_tarifa = "--";
+$tarifa = $this->registro->pega_tarifa();
+if ($tarifa) {
+    $txt_tarifa = $tarifa->toString();
+}
+?>
+<div class="conteudo_controller">
+    <div class="row-fluid">
+        <div class="span12">
+            <div class="well">
+                <div class="page-header">
+                    <h4>Cadastro de Boletim Diário de Ônibus</h4>
+                </div>
+                <dl class="dl-horizontal">
+                    <dt>Codigo:</dt>
+                    <dd><?php echo $this->registro->getId(); ?></dd>
+                </dl>
+<?php if ($this->transporte) { ?>
+                <dl class="dl-horizontal">
+                    <dt>Transporte:</dt>
+                    <dd><?php echo $this->transporte->toString(); ?></dd>
+                </dl>
+<?php } ?>
+<?php if ($this->rota) { ?>
+                <dl class="dl-horizontal">
+                    <dt>Rota:</dt>
+                    <dd><?php echo $this->rota->toString(); ?></dd>
+                </dl>
+<?php } ?>
+                <dl class="dl-horizontal">
+                    <dt>BDO:</dt>
+                    <dd><?php echo $this->registro->bdo; ?></dd>
+                </dl>
+                <dl class="dl-horizontal">
+                    <dt>Data:</dt>
+                    <dd><?php echo Escola_Util::formatData($this->registro->data_bdo); ?></dd>
+                </dl>
+<?php
+$txt_veiculo = "";
+$tv = $this->registro->findParentRow("TbTransporteVeiculo");
+if ($tv) {
+    $txt_veiculo = $tv->toString();
+}
+?>
+                <dl class="dl-horizontal">
+                    <dt>Veículo:</dt>
+                    <dd><?php echo $txt_veiculo; ?></dd>
+                </dl>
+                <dl class="dl-horizontal">
+                    <dt>Tarifa:</dt>
+                    <dd><?php echo $txt_tarifa; ?></dd>
+                </dl>
+                <dl class="dl-horizontal">
+                    <dt>Hora de Saída:</dt>
+                    <dd><?php echo $this->registro->hora_saida; ?></dd>
+                </dl>
+                <dl class="dl-horizontal">
+                    <dt>Hora de Chegada:</dt>
+                    <dd><?php echo $this->registro->hora_chegada; ?></dd>
+                </dl>
+                <dl class="dl-horizontal">
+                    <dt>Km Inicial:</dt>
+                    <dd><?php echo Escola_Util::number_format($this->registro->km_inicial); ?></dd>
+                </dl>
+                <dl class="dl-horizontal">
+                    <dt>Km Final:</dt>
+                    <dd><?php echo Escola_Util::number_format($this->registro->km_final); ?></dd>
+                </dl>
+                <dl class="dl-horizontal">
+                    <dt>Viagens:</dt>
+                    <dd><?php echo Escola_Util::number_format($this->registro->viagens); ?></dd>
+                </dl>
+            </div>
+<?php if ($this->tts) { ?>
+            <div class="well">
+                <div class="page-header">
+                    <h4>Cadastro de Rota > BDO > Passageiros</h4>
+                </div>
+<?php 
+$tb = new TbOnibusBdoTarifa();
+foreach ($this->tts as $tt) { 
+    $passageiros = 0;
+    if ($this->registro->getId()) {
+        $rs = $tb->listar(array("id_onibus_bdo" => $this->registro->getId(), "id_tarifa_tipo" => $tt->getId()));
+        if ($rs && count($rs)) {
+            $obj = $rs->current();
+            $passageiros = $obj->passageiros;
+        }
+    }
+?>
+                <dl class="dl-horizontal">
+                    <dt><?php echo $tt->toString(); ?>:</dt>
+                    <dd><?php echo Escola_Util::number_format($passageiros); ?></dd>
+                </dl>
+<?php } ?>
+            </div>
+<?php } ?>
+        </div>
+    </div>
+</div>

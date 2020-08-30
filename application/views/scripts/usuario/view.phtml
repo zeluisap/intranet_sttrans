@@ -1,0 +1,34 @@
+<div class="conteudo_controller">
+    <div class="row-fluid">
+        <div class="span12">
+            <div class="well">
+                <div class="page-header">
+                    <h4>Cadastro de Usuário</h4>
+                </div>
+                <form action="<?php echo $this->url(array("action" => "index")); ?>" method="post" id="formulario" class="formulario">
+                    <input type="hidden" name="id" id="id" value="<?php echo $this->registro->getId(); ?>" />
+                    <dl class="dl-horizontal">
+                        <dt>Código:</dt>
+                        <dd><?php echo $this->registro->getId(); ?></dd>
+                    </dl>
+                    <dl class="dl-horizontal">
+                        <dt>C.P.F.:</dt>
+                        <dd><?php echo $this->formatCpf($this->registro->getPessoaFisica()->cpf); ?></dd>
+                    </dl>
+                    <dl class="dl-horizontal">
+                        <dt>Nome:</dt>
+                        <dd><?php echo $this->registro->getPessoaFisica()->nome; ?></dd>
+                    </dl>
+                    <dl class="dl-horizontal">
+                        <dt>E-Mail:</dt>
+                        <dd><?php echo $this->registro->getPessoaFisica()->getPessoa()->email; ?></dd>
+                    </dl>
+                    <dl class="dl-horizontal">
+                        <dt>Situação:</dt>
+                        <dd><?php echo $this->registro->findParentRow("TbUsuarioSituacao")->descricao; ?></dd>
+                    </dl>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

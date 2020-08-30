@@ -1,0 +1,43 @@
+<style type="text/css">
+    .caracter {
+        width: 40px;
+        margin-right: 4px;
+    }
+</style>
+<div class="conteudo_controller">
+    <div class="row-fluid">
+        <div class="span12">
+            <form action="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(), "action" => $this->getRequest()->getActionName())); ?>" method="post" id="formulario" class="formulario form-horizontal">
+                <input type="hidden" name="id_agente" id="id_agente" value="<?php echo $this->registro->getId(); ?>" />
+                <div class="well">
+                    <fieldset>
+                        <legend>ADICIONAR AUTO DE INFRAÇÃO: </legend>
+                        <dl class="dl-horizontal">
+                            <dt>Agente: </dt>
+                            <dd><?php echo $this->registro->toString(); ?></dd>
+                        </dl>
+<?php 
+$ctrl = new Escola_Form_Element_Select_Table("id_servico_tipo");
+$ctrl->setPkName("id_servico_tipo");
+$ctrl->setModel("TbServicoTipo");
+$ctrl->setLabel("Tipo:");
+echo $ctrl->render($this);
+?>                        
+                        <div class="control-group">
+                            <label for="codigo_inicio" class="control-label">Início da Numeração:</label>
+                            <div class="controls">
+                                <input type="text" name="filtro_caracter" id="filtro_caracter" class="span1 caracter" value="A" /><input type="text" name="filtro_codigo_inicio" id="filtro_codigo_inicio" size="5" value="" class="span2" />
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label for="codigo_final" class="control-label">Final da Numeração:</label>
+                            <div class="controls">
+                                <input type="text" name="caracter_final" id="caracter_final" disabled class="caracter" /><input type="text" name="filtro_codigo_final" id="filtro_codigo_final" size="5" value="" class="span2" />
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

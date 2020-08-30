@@ -1,0 +1,51 @@
+<div class="conteudo_controller">
+    <div class="row-fluid">
+        <div class="span12">
+            <form action="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(), "action" => $this->getRequest()->getActionName())); ?>" method="post" id="formulario" class="formulario form-horizontal" enctype="multipart/form-data">
+<?php if ($this->registro->getId()) { ?>
+                <input type="hidden" name="id" id="id" value="<?php echo $this->registro->getId(); ?>" />
+<?php } ?>
+                <div class="well">
+                    <fieldset>
+                        <legend>DEVOLVER AUTO DE INFRAÇÃO: </legend>
+                        <dl class="dl-horizontal">
+                            <dt>ID:</dt>
+                            <dd><?php echo $this->registro->getId(); ?></dd>
+                        </dl>
+                        <dl class="dl-horizontal">
+                            <dt>Código:</dt>
+                            <dd><?php echo $this->registro->findParentRow("TbServicoTipo")->toString(); ?></dd>
+                        </dl>
+                        <dl class="dl-horizontal">
+                            <dt>Código:</dt>
+                            <dd><?php echo $this->registro->mostrar_codigo(); ?></dd>
+                        </dl>
+                        <dl class="dl-horizontal">
+                            <dt>Agente:</dt>
+                            <dd><?php echo $this->agente->toString(); ?></dd>
+                        </dl>
+<?php 
+$ctrl = new Escola_Form_Element_Select_Table("id_auto_infracao_devolucao_status");
+$ctrl->setPkName("id_auto_infracao_devolucao_status");
+$ctrl->setModel("TbAutoInfracaoDevolucaoStatus");
+$ctrl->setValue("");
+$ctrl->setLabel("Situação da Devolução:");
+echo $ctrl->render($this);
+?>
+                        <div class="control-group linha_observacoes hide">
+                            <label for="observacoes" class="control-label">Observações: </label>
+                            <div class="controls">
+                                <textarea name="observacoes" id="observacoes" rows="6" class="span5"></textarea>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+<?php if ($this->notificacao) { ?>
+                <div class="well linha_notificacao hide">
+<?php echo $this->notificacao->render($this); ?>
+                </div>
+<?php } ?>
+            </form>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,123 @@
+<?php echo $this->doctype(); ?>
+<!DOCTYPE HTML>
+<html lang="en-US">
+<head>
+	<?php echo $this->headMeta(); ?>
+	<?php echo $this->headTitle(); ?>
+	<?php echo $this->headLink(); ?>
+	<?php echo $this->headScript(); ?>
+</head>
+<body>
+    <div class="topo">
+        <div class="container-fluid">
+    <div class="pull-left logo-topo">
+            <a href="<?php echo $this->url(array("controller" => "index", "action" => "index")); ?>"><img src="<?php echo $this->baseUrl(); ?>/img/logo2.png" alt="" /></a>
+        </div>
+        <div class="text-center">
+            <h4 style="color: #fff">FUNDAÇÃO DE APOIO À PESQUISA, EXTENSÃO E ENSINO EM CIÊNCIAS AGRÁRIAS - FUNPEA</h4>
+        </div>
+    
+            <div class="navbar span10" style="position: static;">
+                    <div class="navbar-inner navbar-green">
+                      <div class="container">
+                          <a class="btn btn-navbar" data-toggle="collapse" data-target=".navbar-inverse-collapse">
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                          </a>
+                          <div class="nav-collapse collapse navbar-inverse-collapse">
+<?php 
+$tb = new TbMenuPosicao();
+$ms = $tb->getPorChave("S");
+if ($ms) {
+    $tb = new TbMenu();
+    $menus = $tb->listar(array("id_menu_posicao" => $ms->getId(), "id_menu_superior" => "null"));
+    if ($menus) {
+?>
+                        <ul class="nav">
+<?php foreach ($menus as $menu) { 
+    $inferiores = $menu->pegaInferiores();
+    if ($inferiores) {
+?>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown"><?php echo $menu->descricao; ?><b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+<?php if ($inferiores) { ?>
+<?php foreach ($inferiores as $inferior) { ?>
+                                  <li class="text-left"><a href="<?php echo $inferior->url(); ?>"><?php echo $inferior->descricao; ?></a></li>
+<?php }} ?>
+                                </ul>
+                            </li>
+<?php } else { ?>
+                            <li class="text-left"><a href="<?php echo $menu->url(); ?>"><?php echo $menu->descricao; ?></a></li>
+<?php }} ?>
+                        </ul>
+<?php }} ?>
+                      </div>
+                          </div>
+                    </div>
+                </div>
+      </div>
+      </div>
+    <hr />
+<?php
+if ($this->actionErrors) { 
+?>
+				<div class="alert alert-error">
+					<button type="button" class="close" data-dismiss="alert">&times;</button>
+                    <ul>
+<?php	foreach ($this->actionErrors as $erro) { ?>
+                        <li><?php echo $erro; ?></li>
+<?php } ?>  
+                    </ul>
+				</div>
+<?php } 
+/*================================================
+	Mensagem de sucesso
+=================================================*/
+if ($this->actionMessages) { 
+?>
+				<div class="alert alert-info">  
+					<button type="button" class="close" data-dismiss="alert">&times;</button>
+                    <ul>
+<?php foreach ($this->actionMessages as $message) { ?>
+					<li><?php echo $message; ?></li>
+<?php } ?>
+                    </ul>
+				</div>
+<?php } ?>
+            
+    <div class="container-fluid">
+        
+            
+        
+
+<?php 
+$nav = Escola_Navegacao::getInstance();
+echo $nav->render();
+?>
+            <?php echo $this->layout()->content; ?>
+        
+          
+
+      
+    </div>
+    <div class="rodape">
+        <div class="text-center">
+            <img class="img-polaroid" src="<?php echo $this->baseUrl(); ?>/img/logo2.png" alt="" /><br /><br />
+            <p>
+                Avenida Presidente Tancredo Neves, nº 2501, campus UFRA ||
+                <strong>CEP:</strong> nº 66.077-830 - Belém - PA ||
+                <strong>CNPJ:</strong> 01821471/0001-23 ||
+                <strong>Tel efones/Fax:</strong> (91) 3274-6311 e 3274-6615 || 
+                <strong>Email:</strong> ascom@funpea.org.br
+            </p>
+        </div>
+    </div>
+      <div class="container-fluid">
+        <footer>
+            <p> Copyright © 2015. All Rights Reserved.</p>
+        </footer>
+      </div>
+  </body>
+</html>

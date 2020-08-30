@@ -1,0 +1,59 @@
+<div class="conteudo_controller">
+	<div class="row-fluid">
+		<div class="span12">
+			<div class="well">
+<form action="<?php echo $this->url(array("controller" => "grupo", "action" => "editar")); ?>" method="post" id="formulario" class="formulario form-horizontal">
+	<input type="hidden" name="id" id="id" value="<?php echo $this->grupo->getId(); ?>" />
+	<fieldset>
+		<legend>CADASTRO DE GRUPO: </legend>
+<?php if ($this->grupo->getId()) { ?>
+		<dl class="dl-horizontal">
+			<dt>Código:</dt>
+			<dd><?php echo $this->grupo->getId(); ?></dd>
+		</dl>
+<?php } ?>
+		<div class="control-group">
+			<label for="descricao" class="control-label">Descrição:</label>
+			<div class="controls">
+				<input type="text" name="descricao" id="descricao" size="60" maxlength="60" value="<?php echo $this->grupo->descricao; ?>" />
+			</div>
+		</div>
+		<div class="control-group">
+			<label for="padrao" class="control-label">Padrão:</label>
+			<div class="controls">
+				<select name="padrao" id="padrao">
+					<option value="" <?php echo (!$this->grupo->padrao)?"selected":""; ?> >==> SELECIONE <==</option>
+					<option value="S" <?php echo ($this->grupo->padrao == "S")?"selected":""; ?>>SIM</option>
+					<option value="N" <?php echo ($this->grupo->padrao == "N")?"selected":""; ?>>NÃO</option>
+				</select>
+			</div>
+		</div>
+<?
+$tb = new TbGrupo();
+$rg = $tb->fetchAll();
+$grupos = array();
+foreach ($rg as $obj) {
+	if ($this->grupo->getId() != $obj->getId()) {
+		$grupos[] = $obj;
+	}
+}
+if (count($grupos)) {
+?>		
+		<div class="control-group">
+			<label for="descricao" class="control-label">Grupo Inferior:</label>
+			<div class="controls">
+				<select name="id_grupo_inferior" id="id_grupo_inferior">
+					<option value="" <?php echo (!$this->grupo->id_grupo_inferior)?"selected":""; ?>>==> SELECIONE <==</option>
+	<?php foreach ($grupos as $grupo) { ?>
+					<option value="<?php echo $grupo->getId(); ?>" <?php echo ($this->grupo->id_grupo_inferior == $grupo->getId())?"selected":""; ?>><?php echo $grupo->descricao; ?></option>
+	<?php } ?>
+				</select>
+			</div>
+		</div>
+<?php } ?>
+	</fieldset>
+</form>
+			</div>
+		</div>
+	</div>
+</div>

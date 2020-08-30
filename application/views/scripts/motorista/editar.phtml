@@ -1,0 +1,55 @@
+<div class="conteudo_controller">
+    <div class="row-fluid">
+        <div class="span12">
+            <form action="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(), "action" => "editar")); ?>" method="post" id="formulario" class="formulario form-horizontal">
+                <input type="hidden" name="id" id="id" value="<?php echo $this->registro->getId(); ?>" />
+                <div class="well">
+                    <fieldset>
+                        <legend>CADASTRO DE MOTORISTA: </legend>
+                        <?php if ($this->registro->getId()) { ?>
+                            <dl class="dl-horizontal">
+                                <dt>Código:</dt>
+                                <dd><?php echo $this->registro->getId(); ?></dd>
+                            </dl>
+                            <dl class="dl-horizontal">
+                                <dt>Motorista:</dt>
+                                <dd><?php echo $this->registro->toString(); ?></dd>
+                            </dl>
+                        <?php } ?>
+                        <?php
+                        if (!$this->registro->getId()) {
+                            $ctrl = new Escola_Form_Element_Select_Table("id_transporte_grupo");
+                            $ctrl->setPkName("id_transporte_grupo");
+                            $ctrl->setModel("TbTransporteGrupo");
+                            $ctrl->setValue($this->registro->id_transporte_grupo);
+                            $ctrl->setLabel("Grupo de Transporte: ");
+                            echo $ctrl->render($this);
+                        }
+                        ?>
+                        <div class="control-group">
+                            <label for="data_cadastro" class="control-label">Data Cadastro:</label>
+                            <div class="controls">
+                                <input type="text" name="data_cadastro" id="data_cadastro" size="5" value="<?php echo Escola_Util::formatData($this->registro->data_cadastro); ?>" class="span2 data" />
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label for="matricula" class="control-label">Matrícula:</label>
+                            <div class="controls">
+                                <input type="text" name="matricula" id="matricula" size="5" value="<?php echo $this->registro->matricula; ?>" class="span2" />
+                                Deixe em Branco para Numeração Automática.
+                            </div>
+                        </div>
+                        <?php
+                        if (!$this->registro->getId()) {
+                            $ctrl = new Escola_Form_Element_Select_Table_PessoaMotorista("id_pessoa_motorista");
+                            $ctrl->setValue($this->registro->id_pessoa_motorista);
+                            $ctrl->setLabel("Motorista: ");
+                            echo $ctrl->render($this);
+                        }
+                        ?>
+                    </fieldset>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

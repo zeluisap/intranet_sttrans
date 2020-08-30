@@ -1,0 +1,154 @@
+<?php  if ($this->destaques) { ?>
+    <div class="span8">
+        <div id="myCarousel" class="carousel">
+
+<!-- Itens de carousel -->
+        <div class="carousel-inner">
+<?php 
+$contador = 0;
+foreach ($this->destaques as $destaque) { 
+    $contador++;
+    $arquivo = $destaque->pega_arquivo();
+    $link = $this->url(array("controller" => $this->getRequest()->getControllerName(), "action" => "view", "id" => $destaque->getId()));
+    $link_imagem = Escola_Util::url(array("controller" => "arquivo", "action" => "show", "id" => $arquivo->getId(), "width" => 600, "height" => 300));
+?>
+            <div class="item <?php if($contador == 1) print 'active';  ?>">
+            <?php if ($arquivo) { ?>
+                <center>
+                    <img src='<?php echo $link_imagem; ?>' alt='Slide' />   
+                </center>
+            <?php }  ?>
+                <div class="carousel-caption">
+                    <h4><a href="<?php echo $link; ?>"><?php echo $destaque->titulo; ?></a></h4>
+                    <p><a href="<?php echo $link; ?>"><?php echo $destaque->resumo; ?></a></p>
+                </div> 
+            </div>
+<?php }  ?>
+        </div>
+        <!-- Navegador do carousel -->
+        <a class="carousel-control left" href="#myCarousel" data-slide="prev">&lsaquo;</a>
+        <a class="carousel-control right" href="#myCarousel" data-slide="next">&rsaquo;</a>
+    </div>  
+    </div>
+<?php }  ?>
+
+<?php 
+$tb = new TbMenuPosicao();
+$ml = $tb->getPorChave("L");
+if ($ml) {
+    $tb = new TbMenu();
+    $menus = $tb->listar(array("id_menu_posicao" => $ml->getId(), "id_menu_superior" => "null"));
+    $conta = 0;
+    
+?>
+    <div class="span4">
+        
+             <?php if ($menus) { ?>   
+            <div class="accordion" id="leftMenu">
+            <?php foreach ($menus as $menu) {
+                $conta++;
+                $inferiores = $menu->pegaInferiores();
+                if ($inferiores) {
+            ?>    
+                <div class="accordion-group">
+                    <div class="accordion-heading">
+                        <a class="accordion-toggle" data-toggle="collapse" data-parent="#leftMenu" href="#collapse<?php echo $conta; ?>">
+                            <i class="icon-chevron-down"></i> <?php echo $menu->descricao; ?>
+                        </a>
+                    </div>
+                    <div id="collapse<?php echo $conta; ?>" class="accordion-body collapse" style="height: 0px; ">
+                        <div class="accordion-inner">
+                            <ul>
+                    <?php if ($inferiores) { ?>
+                    <?php foreach ($inferiores as $inferior) { ?>
+                                <li><i class="icon-chevron-right"></i> <a href="<?php echo $inferior->url(); ?>"><?php echo $inferior->descricao; ?></a></li>
+                    <?php }} ?>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+             <?php } else {  ?> 
+                <div class="accordion-group">
+                    <div class="accordion-heading">
+                        <a class="accordion-toggle" data-toggle="collapse" data-parent="#leftMenu" href="<?php echo $menu->url(); ?>">
+                            <i class="icon-chevron-right"></i> <?php echo $menu->descricao; ?>
+                        </a>
+                    </div>
+                </div>
+            <?php }} ?>
+            </div>
+            
+            <?php } ?>
+        </div>
+<?php } ?> 
+<div class="span12">
+    <ul class="thumbnails">
+<div class="span4">
+    <table class="table table-bordered">
+        <thead>
+        <th class="ttopo">MENSAGEM DO PRESIDENTE</th>
+        </thead>
+        <tbody>
+        <td>
+            <p style="text-align: justify">
+                Em um mundo em que as mudanças são os carros-chefes dos acontecimentos, estar atento às demandas da sociedade e comunidade acadêmica é de fundamental importância para evolução dos processos no campo da pesquisa, extensão e ensino.
+                A busca constante de aprimoramento de técnicas de controle administrativo-financeiro, gerencial e a difusão da informação, tornam-se elementos essenciais no processo de apoio ao desenvolvimento Institucional.
+            </p>
+            <p><a class="btn pull-right btn-mini btn-success" href="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(), "action" => "view", "chave" => "I", "id" => "9")); ?>">Ler mais &raquo;</a></p>
+        </td>
+        </tbody>
+    </table>
+</div>
+  
+<?php if ($this->noticias){ ?>
+    <div class="span4">
+<?php 
+    foreach ($this->noticias as $noticia){ 
+        $img = $noticia->pega_arquivo(); 
+        $imagem = Escola_Util::url(array("controller" => "arquivo", "action" => "show", "id" => $img->getId(), "width" => 64, "height" => 64));
+?>  
+        <div class="media">
+            <?php if($img->getId()){ ?>
+            <div class="pull-left">
+                <img src="<?php echo $imagem; ?>" alt="">
+            </div>
+            <?php } ?>
+            <div class="media-body">
+                <span class="media-heading"><a href="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(), "action" => "view", "id" => $noticia->getId())); ?>"><?php echo $noticia->titulo;?></a></span><br />
+                <small class="muted">Postado <?php echo Escola_Util::formatData($noticia->data); ?></small>
+            </div>
+        </div>
+        <?php } ?>
+        <a class="btn pull-right btn-mini btn-success" href="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(), "action" => "viewall", "chave" => "I")); ?>">Ver Todas  &raquo;</a>
+    </div>
+<?php } ?>
+
+<?php 
+$tb = new TbMenuPosicao();
+$ms = $tb->getPorChave("E");
+if ($ms) {
+    $tb = new TbMenu();
+    $menus = $tb->listar(array("id_menu_posicao" => $ms->getId(), "id_menu_superior" => "null"));
+?>
+<div class="span4">
+    <table class="table table-bordered parceiro">
+        <thead>
+        <th class="ttopo">Parceiros</th>
+        </thead>
+        <tbody>
+        <td style="text-align: center">
+<?php foreach ($menus as $menu) { 
+    $target = "";
+    if ($menu->externo()) {
+        $target = 'target="_blank"';
+    }
+?>
+    <a href="<?php echo $menu->url(); ?>" title="<?php echo $menu->toString(); ?>" <?php echo $target; ?>><?php echo $menu->mostrarIcone(); ?></a>        
+<?php } ?>
+        </td>
+        </tbody>
+    </table>
+</div>
+<?php } ?>
+</ul>
+    </div>

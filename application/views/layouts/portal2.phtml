@@ -1,0 +1,58 @@
+<?php echo $this->doctype(); ?>
+<!DOCTYPE html>
+<html>
+    <head>
+	<?php echo $this->headMeta(); ?>
+	<?php echo $this->headTitle(); ?>
+	<?php echo $this->headLink(); ?>
+	<?php echo $this->headScript(); ?>
+    </head>
+    <body>
+        <div id="geral">
+			<?php echo $this->partial("_header_site.phtml");  ?>
+			<?php echo $this->partial("_site_menu_superior.phtml");  ?>
+			
+<?php 
+/*================================================
+	Mensagem de erro
+=================================================*/
+if ($this->actionErrors) { ?>
+			<div class="errors">			
+<?php foreach ($this->actionErrors as $erro) { ?>
+				<div>
+					<div class="ui-amarelo ui-icon ui-icon-alert icon-position"></div>
+					<?php echo $erro; ?>
+				</div>
+<?php } ?>
+			</div>
+<?php } ?>
+<?php 
+/*================================================
+	Mensagem de sucesso
+=================================================*/
+if ($this->actionMessages) { ?>
+			<div class="messages">
+<?php foreach ($this->actionMessages as $message) { ?>
+				<div>  
+					<div class="ui-branco ui-icon ui-icon-check icon-position"></div>
+					<?php echo $message; ?>
+				</div>
+<?php } ?>
+			</div>
+<?php } ?>
+			
+            <div id="centro">
+				<?php echo $this->partial("_site_menu_lateral.phtml");  ?>					
+				<?php echo $this->layout()->content; ?>
+            </div>
+            <div id="rodape">
+              <div class="div_rodape">
+                  <img style="margin-top: 20px;" src="<?php echo Escola_Util::getBaseUrl(); ?>/img/logo_rodape.png">
+              </div>
+              <div class="linha"><img src="<?php echo Escola_Util::getBaseUrl(); ?>/img/l.png"></div>
+				<?php echo $this->partial("_footer_site.phtml"); ?>              
+            </div>
+            
+        </div>
+    </body>
+</html>

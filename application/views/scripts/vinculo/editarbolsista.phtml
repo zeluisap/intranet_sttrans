@@ -1,0 +1,54 @@
+<div class="conteudo_controller">
+    <div class="row-fluid">
+        <div class="span12">
+            <form action="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(), "action" => "editarbolsista")); ?>" method="post" id="formulario" class="formulario form-horizontal">
+                <input type="hidden" name="id" id="id" value="<?php echo $this->registro->getId(); ?>" />
+                <div class="well">
+                    <fieldset>
+                        <legend>CADASTRO DE BOLSISTA: </legend>
+                        <dl class="dl-horizontal">
+                            <dt>Vínculo:</dt>
+                            <dd><?php echo $this->vinculo->toString(); ?></dd>
+                        </dl>
+                <?php if ($this->registro->getId()) { ?>
+                        <dl class="dl-horizontal">
+                            <dt>ID:</dt>
+                            <dd><?php echo $this->registro->getId(); ?></dd>
+                        </dl>
+                <?php } ?>
+                        <div class="control-group">
+                            <label for="chave" class="control-label">Tipo:</label>
+                            <div class="controls">
+                                <select name="id_bolsa_tipo" id="id_bolsa_tipo" class="span5">
+                                    <option value="">==> SELECIONE <==</option>
+<?php foreach ($this->bts as $bt) { ?>
+                                    <option value="<?php echo $bt->getId(); ?>" <?php echo ($bt->getId() == $this->registro->id_bolsa_tipo)?"selected":""; ?>><?php echo $bt->toString(); ?> - <?php echo $bt->mostrar_valor(); ?></option>
+<?php } ?>
+                                </select>
+                            </div>
+                        </div>
+<?php
+$ctrl = new Escola_Form_Element_Select_Table_PessoaFisica("id_pessoa_fisica");
+$ctrl->setValue($this->registro->id_pessoa_fisica);
+$ctrl->setLabel("Pessoa Física:");
+echo $ctrl->render($this);
+
+$ctrl = new Escola_Form_Element_Select_Table_Crud_InfoBancaria("id_info_bancaria");
+$ctrl->setValue($this->ib->getId());
+$ctrl->set_tipo("P");
+$ctrl->set_chave("id_pessoa_fisica");
+$ctrl->setLabel("Informações Bancárias:");
+echo $ctrl->render($this);
+?>
+                        <div class="control-group">
+                            <label for="carga_horaria" class="control-label">Carga Horária:</label>
+                            <div class="controls">
+                                <input type="text" name="carga_horaria" id="carga_horaria" class="span1" value="<?php echo $this->registro->carga_horaria; ?>" /> Horas Semanais.
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

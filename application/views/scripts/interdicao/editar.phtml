@@ -1,0 +1,122 @@
+<style type="text/css">
+<?php if (!$this->interdicao->getId()) { ?>.linha_dados, <?php } ?>#linha_id_pessoa_fisica, #linha_id_pessoa_juridica {
+    display:none;
+}
+</style>
+<div class="conteudo_controller">
+    <div class="row-fluid">
+        <div class="span12">
+            <form action="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(), "action" => $this->getRequest()->getActionName())); ?>" method="post" id="formulario" class="formulario form-horizontal">
+                <input type="hidden" name="id_servico_transporte_grupo" id="id_servico_transporte_grupo" value="<?php echo $this->stg->getId(); ?>" />
+                <div class="well well-small">
+                    <fieldset>
+                        <legend>ADICIONAR SOLICITAÇÃO DE INTERDIÇÃO</legend>
+                        <dl class="dl-horizontal">
+                            <dt>Serviço:</dt>
+                            <dd><?php echo $this->stg->toString(); ?></dd>
+                        </dl>
+                        <div class="control-group">
+                            <label for="titulo" class="control-label">Título:</label>
+                            <div class="controls">
+                                <input type="text" name="titulo" id="titulo" class="span5" value="<?php echo $this->interdicao->titulo; ?>" />
+                            </div>
+                        </div>
+<?php 
+$pt = false;
+$pessoa = $this->interdicao->findParentRow("TbPessoa");
+if ($pessoa) {
+    $pt = $pessoa->findParentRow("TbPessoaTipo");
+    $filho = $pessoa->pegaPessoaFilho();
+}
+$ctrl = new Escola_Form_Element_Select_Table("id_pessoa_tipo");
+$ctrl->setAttrib("class", "filtro");
+$ctrl->setPkName("id_pessoa_tipo");
+$ctrl->setModel("TbPessoaTipo");
+$ctrl->setLabel("Tipo de Pessoa:");
+if ($pt) {
+    $ctrl->setValue($pt->getId());
+}
+echo $ctrl->render($this);
+
+$ctrl = new Escola_Form_Element_Select_Table_PessoaFisica("id_pessoa_fisica");
+$ctrl->setLabel("Pessoa Física: ");
+if ($pt && $pt->pf() && $filho) {
+    $ctrl->setValue($filho->getId());
+}
+echo $ctrl->render($this);
+
+$ctrl = new Escola_Form_Element_Select_Table_PessoaJuridica("id_pessoa_juridica");
+$ctrl->setLabel("Pessoa Jurídica: ");
+if ($pt && $pt->pj() && $filho) {
+    $ctrl->setValue($filho->getId());
+}
+echo $ctrl->render($this);
+?>
+                        <div class="control-group">
+                            <label for="informacoes" class="control-label">Informações da Interdição (Local e Horário):</label>
+                            <div class="controls">
+                                <textarea name="informacoes" id="informacoes" class="span5" rows="6"><?php echo $this->interdicao->informacoes; ?></textarea>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label for="isento" class="control-label">Isento?</label>
+                            <div class="controls">
+                                <select name="isento" id="isento">
+                                    <option value="S" <?php echo ($this->interdicao->isento())?"selected":""; ?>>SIM</option>
+                                    <option value="N" <?php echo (!$this->interdicao->isento())?"selected":""; ?>>NÃO</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="control-group linha_motivo">
+                            <label for="isento_motivo" class="control-label">Motivo da Isenção:</label>
+                            <div class="controls">
+                                <textarea name="isento_motivo" id="isento_motivo" class="span5" rows="6"><?php echo $this->interdicao->isento_motivo; ?></textarea>
+                            </div>
+                        </div>
+<?php
+if ($this->ss) {
+    $valor = $this->ss->pega_valor()->toString(); 
+} else {
+    $valor = $this->stg->pega_valor()->toString();
+}
+?>
+                        <div class="control-group linha_valor">
+                            <label for="valor" class="control-label">Valor a Pagar:</label>
+                            <div class="controls">
+                                <div class="input-prepend">
+                                    <div class="add-on">R$</div>
+                                    <input type="text" name="valor" id="valor" class="moeda input-medium" value="<?php echo $valor; ?>" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label for="ano_referencia" class="control-label">Ano Referência:</label>
+                            <div class="controls">
+                                <input type="text" name="ano_referencia" id="ano_referencia" class="span1" value="<?php echo ($this->ss)?$this->ss->ano_referencia:date("Y"); ?>" />
+                            </div>
+                        </div>                        
+                        <div class="control-group">
+                            <label for="codigo" class="control-label">Número:</label>
+                            <div class="controls">
+                                <input type="text" name="codigo" id="codigo" class="span1" value="<?php echo ($this->ss)?$this->ss->codigo:""; ?>" />
+                                * Para Numeração automática, deixe este campo em branco.
+                            </div>
+                        </div>
+                        <div class="control-group linha_dados">
+                            <label for="data_validade" class="control-label">Validade:</label>
+                            <div class="controls">
+                                <input type="text" name="data_validade" id="data_validade" class="span2 data field" value="<?php echo ($this->ss)?  Escola_Util::formatData($this->ss->data_validade):""; ?>" />
+                            </div>
+                        </div>
+                        <div class="control-group linha_dados">
+                            <label for="data_vencimento" class="control-label">Vencimento do Boleto:</label>
+                            <div class="controls">
+                                <input type="text" name="data_vencimento" id="data_vencimento" class="span2 data field" value="<?php echo ($this->ss)?  Escola_Util::formatData($this->ss->data_vencimento):""; ?>" />
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

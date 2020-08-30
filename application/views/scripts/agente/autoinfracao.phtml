@@ -1,0 +1,126 @@
+<form action="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(), "action" => "autoinfracao")); ?>" method="post" id="formulario" class="formulario form-horizontal">
+<div class="conteudo_controller">
+    <div class="row-fluid">
+        <div class="span12">
+            <div class="well well-small" id="idPesquisa">
+                <div class="page-header">
+                    <h4>Opções de Pesquisa</h4>
+                </div>
+<?php 
+$ctrl = new Escola_Form_Element_Select_Table("filtro_id_servico_tipo");
+$ctrl->setAttrib("class", "filtro");
+$ctrl->setPkName("id_servico_tipo");
+$ctrl->setModel("TbServicoTipo");
+$ctrl->setValue($this->dados["filtro_id_servico_tipo"]);
+$ctrl->setLabel("Tipo:");
+echo $ctrl->render($this);
+?>
+                <div class="control-group">
+                    <label for="filtro_caracter" class="control-label">Início da Numeração:</label>
+                    <div class="controls">
+                        <input type="text" name="filtro_caracter" id="filtro_caracter" class="span1 caracter filtro" value="<?php echo $this->dados["filtro_caracter"]; ?>" /><input type="text" name="filtro_codigo_inicio" id="filtro_codigo_inicio" size="5" value="<?php echo $this->dados["filtro_codigo_inicio"]; ?>" class="span2 filtro" />
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label for="filtro_codigo_final" class="control-label">Final da Numeração:</label>
+                    <div class="controls">
+                        <input type="text" name="caracter_final" id="caracter_final" disabled class="caracter filtro" /><input type="text" name="filtro_codigo_final" id="filtro_codigo_final" size="5" value="<?php echo $this->dados["filtro_codigo_final"]; ?>" class="span2 filtro" />
+                    </div>
+                </div>
+<?php 
+$ctrl = new Escola_Form_Element_Select_Table("filtro_id_auto_infracao_status");
+$ctrl->setAttrib("class", "filtro span5");
+$ctrl->setPkName("id_auto_infracao_status");
+$ctrl->setModel("TbAutoInfracaoStatus");
+$ctrl->setValue($this->dados["filtro_id_auto_infracao_status"]);
+$ctrl->setLabel("Status de Auto de Infração:");
+echo $ctrl->render($this);
+?>
+                <div class="control-group">
+                    <div class="controls">
+                        <input type="submit" value="Pesquisar" class="acao btn btn-primary" />
+                        <input type="button" value="Limpar Filtro" id="idLimparPesquisa" class="btn" />
+                    </div>
+                </div>
+            </div>
+            <div class="well well-small">
+                <dl class="dl-horizontal">
+                    <dt>Agente: </dt>
+                    <dd><?php echo $this->registro->toString(); ?></dd>
+                </dl>
+            </div>
+            <table class="table table-striped table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Tipo</th>
+                            <th>Código</th>
+                            <th>Status da Devolução</th>
+                            <th>Status</th>
+                            <th width="20px">Operações</th>
+                        </tr>
+                    </thead>
+            <?php if ($this->registros && count($this->registros)) { ?>
+                    <tbody>
+            <?php 
+                foreach ($this->registros as $registro) { 
+                    $aids = $registro->findParentRow("TbAutoInfracaoDevolucaoStatus");
+                    $ais = $registro->findParentRow("TbAutoInfracaoStatus");
+            ?>
+                        <tr>
+                            <td>
+                                <a href="<?php echo $this->url(array("action" => "viewautoinfracao", "id" => $registro->getId())); ?>">
+                                    <?php echo $registro->findParentRow("TbServicoTipo")->toString(); ?>
+                                </a>
+                            </td>
+                            <td>
+                                <a href="<?php echo $this->url(array("action" => "viewautoinfracao", "id" => $registro->getId())); ?>">
+                                    <?php echo $registro->mostrar_codigo(); ?>
+                                </a>
+                            </td>
+                            <td>
+                                <a href="<?php echo $this->url(array("action" => "viewautoinfracao", "id" => $registro->getId())); ?>">
+                                    <?php echo ($aids)?$aids->toString():"--"; ?>
+                                </a>
+                            </td>
+                            <td>
+                                <a href="<?php echo $this->url(array("action" => "viewautoinfracao", "id" => $registro->getId())); ?>">
+                                    <?php echo $ais->toString(); ?>
+                                </a>
+                            </td>
+                            <td>
+                                <div class="btn-group">	
+                                    <a href="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(),
+                                                                         "action" => "viewautoinfracao",
+                                                                         "id" => $registro->getId())); ?>" class="btn" title="Visualizar">
+                                        <i class="icon-search"></i>
+                                    </a>
+<?php if ($registro->entregue()) { ?>
+                                    <a href="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(),
+                                                                         "action" => "excluirautoinfracao",
+                                                                         "id" => $registro->getId())); ?>" class="btn link_excluir" title="Excluir">
+                                        <i class="icon-trash"></i>
+                                    </a>
+<?php } ?>
+<?php if ($registro->entregue()) { ?>
+                                    <a href="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(),
+                                                                         "action" => "devolver",
+                                                                         "id" => $registro->getId())); ?>" class="btn" title="Devolver">
+                                        <i class="icon-download-alt"></i>
+                                    </a>
+<?php } ?>
+                                </div>
+                            </td>
+                        </tr>
+            <?php } ?>
+                    </tbody>
+            <?php } ?>
+                </table>
+<?php if ($this->registros && count($this->registros)) {
+ echo $this->paginationControl($this->registros, "sliding", "minha_paginacao_control.phtml");
+}
+?>
+        </div>
+    </div>
+    </div>
+</div>
+</form>

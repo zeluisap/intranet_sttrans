@@ -1,0 +1,53 @@
+<style type="text/css">
+    div.imagem img {
+        border: 1px solid #ccc;
+    }
+</style>
+<script type="text/javascript">
+    jQuery(document).ready(function() {
+        jQuery("#bt_limpar_resumo").click(function() {
+            jQuery("#filtro_resumo").val("");
+            jQuery("#form_resumo").submit();
+        });
+    });
+</script>
+<div class="media">
+    <div class="media-body">
+        <form action="<?php echo Escola_Util::url(array("controller" => $this->getRequest()->getControllerName(), "action" => $this->getRequest()->getActionName())); ?>" class="form-inline text-center"  method="POST" id="form_resumo">
+            <fieldset>
+                <legend>Busca na Página</legend>
+                <input type="text" name="filtro_resumo" id="filtro_resumo" class="span5" value="<?php echo $this->filtro_resumo; ?>">
+                <input type="submit" class="btn btn-primary" value="Enviar" />
+                <input type="button" value="Limpar" class="btn btn-danger" id="bt_limpar_resumo"/>
+            </fieldset>
+        </form>
+<?php if ($this->registros) { ?>
+        <div class="well">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>TITULO</th>
+                    </tr>
+                </thead>
+                <tbody>
+<?php 
+foreach ($this->registros as $registro) { 
+    $arquivo = $registro->pega_arquivo();
+    $link = Escola_Util::url(array("controller" => "arquivo", "action" => "view", "id" => $arquivo->getId()));
+?>
+                    <tr>
+                        <td><a href="<?php echo $link; ?>" target="_blank"><?php echo ($arquivo)?$arquivo->miniatura(array("width" => 30)):""; ?></a></td>
+                        <td><a href="<?php echo $link; ?>" target="_blank"><?php echo $registro->resumo; ?></a></td>
+                    </tr>
+<?php } ?>
+                </tbody>
+            </table>
+        </div>
+<?php if ($this->registros && count($this->registros)) {
+ echo $this->paginationControl($this->registros, "sliding", "minha_paginacao_control.phtml");
+}
+?>
+<?php } ?>
+    </div>
+</div>

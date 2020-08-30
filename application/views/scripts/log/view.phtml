@@ -1,0 +1,84 @@
+<?php
+$txt_cpf = $txt_nome = "--";
+if ($this->registro->cpf) {
+    $txt_cpf = Escola_Util::formatCpf($this->registro->cpf);
+}
+if ($this->registro->nome) {
+    $txt_nome = $this->registro->nome;
+}
+?>
+<div class="conteudo_controller">
+    <div class="row-fluid">
+        <div class="span12">
+            <form action="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(), "action" => "view")); ?>" method="post" id="formulario" class="formulario">
+                <input type="hidden" name="id" id="id" value="<?php echo $this->registro->getId(); ?>" />
+                <div class="well">
+                    <fieldset>
+                        <legend>CADASTRO DE LOG: </legend>
+                        <dl class="dl-horizontal">
+                            <dt>Código:</dt>
+                            <dd><?php echo $this->registro->getId(); ?></dd>
+                        </dl>
+                        <dl class="dl-horizontal">
+                            <dt>Data / Hora:</dt>
+                            <dd>
+                <?php
+                $data = new Zend_Date($this->registro->data);
+                echo $data->get("dd/MM/Y HH:mm:ss");
+                ?>  
+                            </dd>
+                        </dl>
+                        <dl class="dl-horizontal">
+                            <dt>Operações:</dt>
+                            <dd><?php echo $this->registro->findParentRow("TbLogOperacao")->toString(); ?></dd>
+                        </dl>
+                        <dl class="dl-horizontal">
+                            <dt>Tabela:</dt>
+                            <dd><?php echo $this->registro->tabela; ?></dd>
+                        </dl>
+                        <dl class="dl-horizontal">
+                            <dt>C.P.F.:</dt>
+                            <dd><?php echo $txt_cpf; ?></dd>
+                        </dl>
+                        <dl class="dl-horizontal">
+                            <dt>Nome:</dt>
+                            <dd><?php echo $txt_nome; ?></dd>
+                        </dl>
+                        <dl class="dl-horizontal">
+                            <dt>Identificador Registro:</dt>
+                            <dd><?php echo $this->registro->id; ?></dd>
+                        </dl>
+                    </fieldset>
+                </div>
+            <?php if ($this->campos && count($this->campos)) { ?>
+                <table class="table table-striped table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Nome do Campo</th>
+                            <th>Valor Anterior</th>
+                            <th>Valor Alterado</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            <?php
+                foreach ($this->campos as $registro) {
+            ?>
+                        <tr>
+                            <td>
+                                <?php echo $registro->nome_campo; ?>
+                            </td>
+                            <td>
+                                    <?php echo $registro->valor_anterior; ?>
+                            </td>
+                            <td>
+                                <?php echo $registro->valor_depois; ?>
+                            </td>
+                        </tr>
+            <?php } ?>
+                    </tbody>
+                </table>
+            <?php } ?>
+            </form>
+        </div>
+    </div>
+</div>

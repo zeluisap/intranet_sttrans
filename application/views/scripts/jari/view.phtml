@@ -1,0 +1,106 @@
+<?php 
+$tb = new TbMoeda();
+$moeda = $tb->pega_padrao();
+$txt_notificacao = $txt_data_hora = $txt_documento = $txt_resumo = $txt_valor_total = $txt_status = "--";
+$txt_data_hora = Escola_Util::formatData($this->registro->data_jari) . " - " . $this->registro->hora_jari;
+$not = $this->registro->findParentRow("TbAutoInfracaoNotificacao");
+if ($not) {
+    $txt_notificacao = $not->toString();
+    $valor_total = $not->pegaValorTotal();
+    $txt_valor_total = Escola_Util::number_format($valor_total);
+}
+$doc = $this->registro->findParentRow("TbDocumento");
+if ($doc) {
+    $txt_documento = $doc->toString();
+    $txt_resumo = $doc->resumo;
+}
+$rjs = $this->registro->pegaRequerimentoJariStatus();
+if ($rjs) {
+    $txt_status = $rjs->toString();
+}
+?>
+<div class="conteudo_controller">
+    <div class="row-fluid">
+        <div class="span12">
+            <div class="well">
+                <div class="page-header">
+                    <h4>Visualização de Requerimento de Auto de Infração</h4>
+                </div>
+                <dl class="dl-horizontal">
+                    <dt>Código:</dt>
+                    <dd><?php echo $this->registro->getId(); ?></dd>
+                </dl>
+                <dl class="dl-horizontal">
+                    <dt>Notificação de Auto de Infração:</dt>
+                    <dd><?php echo $txt_notificacao; ?></dd>
+                </dl>
+                <dl class="dl-horizontal">
+                    <dt>Data / Hora Infração:</dt>
+                    <dd><?php echo $txt_data_hora; ?></dd>
+                </dl>
+                <dl class="dl-horizontal">
+                    <dt>Documento:</dt>
+                    <dd><?php echo $txt_documento; ?></dd>
+                </dl>
+                <dl class="dl-horizontal">
+                    <dt>Resumo Doc:</dt>
+                    <dd><?php echo $txt_resumo; ?></dd>
+                </dl>
+                <dl class="dl-horizontal">
+                    <dt>Valor (R$):</dt>
+                    <dd><?php echo $txt_valor_total; ?></dd>
+                </dl>
+                <dl class="dl-horizontal">
+                    <dt>Status:</dt>
+                    <dd><?php echo $txt_status; ?></dd>
+                </dl>
+            </div>
+<?php 
+$rjrs = $this->registro->pegaResposta();
+if ($rjrs) {
+    $rjr = $rjrs->current();
+    $txt_data_resposta = $txt_funcionario = $txt_observacao = "--";
+    $txt_data_resposta = Escola_Util::formatData($rjr->data_resposta);
+    $funcionario = $rjr->pegaFuncionario();
+    if ($funcionario) {
+        $txt_funcionario = $funcionario->toString();
+    }
+    if ($rjr->observacao) {
+        $txt_observacao = $rjr->observacao;
+    }
+?>
+            <div class="well">
+                <div class="page-header">
+                    <h4>Resposta de Requerimento de Auto de Infração</h4>
+                </div>
+                <dl class="dl-horizontal">
+                    <dt>Data Resposta:</dt>
+                    <dd><?php echo $txt_data_resposta; ?></dd>
+                </dl>
+                <dl class="dl-horizontal">
+                    <dt>Funcionário:</dt>
+                    <dd><?php echo $txt_funcionario; ?></dd>
+                </dl>
+                <dl class="dl-horizontal">
+                    <dt>Observações:</dt>
+                    <dd><?php echo $txt_observacao; ?></dd>
+                </dl>
+<?php 
+if ($this->registro->deferimento_parcial() && $not) { 
+    $txt_valor_pagar = "";
+    $valor_pagar = $not->pegaValorPagar();
+    if ($moeda) {
+        $txt_valor_pagar = $moeda->simbolo;
+    }
+    $txt_valor_pagar .= " " . Escola_Util::number_format($valor_pagar);
+?>
+                <dl class="dl-horizontal">
+                    <dt>Valor a Pagar:</dt>
+                    <dd><?php echo $txt_valor_pagar; ?></dd>
+                </dl>
+<?php } ?>
+            </div>
+<?php } ?>
+        </div>
+    </div>
+</div>

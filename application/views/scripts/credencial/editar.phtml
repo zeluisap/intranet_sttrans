@@ -1,0 +1,122 @@
+<?php 
+$txt_id = $txt_id_credencial_tipo = $txt_id_pessoa_fisica = $txt_id_pessoa_fisica_responsavel = $txt_ano = "";
+if (isset($this->registro)) {
+    $registro = $this->registro;
+    if (!$registro->getId()) {
+        $txt_id = $registro->getId();
+    }
+    if (!empty($registro->id_credencial_tipo)) {
+        $txt_id_credencial_tipo = $registro->id_credencial_tipo;
+    }
+    if (!empty($registro->id_pessoa_fisica)) {
+        $txt_id_pessoa_fisica = $registro->id_pessoa_fisica;
+    }
+    if (!empty($registro->id_pessoa_fisica_responsavel)) {
+        $txt_id_pessoa_fisica_responsavel = $registro->id_pessoa_fisica_responsavel;
+    }
+    if (!empty($registro->ano)) {
+        $txt_ano = $registro->ano;
+    }
+}
+?>
+<script type="text/javascript">
+    $(document).ready(function() {
+        $("#resposta").change(function() {
+            $(".linha_data_validade, .linha_justificativa").hide();
+            if (!$(this).val().length) {
+                return false;
+            }
+            if ($(this).val() == "D") {
+                $(".linha_data_validade").show();
+            } else if ($(this).val() == "I") {
+                $(".linha_justificativa").show();
+            }
+        });
+        $("#id_credencial_tipo").focus();
+    });
+</script>
+<div class="conteudo_controller">
+    <div class="row-fluid">
+        <div class="span12">
+            <form action="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(), "action" => $this->getRequest()->getActionName())); ?>" method="post" id="formulario" class="formulario form-horizontal">
+<?php if ($txt_id) { ?>
+                <input type="hidden" name="id" id="id" value="<?php echo $txt_id; ?>" />
+<?php } ?>
+                <div class="well">
+                    <fieldset>
+                        <legend>CADASTRO DE CREDENCIAL: </legend>
+<?php if ($txt_id) { ?>
+                        <dl class="dl-horizontal">
+                            <dt>Código:</dt>
+                            <dd><?php echo $txt_id; ?></dd>
+                        </dl>
+<?php } ?>
+<?php
+$ctrl = new Escola_Form_Element_Select_Table("id_credencial_tipo");
+$ctrl->setPkName("id_credencial_tipo");
+$ctrl->setModel("TbCredencialTipo");
+$ctrl->setValue($txt_id_credencial_tipo);
+$ctrl->setLabel("Tipo: ");
+echo $ctrl->render($this);
+?>
+                        <div class="control-group">
+                            <label for="ano" class="control-label">Ano:</label>
+                            <div class="controls">
+                                <input type="text" name="ano" id="ano" size="5" maxlength="4" value="<?php echo $txt_ano; ?>" class="span1" />
+                            </div>
+                        </div>
+<?php
+$ctrl = new Escola_Form_Element_Select_Table_PessoaFisica("id_pessoa_fisica");
+$ctrl->setPkName("id_pessoa_fisica");
+$ctrl->setModel("TbPessoaFisica");
+$ctrl->setValue($txt_id_pessoa_fisica);
+$ctrl->setLabel("Beneficiário: ");
+echo $ctrl->render($this);
+
+$ctrl = new Escola_Form_Element_Select_Table_PessoaFisica("id_pessoa_fisica_responsavel");
+$ctrl->setPkName("id_pessoa_fisica");
+$ctrl->setModel("TbPessoaFisica");
+$ctrl->setValue($txt_id_pessoa_fisica_responsavel);
+$ctrl->setLabel("Responsável Legal: ");
+echo $ctrl->render($this);
+
+?>
+                    </fieldset>
+                </div>
+<?php if (!$txt_id) { 
+    $data_validade = new Zend_Date();
+    $data_validade->add(1, Zend_Date::YEAR);
+    $txt_data_validade = $data_validade->toString("dd/MM/yyyy");
+?>                
+                <div class="well">
+                    <fieldset>
+                        <legend>DEFERIR / INDEFERIR: </legend>
+                        <div class="control-group">
+                            <label for="resposta" class="control-label">Resposta:</label>
+                            <div class="controls">
+                                <select name="resposta" id="resposta" class="span4">
+                                    <option value="">==> SELECIONE <==</option>
+                                    <option value="D">DEFERIR</option>
+                                    <option value="I">INDEFERIR</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="control-group linha_data_validade" style="display:none">
+                            <label for="resposta_data_validade" class="control-label">Data de Validade:</label>
+                            <div class="controls">
+                                <input type="text" name="resposta_data_validade" id="resposta_data_validade" value="<?php echo $txt_data_validade; ?>" class="span2 data" />
+                            </div>
+                        </div>
+                        <div class="control-group linha_justificativa" style="display:none">
+                            <label for="resposta_justificativa" class="control-label">Justificativa:</label>
+                            <div class="controls">
+                                <textarea name="resposta_justificativa" id="resposta_justificativa" rows="5" class="span6"></textarea>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+<?php } ?>
+            </form>
+        </div>
+    </div>
+</div>

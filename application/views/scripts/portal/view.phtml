@@ -1,0 +1,126 @@
+<?php
+$span = "span6";
+if(!$this->arquivos && !$this->fotos){
+   $span = "span12";
+}
+
+?>
+<div class="row-fluid">
+    <div class="<?php echo $span; ?>">
+        <ul class="media-list">
+            <li class="media">
+                <?php if ($this->foto_principal) { ?>
+                <a class="pull-left swipebox" href="<?php echo $this->foto_principal->getlink(); ?>" title="<?php echo $this->foto_principal->toString(); ?>">
+
+                  <?php echo $this->foto_principal->miniatura(array("width" => "120")); ?>
+                </a>
+                <?php } ?>
+                <div class="media-body">
+                    <h4 style="color: #34495e"><?php echo $this->info->titulo; ?></h4>
+                    <small class="muted"><i class="icon-calendar"></i> Postado <?php echo Escola_Util::formatData($this->info->data); ?> |</small> 
+                    <?php if ($this->info->autor) { ?>
+                    <small class="muted"><i class="icon-user"></i> Autor: <?php echo $this->info->autor; ?> |</small>
+                    <?php } ?>
+                    <?php if ($this->info->fonte) { ?>
+                    <small class="muted"><i class="icon-link"></i> Fonte: <?php echo $this->info->fonte; ?></small>
+                    <?php } ?>
+                    <div class="media">
+                        <div class="texto_justificado" style="color: #34495e; padding-top: 10px"><?php echo $this->info->conteudo; ?></div>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </div>
+    
+    <div class="span6">
+    <?php if ($this->arquivos) { ?>
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th>Data</th>
+            <th>Arquivo</th>
+            <th>Tamanho</th>
+          </tr>
+        </thead>
+        <tbody>
+        <?php foreach ($this->arquivos as $arquivo) { ?>
+          <tr>
+            <td><a href="<?php echo Escola_Util::url(array("controller" => "arquivo", "action" => "view", "id" => $arquivo->getId())); ?>"><?php echo Escola_Util::formatData($arquivo->data_upload); ?></a></td>
+            <td><a href="<?php echo Escola_Util::url(array("controller" => "arquivo", "action" => "view", "id" => $arquivo->getId())); ?>"><?php echo $arquivo->legenda; ?></a></td>
+            <td><a href="<?php echo Escola_Util::url(array("controller" => "arquivo", "action" => "view", "id" => $arquivo->getId())); ?>"><?php echo $arquivo->mostrarTamanho(); ?></a></td>
+          </tr>
+        <?php } ?>
+        </tbody>
+      </table>
+    <?php } ?>
+    <?php if ($this->fotos) { ?>
+        <?php foreach ($this->fotos as $foto) { ?>
+        <div class="span3">
+            <ul class="thumbnails'">
+                <li class="span12">
+                    <a href="<?php echo Escola_Util::url(array("controller" => "arquivo", "action" => "show", "id" => $foto->getId())); ?>" class="thumbnail swipebox" title="<?php echo $foto->legenda; ?>">
+                        <img src="<?php echo Escola_Util::url(array("controller" => "arquivo", "action" => "show", "id" => $foto->getId())); ?>" />
+                    </a>
+                </li>
+                
+            </ul>
+        </div>
+            <?php } ?>
+    </div>
+    <?php } ?>
+</div>             
+                              
+                   
+<?php if ($this->info->comentario()) { ?>
+                   <form action="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(), "action" => "addcomentario")); ?>" class="form-horizontal well well-small" method="post">
+                       <input type="hidden" name="id_info" id="id_info" value="<?php echo $this->info->getId(); ?>" />
+                        <fieldset>
+                        <legend class="text-center">Deixe seu comentário.</legend>
+                            <div class="control-group">
+                              <label class="control-label" for="">Nome</label>
+                              <div class="controls">
+                                <input type="text" name="nome" id="nome" placeholder="Nome" class="span4">
+                              </div>
+                            </div>
+                           <div class="control-group">
+                              <label class="control-label" for="">Email</label>
+                              <div class="controls">
+                                <input type="text" name="email" id="email" placeholder="Email" class="span4">
+                              </div>
+                            </div>
+                           <div class="control-group">
+                              <label class="control-label" for="">Mensagem</label>
+                              <div class="controls">
+                                <textarea name="comentario" id="comentario" cols="" rows="5" class="span9"></textarea>
+                              </div>
+                            </div>
+                            <div class="control-group">
+                              <div class="controls">
+                                <button type="submit" class="btn btn-success">Publicar Comentário</button>
+                              </div>
+                            </div>
+                        </fieldset>
+                        </form>
+<?php if ($this->comentarios) { ?>
+<?php foreach ($this->comentarios as $comentario) { ?>
+                        <hr />
+                        <div class="panel well well-small">
+                            <h4 class="media-heading"><?php echo $comentario->nome; ?></h4>
+                            <dl class="dl-horizontal">
+                                <dt>Data / Hora: </dt>
+                                <dd><?php echo Escola_Util::formatData($comentario->data); ?> <?php echo $comentario->hora; ?></dd>
+                            </dl>
+                            <dl class="dl-horizontal">
+                                <dt>E-mail: </dt>
+                                <dd><?php echo $comentario->email; ?></dd>
+                            </dl>
+                            <dl class="dl-horizontal">
+                                <dt>Comentário: </dt>
+                                <dd><?php echo $comentario->comentario; ?></dd>
+                            </dl>
+                        </div>
+<?php } ?>
+<?php } ?>
+<?php } ?>
+                    </div>
+                  </div>

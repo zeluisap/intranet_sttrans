@@ -1,0 +1,135 @@
+<div class="conteudo_controller">
+    <div class="row-fluid">
+        <div class="span12">
+            <form action="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(), "action" => "editararquivo")); ?>" method="post" id="formulario" class="formulario form-horizontal" enctype="multipart/form-data">
+                <input type="hidden" name="jan_pagina" id="jan_pagina" value="" />
+                <input type="hidden" name="operacao" id="operacao" value="<?php echo $this->operacao; ?>" />
+                <input type="hidden" name="id" id="id" value="<?php echo $this->transporte->getId(); ?>" />
+            <?php if ($this->registro->getId()) { ?>
+                <input type="hidden" name="id_documento_ref" id="id_documento_ref" value="<?php echo $this->registro->getId(); ?>" />
+            <?php } ?>
+                <div class="well">
+                    <fieldset class="fieldset">
+                        <legend>ARQUIVO DE TRANSPORTE: </legend>
+
+                        <dl class="dl-horizontal">
+                            <dt>Transporte:</dt>
+                            <dd><?php echo $this->transporte->toString(); ?></dd>
+                        </dl>
+                <?php
+                $tb = new TbDocumentoTipoTarget();
+                $dtts = $tb->listar();
+                if ($dtts) {
+                    $id_dtt = 0;
+                    if (isset($this->dados["id_documento_tipo_target"]) && $this->dados["id_documento_tipo_target"]) {
+                        $id_dtt = $this->dados["id_documento_tipo_target"];
+                    }
+                ?>
+                        <div class="control-group">
+                            <label for="id_documento_tipo_target" class="control-label">Tipo:</label>
+                            <div class="controls">
+                                <select name="id_documento_tipo_target" id="id_documento_tipo_target">
+                                    <option value="" <?php echo (!$id_dtt)?"selected":""; ?>>==> SELECIONE <==</option>
+                    <?php foreach ($dtts as $dtt) { ?>
+                    <?php if (!$dtt->normal()) { ?>
+                                    <option value="<?php echo $dtt->getId(); ?>" <?php echo ($dtt->getId() == $id_dtt)?"selected":""; ?>><?php echo $dtt->toString(); ?></option>
+                    <?php } ?>
+                    <?php } ?>
+                                </select>
+                            </div>
+                        </div>
+                <?php } ?>
+                        <div class="linha_documento_tipo control-group" style="display:none">
+                            <label for="id_documento_tipo" class="control-label">Tipo de Documento:</label>
+                            <div class="controls">
+                                <select name="id_documento_tipo" id="id_documento_tipo">
+                                </select>
+                            </div>
+                        </div>
+                        
+    <div id="janela_documento" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h4 id="myModalLabel">Localizar Documento</h4>
+        </div>
+        <div class="modal-body">
+            <div class="well well-small">
+                <fieldset>
+                    <div class="control-group">
+                        <label for="filtro_numero" class="control-label">Número / Ano:</label>
+                        <div class="controls">
+                            <input type="text" name="filtro_numero" id="filtro_numero" value="" class="filtro span1" /> / <input type="text" name="filtro_ano" id="filtro_ano" value="" class="filtro span1" />
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label for="filtro_resumo" class="control-label">Resumo:</label>
+                        <div class="controls">
+                            <textarea name="filtro_resumo" id="filtro_resumo" rows="5" class="filtro span5"></textarea>
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
+            <table id="documento_resposta" class="table table-striped table-bordered">
+                <thead class="head_documento">
+                    <th>ID</th>
+                    <th>Data / Hora Criação</th>
+                    <th>Tipo</th>
+                    <th>Número</th>
+                    <th>Resumo</th>
+                </thead>
+                <tbody class="corpo_documento"></tbody>
+            </table>            
+        </div>
+        <div class="modal-footer">
+            <button class="btn" data-dismiss="modal" aria-hidden="true">Fechar</button>
+            <input type="button" value="ADICIONAR" class="btn" id="bt_documento_novo" />
+            <input type="button" value="LIMPAR FILTRO" id="bt_documento_limpar" class="btn" />
+            <input type="submit" value="PROCURAR" class="btn btn-primary" />
+       </div>
+    </div>
+                        
+                       <input type="hidden" name="id_documento" id="id_documento" value="<?php echo ($this->documento)?$this->documento->getId():""; ?>" />
+                        <div class="linha_documento control-group" style="display:none">
+                            <label for="procedencia" class="control-label">Documento:</label>
+                            <div class="controls">
+                                <div class="input-append">
+                                    <input type="text" name="show_documento" id="show_documento" value="<?php echo ($this->documento && $this->documento->getId())?$this->documento->toString():""; ?>" disabled class="input-xxlarge" />
+                                    <div class="add-on">
+                                        <a href="#" id="link_documento" title="Selecionar Documento">
+                                            <i class="icon-search"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="clear"></div>
+                        </div>
+                        <div class="linha_documento_cadastro control-group" style="display:none">
+                            <label for="numero" class="control-label">Número:</label>
+                            <div class="controls">
+                                <input type="text" name="numero" id="numero" class="field span1" /> / <input type="text" name="ano" id="ano" class="field span1" />
+                            </div>
+                        </div>
+                        <div class="linha_cadastro control-group">
+                            <label for="resumo" class="control-label">Observações:</label>
+                            <div class="controls">
+                                <textarea name="resumo" id="resumo" rows="4" class="field span5"><?php echo ($this->documento)?$this->documento->resumo:""; ?></textarea>
+                            </div>
+                        </div>
+                        <div class="linha_cadastro control-group">
+                            <label for="localizacao_fisica" class="control-label">Localização Física:</label>
+                            <div class="controls">
+                                <textarea name="localizacao_fisica" id="localizacao_fisica" rows="4" class="field span5"><?php echo ($this->documento)?$this->documento->localizacao_fisica:""; ?></textarea>
+                            </div>
+                        </div>
+                        <div class="linha_cadastro control-group">
+                            <label for="arquivo" class="control-label">Arquivo:</label>
+                            <div class="controls">
+                                <input type="file" name="arquivo" id="arquivo" size="50" class="field" />
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,72 @@
+<?php 
+$registro = $this->registro;
+$txt_id = $txt_veiculo = $txt_data_hora = $txt_notificacao = $txt_status = "--";
+$txt_id = $registro->getId();
+$veiculo = $registro->pegaVeiculo();
+if ($veiculo) {
+    $txt_veiculo = $veiculo->toString();
+}
+$txt_data_hora = Escola_Util::formatData($registro->data_veiculo_retido) . " - " . $registro->hora_veiculo_retido;
+$not = $registro->pegaAutoInfracaoNotificacao();
+if ($not) {
+    $txt_notificacao = $not->toString();
+    $pf = $not->pegaPessoaFisica();
+    if ($pf) {
+        $txt_motorista = $pf->toString();
+    }
+}
+$vrs = $registro->pegaVeiculoRetidoStatus();
+if ($vrs) {
+    $txt_status = $vrs->toString();
+}
+?>
+<div class="conteudo_controller">
+    <div class="row-fluid">
+        <div class="span12">
+            <div class="well">
+                <div class="page-header">
+                    <h4>Visualização de Veículo Retido</h4>
+                </div>
+                <dl class="dl-horizontal">
+                    <dt>Código:</dt>
+                    <dd><?php echo $txt_id; ?></dd>
+                </dl>
+                <dl class="dl-horizontal">
+                    <dt>Veículo:</dt>
+                    <dd><?php echo $txt_veiculo; ?></dd>
+                </dl>
+                <dl class="dl-horizontal">
+                    <dt>Data / Hora Infração:</dt>
+                    <dd><?php echo $txt_data_hora; ?></dd>
+                </dl>
+                <dl class="dl-horizontal">
+                    <dt>Notificação:</dt>
+                    <dd><?php echo $txt_notificacao; ?></dd>
+                </dl>
+                <dl class="dl-horizontal">
+                    <dt>Status:</dt>
+                    <dd><?php echo $txt_status; ?></dd>
+                </dl>
+<?php 
+if ($this->vrl) {
+    $txt_data_liberacao = $txt_funcionario = "--";
+    $txt_data_liberacao = Escola_Util::formatData($this->vrl->data_liberacao) . " - " . $this->vrl->hora_liberacao;
+    $funcionario = $this->vrl->pegaFuncionario();
+    if ($funcionario) {
+        $txt_funcionario = $funcionario->toString();
+    }
+?>
+                <br />
+                <dl class="dl-horizontal">
+                    <dt>Data da Liberação:</dt>
+                    <dd><?php echo $txt_data_liberacao; ?></dd>
+                </dl>
+                <dl class="dl-horizontal">
+                    <dt>Liberado Por:</dt>
+                    <dd><?php echo $txt_funcionario; ?></dd>
+                </dl>
+<?php } ?>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,206 @@
+
+#menu{
+    font-family: arial;
+    margin-left:10px;
+    margin-right: 10px;
+    float: left;
+    font-size: 12px;
+    height: 810px;
+}
+
+#menu ul{
+    margin: 0px;
+    padding: 0px;
+}
+
+#menu ul a{
+    text-decoration: none;
+}
+
+#menu ul a li{
+    color: #1F547F;
+    text-transform: capitalize;
+    width: 186px;
+    list-style: none;
+    border-bottom: 1px dashed #E6E6E6;
+    padding-top:5px;
+    padding-bottom:5px;
+}
+
+
+
+#menu ul a li:active{
+    color: #1F3B51;
+    font-style: italic;
+    font-weight: bold;
+ 
+}
+
+#menu ul li:hover{
+    margin-left: -10px;
+    background: #FFFFE0;
+    border-left: 4px solid #1F3B51;
+    padding-left: 4px;
+    
+}
+
+
+
+
+
+
+
+
+/*
+MENU PARTE 2
+*/
+
+/*@CHARSET "UTF-8";*/
+/* Menu horizontal com buscador
+----------------------------------------------- */
+#menuWrapper {
+width:82%; /* Tamanho do menu */
+height:40px;
+padding-left:0px;
+background:#1F547F; /* Cor de fundo */
+/*border-radius:5px; /* Bordas aredondadas */
+margin-left: 18%;
+}
+
+.menu {
+width: 100%;
+float: left;
+font-family:"Arial", "Trebuchet Unicode MS", "Lucida Grande",sans-serif;
+font-size:12px; /* Tamanho da fonte */
+font-weight:bold;
+}
+.menu ul {
+float:left;
+height:0px;
+list-style:none;
+margin:0;
+padding:0;
+border-radius: 0px 0px 5px 5px; /* Bordas aredondadas do sub-menu */
+}
+.menu li{
+float:left;
+padding:0px;
+}
+.menu li a{
+border-right: 1px solid #1F3B51;
+color:#FFF; /* Color de la fuente */
+display:block;
+text-transform: capitalize;
+font-weight:normal;
+line-height:40px;
+margin:0px;
+padding:0px 14px; /* Espaço entre cada casa */
+text-align:center;
+text-decoration:none;
+}
+.menu li a:hover, .menu ul li:hover a {
+background: #1F3B51; /* Cor das casas ao passar o cursor */
+color:#FFF; /* Cor do texto ao passar o cursor */
+text-decoration:none;
+}
+.menu li ul {
+background:#C02200; /* Cor de fundo do sub-menu */
+display:none;
+height:auto;
+padding:0px;
+margin:0px;
+position:absolute;
+
+z-index:100;
+border-top:1px solid #fff; /* Borda superior do sub-menu */
+}
+.menu li:hover ul{
+display:block;
+}
+.menu li li {
+display:block;
+float:none;
+margin:0px;
+padding:0px;
+
+}
+.menu li:hover li a {
+background:none;
+border-radius: 0px 0px 5px 5px; /* Borda das sub-casas */
+}
+.menu li ul a {
+display:block;
+height:35px;
+font-size:12px;
+font-style:normal;
+margin:0px;
+padding:0px 10px 0px 15px;
+text-align:left;
+}
+.menu li ul a:hover, .menu li ul li:hover a{
+background:#881300; /* Cor das sub-casas ao passar o cursor */
+color:#ffffff;
+text-decoration:none;
+}
+
+#search { 
+width: 228px; /* Tamanho da caixa de busca */
+height: 24px;
+float: right;
+text-align: center;
+margin-top: 8px;
+margin-right: 6px;
+background: #fff;/* Cor de fundo da caixa de busca */
+}
+#search-box {
+margin-top: 3px;
+border:0px;
+background: transparent;
+text-align:center;
+}
+
+.msg{
+padding: 10px;
+font-size: 16px;
+margin: 6px;
+color: #333;
+
+}
+
+input, select{
+	padding: 4px;
+	font-size: 16px;
+	font-weight: bold;
+	color:#BEBEBE;
+}
+
+table tr {
+	height: 30px;
+}
+
+form table tr td{
+	font-size: 16px;
+	color:#696969;
+	
+	
+}
+
+table tr:hover{
+	
+	color: #333;
+}
+
+#search-box{
+	color:#333;
+	font-size: 12px;
+}
+
+.grid_1{
+	border-collapse: collapse;
+	border-spacing: 2px;
+	table-layout: auto;
+	border:1px solid #cdcdcd;
+	font-size: 12px;
+	color: #8B8378;
+}
+

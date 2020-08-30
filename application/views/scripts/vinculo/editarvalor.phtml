@@ -1,0 +1,36 @@
+<div class="conteudo_controller">
+    <div class="row-fluid">
+        <div class="span12">
+            <form action="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(), "action" => $this->getRequest()->getActionName())); ?>" method="post" id="formulario" class="formulario form-horizontal">
+                <input type="hidden" name="id" id="id" value="<?php echo $this->registro->getId(); ?>" />
+                <div class="well">
+                    <fieldset>
+                        <legend>ALTERAR VALOR DE BOLSISTA: </legend>
+                        <dl class="dl-horizontal">
+                            <dt>Vínculo:</dt>
+                            <dd><?php echo $this->vinculo->toString(); ?></dd>
+                        </dl>
+                        <dl class="dl-horizontal">
+                            <dt>Lote:</dt>
+                            <dd><?php echo $this->lote->toString(false); ?></dd>
+                        </dl>
+<?php
+$bt = $this->registro->findParentRow("TbBolsaTipo");
+if ($bt) {
+?>
+                        <dl class="dl-horizontal">
+                            <dt>Tipo de Despesa:</dt>
+                            <dd><?php echo $bt->toString(); ?></dd>
+                        </dl>
+<?php } ?>
+                        <dl class="dl-horizontal">
+                            <dt>Referência:</dt>
+                            <dd><?php echo $this->registro->mostrar_referencia(); ?></dd>
+                        </dl>
+<?php echo $this->registro->pega_valor()->render($this); ?>
+                    </fieldset>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

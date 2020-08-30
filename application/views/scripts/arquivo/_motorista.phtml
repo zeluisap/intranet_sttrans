@@ -1,0 +1,17 @@
+<?php
+if (Escola_Util::vazio($this->motorista)) {
+    return;
+}
+?>
+<div class="row-fluid">
+    <div class="span12">
+    <form>
+    <div class="well well-small">
+            <dl class="dl-horizontal sem-margin-bottom">
+                <dt>Motorista:</dt>
+                <dd><?php echo $this->motorista->toString(); ?></dd>
+            </dl>
+        </div>
+        </form>
+    </div>
+</div>

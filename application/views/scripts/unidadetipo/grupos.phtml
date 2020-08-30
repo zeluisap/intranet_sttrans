@@ -1,0 +1,85 @@
+<form action="<?php echo $this->url(array("action" => "grupos")); ?>" method="post" id="formulario" class="formulario">
+	<input type="hidden" name="id" id="id" value="<?php echo $this->usuario->getId(); ?>" />
+	<table class="lista_box">
+		<thead>
+			<tr>
+				<th>Usuário</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>
+					<div align="center">
+						<table width="80%">
+							<tr>
+								<td width="25%">
+									<div align="right">
+										Usuário: 
+									</div>
+								</td>
+								<td>
+									<div align="left">
+										<strong>
+										<?php echo $this->usuario->toString(); ?>
+										</strong>
+									</div>
+								</td>
+							</tr>
+						</table>
+					</div>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+	<div id="main_user">
+		<div class="esquerda">
+			<div class="lista">
+				<h1><input type="checkbox" name="ck_usuarios" id="ck_usuarios" class="ck-marca-todos" rel="lista_usuarios" /><label for="ck_usuarios">TODOS OS GRUPOS DO SISTEMA:</label></h1>
+				<ul>
+<?php foreach ($this->grupos as $grupo) {
+ ?>
+					<li>
+						<div class="clear">
+								<input type="checkbox" name="lista" id="lista" class="lista_usuarios" />
+								<?php echo $grupo->descricao; ?>
+						</div>
+					</li>
+<?php } ?>
+				</ul>
+			</div>
+		</div>
+		<div class="centro">
+			<div>
+				<div class="setas">
+					<div class="botao">
+						<a href="#" id="seta_direita">
+						<img src="<?php echo $this->baseUrl(); ?>/img/icons/arrow_right.png" alt="" />
+						</a>
+					</div>
+					<div class="botao">
+						<a href="#" id="seta_esquerda">
+						<img src="<?php echo $this->baseUrl(); ?>/img/icons/arrow_left.png" alt="" />
+						</a>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="direita">
+			<div class="lista">
+				<h1><input type="checkbox" name="ck_usuarios_grupo" id="ck_usuarios_grupo" class="ck-marca-todos" rel="lista_usuarios_grupo" /><label for="ck_usuarios_grupo">GRUPOS QUE PERTENCEM AO USUÁRIO:</label></h1>
+				<ul>
+<?php foreach ($this->usuario_grupos as $grupo) {
+?>
+					<li>
+						<div class="clear">
+								<input type="checkbox" name="lista" id="lista" class="lista_usuarios_grupo" />
+								<?php echo $grupo->descricao; ?>
+						</div>
+					</li>
+<?php } ?>
+				</ul>
+			</div>
+		</div>
+	</div>
+		<div class="clear"></div>
+</form>

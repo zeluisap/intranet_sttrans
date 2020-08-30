@@ -1,0 +1,60 @@
+<div class="conteudo_controller">
+    <div class="row-fluid">
+        <div class="span12">
+            <form action="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(), "action" => "gerar")); ?>" method="post" id="formulario" class="formulario form-horizontal">
+                <div class="well">
+                    <fieldset>
+                        <legend>Emissão de Contra-Cheque: </legend>
+                        <dl class="dl-horizontal">
+                            <dt>Matrícula:</dt>
+                            <dd>
+                <?php if (count($this->funcionarios) > 1) { ?>			
+                            <select name="funcionarios" id="funcionarios">
+                                <option value="">==> SELECIONE <==</option>
+                <?php foreach ($this->funcionarios as $funcionario) { ?>
+                                <option value="<?php echo $funcionario->FUNCIONARIOS; ?>"><?php echo $funcionario->FUNCIONARIOS; ?> - <?php echo $funcionario->NOME; ?> - <?php echo $funcionario->FUNCAO; ?> - <?php echo $funcionario->FUNCAO_NOME; ?></option>
+                <?php } ?>
+                            </select>
+                <?php } else {
+                    $funcionario = $this->funcionarios[0]; 
+                ?>
+                            <input type="hidden" name="funcionarios" id="funcionarios" value="<?php echo $funcionario->FUNCIONARIOS; ?>" />
+                            <strong><?php echo $funcionario->FUNCIONARIOS; ?> - <?php echo $funcionario->NOME; ?> - <?php echo $funcionario->FUNCAO; ?> - <?php echo $funcionario->FUNCAO_NOME; ?></strong>
+                <?php } ?>
+                            </dd>
+                        </dl>
+                        <div class="control-group">
+                            <label for="ano" class="control-label">Ano:</label>
+                            <div class="controls">
+                                <input type="text" name="ano" id="ano" size="4" maxlength="4" value="<?php echo $this->dados["ano"]; ?>" />
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label for="mes" class="control-label">Mês:</label>
+                            <div class="controls">
+                                <select name="mes" id="mes">
+                                    <option value="">==> SELECIONE <==</option>
+                    <?php 
+                    foreach (Escola_Util::pegaMeses() as $mes => $nome_mes) { ?>
+                                    <option value="<?php echo Escola_Util::zero($mes, 2); ?>" <?php echo ($mes == $this->dados["mes"])?"selected":""; ?>><?php echo $nome_mes; ?></option>
+                    <?php } ?>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label for="tipofolha" class="control-label">Tipo de Folha:</label>
+                            <div class="controls">
+                                <select name="tipofolha" id="tipofolha">
+                                    <option value="">==> SELECIONE <==</option>
+                    <?php foreach ($this->tipofolhas as $tipofolha) { ?>
+                                    <option value="<?php echo $tipofolha->TIPOFOLHA; ?>" <?php echo ($tipofolha->TIPOFOLHA == $this->dados["tipofolha"])?"selected":""; ?>><?php echo $tipofolha->NOME; ?></option>
+                    <?php } ?>
+                                </select>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

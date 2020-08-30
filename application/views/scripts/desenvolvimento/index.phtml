@@ -1,0 +1,39 @@
+<div class="conteudo_controller">
+    <div class="row-fluid">
+        <div class="span12">
+            <form action="" method="post" id="formulario" class="form-horizontal">
+                <input type="hidden" name="controller" id="controller" value="<?php echo $this->getRequest()->getControllerName(); ?>" />
+                <input type="hidden" name="action" id="action" value="<?php echo $this->getRequest()->getActionName(); ?>" />
+                <div class="well well-small">
+                    <fieldset>
+                        <legend>Informe a Operação:</legend>
+                        <div class="control-group">
+                            <label for="operacao_corrige_licenca" class="control-label">Corrige Licença:</label>
+                            <div class="controls">
+                                <input type="radio" name="operacao" id="operacao_corrige_licenca" value="corrigelicenca" />
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label for="operacao_agrupa_transporte_pj" class="control-label">Agrupa Transportes - PJ:</label>
+                            <div class="controls">
+                                <input type="radio" name="operacao" id="operacao_agrupa_transporte_pj" value="agrupatransportepj" />
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label for="operacao_relatorio_servico_sem_relatorio" class="control-label">Serviços Sem Relatório:</label>
+                            <div class="controls">
+                                <input type="radio" name="operacao" id="operacao_relatorio_servico_sem_relatorio" value="servicosemrelatorio" />
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label for="operacao_agrupa_vinculo_coordenador" class="control-label">Agrupa Vínculo Coordenador:</label>
+                            <div class="controls">
+                                <input type="radio" name="operacao" id="operacao_agrupa_vinculo_coordenador" value="agrupavinculocoordenador" />
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,34 @@
+<div class="conteudo_controller">
+    <div class="row-fluid">
+        <div class="span12">
+            <form action="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(), "action" => "arquivar")); ?>" method="post" id="formulario" class="formulario form-horizontal">
+                <input type="hidden" name="id" id="id" value="<?php echo $this->registro->getId(); ?>" />
+                <input type="hidden" name="jan_pagina" id="jan_pagina" />
+                <input type="hidden" name="operacao" id="operacao" value="" />
+                <div class="well">
+                    <fieldset>
+                        <legend>ARQUIVAR DOCUMENTO: </legend>
+                        <dl class="dl-horizontal">
+                            <dt>Documento:</dt>
+                            <dd><?php echo $this->registro->toString(); ?></dd>
+                        </dl>
+                        <dl class="dl-horizontal">
+                            <dt>Funcionário:</dt>
+                            <dd><?php echo $this->funcionario->toString(); ?></dd>
+                        </dl>
+                        <dl class="dl-horizontal">
+                            <dt>Setor Atual:</dt>
+                            <dd><?php echo $this->setor->toString(); ?></dd>
+                        </dl>
+                        <div class="control-group">
+                            <label class="control-label">Observações:</label>
+                            <div class="controls">
+                                <textarea name="despacho" id="despacho" rows="6" class="span5"></textarea>
+                            </div>
+                        </div>		
+                    </fieldset>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

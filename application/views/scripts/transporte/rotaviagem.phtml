@@ -1,0 +1,143 @@
+<script type="text/javascript">
+    var ajax_obj = false;
+    var dia_semana = [];
+    $(document).ready(function() {
+        $(".link_inserir_hora").click(function(ev) {
+            ev.preventDefault();
+            $.limpaAlerta();
+            var dia_semana = $(this).attr("id");
+            var controle = $("#hora_saida_" + dia_semana);
+            if (controle.val().length) {
+                if (ajax_obj) {
+                    ajax_obj.abort();
+                }
+                ajax_obj = $.ajax({
+                    "url": "<?php echo Escola_Util::getBaseUrl(); ?>/rotaviagem/salvar/format/json/",
+                    "type": "POST",
+                    "data": { "id_rota": "<?php echo $this->rota->getId(); ?>", "dia_semana" : dia_semana, "hora_saida" : controle.val() },
+                    "success": function(view) {
+                        if (view.erro) {
+                            $.mensagemAlerta( { "mensagem" : view.erro } );
+                        }
+                        carregaListagemViagem();
+                    }
+                });
+            } else {
+                $.mensagemAlerta( { "mensagem" : "HORA NÃO INFORMADA!" } );
+            }
+        });
+        carregaListagemViagem();
+    })
+    
+    function carregaListagemViagem() {
+        $(".hora").val("");
+        if (ajax_obj) {
+            ajax_obj.abort();
+        }
+        ajax_obj = $.ajax({
+            "url": "<?php echo Escola_Util::getBaseUrl(); ?>/rotaviagem/info/format/json/",
+            "type": "POST",
+            "data": { "id_rota": "<?php echo $this->rota->getId(); ?>" },
+            "success": function(view) {
+                $(".linha_hora").remove();
+                if (view.result) {
+                    var lista = view.result;
+                    var quantidade_total = 0;
+                    for (var i = 0; i < dia_semana.length; i++) {
+                        var item = lista[i];
+                        if (item && item.length && (item.length > quantidade_total)) {
+                            quantidade_total = item.length;
+                        }
+                    }
+                    if (quantidade_total > 0) {
+                        for (var i = 0; i < quantidade_total; i++) {
+                            var tr = $("<tr>", { "class" : "linha_hora" }).appendTo($("table#tabela_viagem tbody"));
+                            for (x = 0; x < dia_semana.length; x++) {
+                                var td = $("<td>");
+                                var lista_item = lista[x];
+                                if (lista_item && lista_item[i]) {
+                                    var objeto_rv = lista_item[i];
+                                    var div_append = $("<div>", { "class" : "input-append span12" });
+                                    $("<input>", { "type" : "text", "value" : objeto_rv.hora_saida, "disabled" : "true", "class": "span10 text-center", "style": "font-size:18pt" }).appendTo(div_append);
+                                    var div_addon = $("<div>", { "class" : "add-on" });
+                                    div_addon.appendTo(div_append);
+                                    div_addon.html('<a href="#" class="link_hora_excluir" id="' + objeto_rv.id_rota_viagem + '"><i class="icon-trash"></i></a>');
+                                    div_append.appendTo(td);
+                                }
+                                td.appendTo(tr);
+                            }
+                        }
+                        $(".link_hora_excluir").bind("click", function(ev) {
+                            ev.preventDefault();
+                            $.limpaAlerta();
+                            var id_rt = $(this).attr("id");
+                            if (id_rt && (id_rt > 0)) {
+                                if (ajax_obj) {
+                                    ajax_obj.abort();
+                                }
+                                ajax_obj = $.ajax({
+                                    "url": "<?php echo Escola_Util::getBaseUrl(); ?>/rotaviagem/excluir/format/json/",
+                                    "type": "POST",
+                                    "data": { "id": id_rt },
+                                    "success": function(view) {
+                                        if (view.erro) {
+                                            $.mensagemAlerta( { "mensagem" : view.erro } );
+                                        }
+                                        carregaListagemViagem();
+                                    }
+                                });
+                            }
+                        });
+                    }
+                }
+            }
+        });
+    }
+</script>
+<div class="conteudo_controller">
+    <div class="row-fluid">
+        <div class="span12">
+            <form action="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(), "action" => "veiculo")); ?>" method="post" id="formulario" class="formulario form-horizontal">
+                <div class="well well-small">
+                    <dl class="dl-horizontal">
+                        <dt>Transporte: </dt>
+                        <dd><?php echo $this->transporte->toString(); ?></dd>
+                    </dl>
+                    <dl class="dl-horizontal">
+                        <dt>Rota: </dt>
+                        <dd><?php echo $this->rota->toString(); ?></dd>
+                    </dl>
+                </div>
+                <table class="table table-striped table-bordered" id="tabela_viagem">
+                    <thead>
+                        <tr>
+<?php
+    $dias = Escola_Util::listarDiaSemana();
+?>
+<?php foreach ($dias as $chave_dia => $dia){ ?>
+                            <script type="text/javascript">
+                                dia_semana[<?php echo $chave_dia; ?>] = "<?php echo $dia; ?>";
+                            </script>
+                            <th width="14%"><?php echo $dia; ?></th>
+<?php }?>
+                        </tr>
+                    </thead>
+                    <tboby>
+                        <tr>
+                        <?php foreach ($dias as $chave_dia => $dia){ ?>
+                            <td>
+                                 <div class="input-append" class="span12">
+                                     <input type="text" name="hora_saida_<?php echo $chave_dia; ?>" id="hora_saida_<?php echo $chave_dia; ?>" class="hora span10" />
+                                     <div class="add-on">
+                                         <a href="#" class="link_inserir_hora" id="<?php echo $chave_dia; ?>"><i class="icon-plus-sign"></i></a>
+                                     </div>
+                                 </div>
+                             </td>
+                        <?php } ?>
+                        </tr>
+                    </tboby>
+                </table>
+            </form>
+        </div>
+    </div>
+</div>

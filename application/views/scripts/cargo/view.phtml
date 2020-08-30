@@ -1,0 +1,24 @@
+<div class="conteudo_controller">
+    <div class="row-fluid">
+        <div class="span12">
+            <input type="hidden" name="id" id="id" value="<?php echo $this->registro->getId(); ?>" />
+            <div class="well">
+                <div class="page-header">
+                    <h4>Cadastro de Cargo</h4>
+                </div>
+                <dl class="dl-horizontal">
+                    <dt>Código:</dt>
+                    <dd><?php echo $this->registro->getId(); ?></dd>
+                </dl>
+                <dl class="dl-horizontal">
+                    <dt>Descrição:</dt>
+                    <dd><?php echo $this->registro->descricao; ?></dd>
+                </dl>
+                <dl class="dl-horizontal">
+                    <dt>Tipo:</dt>
+                    <dd><?php echo $this->registro->findParentRow("TbCargoTipo")->descricao; ?></dd>
+                </dl>
+            </div>
+        </div>
+    </div>
+</div>

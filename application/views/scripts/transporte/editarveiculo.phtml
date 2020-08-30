@@ -1,0 +1,66 @@
+<div class="conteudo_controller">
+    <div class="row-fluid">
+        <div class="span12">
+            <form action="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(), "action" => "editarveiculo")); ?>" method="post" id="formulario" class="formulario form-horizontal">
+                <input type="hidden" name="id" id="id" value="<?php echo $this->registro->getId(); ?>" />
+                <input type="hidden" name="id_transporte" id="id_transporte" value="<?php echo $this->transporte->getId(); ?>" />
+                <div class="well well-small">
+                    <fieldset id="grupo_transporte">
+                        <legend>CADASTRO DE TRANSPORTE > VEÍCULO: </legend>
+                <?php if ($this->registro->getId()) { ?>
+                        <dl class="dl-horizontal">
+                            <dt>ID:</dt>
+                            <dd><?php echo $this->registro->getId(); ?></dd>
+                        </dl>
+                <?php } ?>
+                        <dl class="dl-horizontal">
+                            <dt>Transporte:</dt>
+                            <dd><?php echo $this->transporte->toString(); ?></dd>
+                        </dl>
+<?php
+if (!$this->registro->getId()) {
+    $ctrl = new Escola_Form_Element_Select_Table_Veiculo("id_veiculo");
+    $ctrl->setValue($this->registro->id_veiculo);
+    $ctrl->setLabel("Veículo: ");
+    echo $ctrl->render($this);    
+} elseif ($this->registro->getId()) {
+?>   
+<div class="control-group" id="linha_id_veiculo">
+    <label for="id_veiculo" class="control-label">Veículo: </label>
+    <div class="controls">
+        <input type="text" name="" id="" disabled="" class="input-xxlarge" value="<?php echo $this->registro->toString(); ?>">
+    </div>
+</div>
+<?php  
+    $ctrl = new Escola_Form_Element_Select_Table("id_transporte_veiculo_status");
+    $ctrl->setPkName("id_transporte_veiculo_status");
+    $ctrl->setModel("TbTransporteVeiculoStatus");
+    $ctrl->setValue($this->registro->id_transporte_veiculo_status);
+    $ctrl->setLabel("Status: ");
+    echo $ctrl->render($this);
+?>
+                        <div class="control-group">
+                            <label for="processo_data" class="control-label">Data do Cadastro:</label>
+                            <div class="controls">
+                                <input type="text" name="data_cadastro" id="data_cadastro" value="<?php echo Escola_Util::formatData($this->registro->data_cadastro); ?>" class="span2 data" />
+                            </div>
+                        </div>
+<?php } ?>
+                        <div class="control-group">
+                            <label for="processo" class="control-label">Processo:</label>
+                            <div class="controls">
+                                <input type="text" name="processo" id="processo" value="<?php echo $this->registro->processo; ?>" class="span3" />
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label for="processo_data" class="control-label">Data do Processo:</label>
+                            <div class="controls">
+                                <input type="text" name="processo_data" id="processo_data" value="<?php echo Escola_Util::formatData($this->registro->processo_data); ?>" class="span2 data" />
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

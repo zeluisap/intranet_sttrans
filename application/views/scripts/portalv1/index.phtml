@@ -1,0 +1,144 @@
+<div id="home">
+<?php if ($this->galerias && count($this->galerias)) { ?>
+                    <div id="slide">
+						<div id="slider">
+                            <ul>
+<?php
+foreach ($this->galerias as $galeria) {
+	$arquivo = $galeria->findParentRow("TbArquivo");
+?>
+                                <li>
+									<div class="opacidade">
+										<a href="<?php echo $this->url(array("action" => "viewinfo", "id" => $galeria->getId())); ?>">
+										<?php echo $galeria->titulo; ?>
+										</a>
+									</div>
+										<a href="<?php echo $this->url(array("action" => "viewinfo", "id" => $galeria->getId())); ?>">
+											<?php echo $arquivo->miniatura(array("width" => 400, "align" => "")); ?>
+										</a>
+								</li>
+<?php } ?>
+                            </ul>
+                        </div>				
+                    </div>
+<?php } ?>
+<?php if ($this->destaques && count($this->destaques)) { ?>
+                    <div id="destaques">
+                            <div class="titulo_">Destaques</div>
+                            <ul id="mycarousel" class="jcarousel-skin-tango">
+<?php
+foreach ($this->destaques as $destaque) {
+	$arquivo = $destaque->findParentRow("TbArquivo");
+?>
+                                <li>
+                                    <div class="destaque">
+										<a href="<?php echo $this->url(array("action" => "viewinfo", "id" => $destaque->getId())); ?>">
+										<?php echo $arquivo->miniatura(array("width" => 140, "align" => "left")); ?>
+										</a>
+                                        <div class="text"><a href="<?php echo $this->url(array("action" => "viewinfo", "id" => $destaque->getId())); ?>"><?php echo $destaque->toString(); ?></a></div>
+										</a>
+                                    </div>
+                                </li>
+<?php } ?>
+                            </ul>
+                    </div>
+<?php } ?>
+                
+                <div id="conteudo">
+<?php if ($this->p_contas && count($this->p_contas)) { ?>
+                    <div id="noticias">
+			<ul>
+                            <div class="titulo_">Prestação de Contas</div>
+<?php foreach ($this->p_contas as $conta) {
+	$arquivo = $conta->findParentRow("TbArquivo");
+?>
+                            <li>
+								<a href="<?php echo $this->url(array("action" => "viewinfo", "id" => $conta->getId())); ?>">
+									<?php echo $arquivo->miniatura(array("width" => 90, "align" => "left", "class" => "img")); ?>
+								</a>
+				<div class="titulo">
+					<a href="<?php echo $this->url(array("action" => "viewinfo", "id" => $conta->getId())); ?>">
+					<?php echo $conta->titulo; ?>
+					</a>
+				</div>
+				<div class="desc">
+					<a href="<?php echo $this->url(array("action" => "viewinfo", "id" => $conta->getId())); ?>">
+					<?php echo $conta->resumo; ?>
+					</a>
+				</div>
+                            </li>
+<?php } ?>
+				<div class="clear"></div>
+				<a href="<?php echo $this->url(array("action" => "portal", "action" => "infos", "chavetipo" => "P")); ?>"><img border="none"src="<?php echo Escola_Util::getBaseUrl(); ?>/img/btn_more.png"></a>
+		
+                        </ul>		
+                    </div>
+<?php } ?>
+<!-- BLOCO NOTÍCIAS -->
+<?php
+if ($this->noticias && count($this->noticias)) {
+	$contador = 0;
+?>
+<div id="maislidas">
+	<div class="titulo_">Noticias</div>
+<?php foreach ($this->noticias as $noticia) {
+	$arquivo = $noticia->findParentRow("TbArquivo");
+	$contador++;
+	if ($contador == 1) {
+?>
+
+	<div id="noticia_principal">
+		<a href="<?php echo $this->url(array("action" => "viewinfo", "id" => $noticia->getId())); ?>">
+		<?php echo $arquivo->miniatura(array("width" => 300, "align" => "left")); ?>
+		</a>
+		<div class="desc"><a href="<?php echo $this->url(array("action" => "viewinfo", "id" => $noticia->getId())); ?>"><?php echo $noticia->titulo; ?></a></div>
+	</div>
+<?php } elseif (($contador == 2) || ($contador == 3)) { ?>
+	<div id="noticia_secundaria">
+		<div class="noti">
+			<a href="<?php echo $this->url(array("action" => "viewinfo", "id" => $noticia->getId())); ?>">
+			<?php echo $arquivo->miniatura(array("width" => 140, "align" => "left")); ?>
+			</a>
+			<div class="desc"><a href="<?php echo $this->url(array("action" => "viewinfo", "id" => $noticia->getId())); ?>"><?php echo $noticia->titulo; ?></a></div>
+		</div>
+	</div>
+<?php } else { ?>
+	<div class="clear"></div>
+	<div id="noticia_outras">
+		<div class="noti">
+			<a href="<?php echo $this->url(array("action" => "viewinfo", "id" => $noticia->getId())); ?>"><?php echo $noticia->titulo; ?></a>
+		</div>
+	</div>
+<?php } ?>
+<?php } ?>
+</div>
+<?php } ?>
+<!-- FIM BLOCO NOTÍCIAS -->
+
+                </div>
+<?php
+$tb = new TbMenuPosicao();
+$ms = $tb->getPorChave("E");
+if ($ms) {
+    $tb = new TbMenu();
+    $menus = $tb->listar(array("id_menu_posicao" => $ms->getId()));
+    if ($menus) {
+?>			
+                <div id="social">                    
+                 <ul>
+                     <div class="titulo_">Serviços da Prefeitura</div>
+<?php foreach ($menus as $menu) {
+	$arquivo = $menu->pegaArquivo();
+?>
+                      <li><a href="<?php echo $menu->url(); ?>">
+                            <div id="img_srv">
+                                <?php echo $menu->mostrarIcone(); ?>
+                            </div>
+                            <div id="txt_srv"><?php echo $menu->descricao; ?></div>
+                          </a>
+                      </li>
+<?php } ?>
+                 </ul>
+                </div>
+<?php }} ?>
+				</div>

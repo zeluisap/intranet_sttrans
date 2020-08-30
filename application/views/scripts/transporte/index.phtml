@@ -1,0 +1,208 @@
+<div class="conteudo_controller">
+    <div class="row-fluid">
+        <form action="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(), "action" => "index")); ?>" method="post" id="formulario" class="formulario form-horizontal">
+            <div class="well well-small" id="idPesquisa">
+                <div class="page-header">
+                    <h4>Opções de Pesquisa</h4>
+                </div>
+                <?php
+                $ctrl = new Escola_Form_Element_Select_Table("filtro_id_transporte_grupo");
+                $ctrl->setAttrib("class", "filtro span5");
+                $ctrl->setPkName("id_transporte_grupo");
+                $ctrl->setModel("TbTransporteGrupo");
+                $ctrl->setValue($this->dados["filtro_id_transporte_grupo"]);
+                $ctrl->setLabel("Grupo de Transporte:");
+                echo $ctrl->render($this);
+                ?>
+                <div class="control-group">
+                    <label for="filtro_codigo" class="control-label">Código:</label>
+                    <div class="controls">
+                        <input type="text" name="filtro_codigo" id="filtro_codigo" value="<?php echo $this->dados["filtro_codigo"]; ?>" class="span2 filtro" />
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label for="filtro_placa" class="control-label">Placa do Veículo:</label>
+                    <div class="controls">
+                        <input type="text" name="filtro_placa" id="filtro_placa" value="<?php echo $this->dados["filtro_placa"]; ?>" class="span2 filtro" />
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label for="filtro_proprietario_nome" class="control-label">Nome Proprietário:</label>
+                    <div class="controls">
+                        <input type="text" name="filtro_proprietario_nome" id="filtro_proprietario_nome" value="<?php echo $this->dados["filtro_proprietario_nome"]; ?>" class="span5 filtro" />
+                    </div>
+                </div>
+                <div class="control-group">
+                    <div class="controls">
+                        <input type="submit" value="Pesquisar" class="acao btn btn-primary" />
+                        <input type="button" value="Limpar Filtro" id="idLimparPesquisa" class="btn" />
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="row-fluid">
+        <div class="span12">
+            <table class="table table-striped table-bordered">
+                <thead>
+                    <tr>
+                        <th>Grupo de Transporte</th>
+                        <th>Código</th>
+                        <th>Proprietário</th>
+                        <th>Tipo de Concessão</th>
+                        <th>Número da Concessão</th>
+                        <th>Decreto</th>
+                        <th>Veículo</th>
+                        <th>Status</th>
+                        <th width="20px">Operações</th>
+                    </tr>
+                </thead>
+                <?php if ($this->registros && count($this->registros)) { ?>
+                    <tbody>
+                        <?php
+                            foreach ($this->registros as $registro) {
+                                $transporte = $registro;
+                                $registro = $transporte->getTransporteInstancia();
+                                $concessao = $transporte->get_concessao();
+                                $txt_proprietario = "--";
+                                $proprietario = $transporte->pegaProprietario();
+                                if ($proprietario) {
+                                    $txt_proprietario = $proprietario->findParentRow("TbPessoa")->toString();
+                                }
+                                $txt_veiculo = "--";
+                                $veiculos = $transporte->pegaTransporteVeiculoAtivos();
+                                if ($veiculos) {
+                                    if (count($veiculos) == 1) {
+                                        $txt_veiculo = $veiculos->current()->toString();
+                                    } elseif (count($veiculos) > 1) {
+                                        $txt_veiculo = "<b>" . count($veiculos) . "</b> Veículo(s) Ativo(s).";
+                                    }
+                                }
+                                ?>
+                            <tr>
+                                <td>
+                                    <a href="<?php echo $this->url(array("action" => "view", "id" => $transporte->getId())); ?>">
+                                        <?php echo $transporte->findParentRow("TbTransporteGrupo")->toString(); ?>
+                                    </a>
+                                </td>
+                                <td>
+                                    <a href="<?php echo $this->url(array("action" => "view", "id" => $transporte->getId())); ?>">
+                                        <?php echo $transporte->mostrar_codigo(); ?>
+                                    </a>
+                                </td>
+                                <td>
+                                    <a href="<?php echo $this->url(array("action" => "view", "id" => $transporte->getId())); ?>">
+                                        <?php echo $txt_proprietario; ?>
+                                    </a>
+                                </td>
+                                <td>
+                                    <a href="<?php echo $this->url(array("action" => "view", "id" => $transporte->getId())); ?>">
+                                        <?php echo ($concessao->getId()) ? $concessao->findParentRow("TbConcessaoTipo")->toString() : "--"; ?>
+                                    </a>
+                                </td>
+                                <td>
+                                    <a href="<?php echo $this->url(array("action" => "view", "id" => $transporte->getId())); ?>">
+                                        <?php echo ($concessao->getId()) ? $concessao->numero : "--"; ?>
+                                    </a>
+                                </td>
+                                <td>
+                                    <a href="<?php echo $this->url(array("action" => "view", "id" => $transporte->getId())); ?>">
+                                        <?php echo ($concessao->getId()) ? $concessao->decreto : "--"; ?>
+                                    </a>
+                                </td>
+                                <td>
+                                    <a href="<?php echo $this->url(array("action" => "view", "id" => $transporte->getId())); ?>">
+                                        <?php echo $txt_veiculo; ?>
+                                    </a>
+                                </td>
+                                <td>
+                                    <a href="<?php echo $this->url(array("action" => "view", "id" => $transporte->getId())); ?>">
+                                        <?php echo $transporte->mostrar_status(); ?>
+                                    </a>
+                                </td>
+                                <td>
+                                    <div class="btn-group">
+                                        <a href="<?php echo $this->url(array(
+                                                                "controller" => $this->getRequest()->getControllerName(),
+                                                                "action" => "view",
+                                                                "id" => $transporte->getId()
+                                                            )); ?>" class="btn" title="Visualizar">
+                                            <i class="icon-search"></i>
+                                        </a>
+                                        <a href="<?php echo $this->url(array(
+                                                                "controller" => $this->getRequest()->getControllerName(),
+                                                                "action" => "editar",
+                                                                "id" => $transporte->getId()
+                                                            )); ?>" class="btn" title="Editar">
+                                            <i class="icon-cog"></i>
+                                        </a>
+                                        <a href="<?php echo $this->url(array(
+                                                                "controller" => $this->getRequest()->getControllerName(),
+                                                                "action" => "excluir",
+                                                                "id" => $transporte->getId()
+                                                            )); ?>" class="btn link_excluir" title="Excluir">
+                                            <i class="icon-trash"></i>
+                                        </a>
+                                        <a href="<?php echo $this->url(array(
+                                                                "controller" => "arquivo",
+                                                                "action" => "index",
+                                                                "id_transporte" => $transporte->getId(),
+                                                                "id" => 0
+                                                            )); ?>" class="btn" title="Arquivos">
+                                            <i class="icon-folder-open-alt"></i>
+                                        </a>
+                                        <a href="<?php echo $this->url(array(
+                                                                "controller" => $this->getRequest()->getControllerName(),
+                                                                "action" => "pessoa",
+                                                                "id_transporte" => $transporte->getId(),
+                                                                "id" => 0
+                                                            )); ?>" class="btn" title="Pessoas">
+                                            <i class="icon-group"></i>
+                                        </a>
+                                        <a href="<?php echo $this->url(array(
+                                                                "controller" => $this->getRequest()->getControllerName(),
+                                                                "action" => "veiculo",
+                                                                "id_transporte" => $transporte->getId(),
+                                                                "id" => 0
+                                                            )); ?>" class="btn" title="Veículos">
+                                            <i class="icon-truck"></i>
+                                        </a>
+                                        <a href="<?php echo $this->url(array(
+                                                                "controller" => $this->getRequest()->getControllerName(),
+                                                                "action" => "licenca",
+                                                                "id_transporte" => $transporte->getId(),
+                                                                "id" => 0
+                                                            )); ?>" class="btn" title="Serviços">
+                                            <i class="icon-copy"></i>
+                                        </a>
+                                        <a href="<?php echo $this->url(array(
+                                                                "controller" => $this->getRequest()->getControllerName(),
+                                                                "action" => "relatorio",
+                                                                "id" => $transporte->getId()
+                                                            )); ?>" class="btn" title="Relatórios">
+                                            <i class="icon-print"></i>
+                                        </a>
+                                        <?php if ($transporte->onibus()) {  ?>
+                                            <a href="<?php echo $this->url(array(
+                                                                        "controller" => $this->getRequest()->getControllerName(),
+                                                                        "action" => "rota",
+                                                                        "id_transporte" => $transporte->getId(),
+                                                                        "id" => 0
+                                                                    )); ?>" class="btn" title="Rota">
+                                                <i class="icon-road"></i>
+                                            </a>
+                                        <?php } ?>
+                                    </div>
+                                </td>
+                            </tr>
+                        <?php } ?>
+                    </tbody>
+                <?php } ?>
+            </table>
+            <?php if ($this->registros && count($this->registros)) {
+                echo $this->paginationControl($this->registros, "sliding", "minha_paginacao_control.phtml");
+            }
+            ?>
+        </div>
+    </div>
+</div>

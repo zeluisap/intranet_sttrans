@@ -1,0 +1,19 @@
+<div class="conteudo_controller">
+    <div class="row-fluid">
+        <div class="span12">
+            <div class="well">
+                <div class="page-header">
+                    <h4>Cadastro de Auto de Infração > Ocorrência > Notificação</h4>
+                </div>
+                <dl class="dl-horizontal">
+                    <dt>Auto de Infração:</dt>
+                    <dd><?php echo $this->ai->toString(); ?></dd>
+                </dl>
+                <dl class="dl-horizontal">
+                    <dt>Ocorrência:</dt>
+                    <dd><?php echo $this->ocorrencia->toString(); ?></dd>
+                </dl>
+<?php echo $this->registro->view($this); ?>
+        </div>
+    </div>
+</div>

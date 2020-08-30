@@ -1,0 +1,39 @@
+<div class="row-fluid">
+    <div class="dialog">
+        <?php 
+$tb = new TbSistema();
+$sistema = $tb->pegaSistema();
+$pj = $sistema->findParentRow("TbPessoaJuridica");
+$pessoa = $pj->findParentRow("TbPessoa");
+$arquivo = $pessoa->getFoto();
+if ($arquivo) {
+    //$filename = $arquivo->pegaLinkFisico();
+?>	
+        <center><img src="<?php echo $this->url(array("controller" => "arquivo", "action" => "view", "id" => $arquivo->getId())); ?>"  width="50%"/></center>
+<?php } ?>
+        <div class="block">
+        
+        <form action="<?php echo $this->url(array("controller" => "auth", "action" => "recuperasenha")); ?>" method="post" id="formulario" >
+            <p class="block-heading">Recuperar Senha</p>
+            <div class="block-body text-center">
+                    <div class="alert">
+                    <p>
+                            Digite o CPF para recuperar a senha.
+                    </p>
+            </div>
+                    <div class="input-prepend">
+                        <span class="add-on"><i class="icon-user"></i></span>
+                        <input type="text" name="cpf" id="cpf" class="cpf" value="<?php echo $this->getRequest()->getPost("cpf"); ?>" />
+                        
+                    </div>
+                    
+                    <div class="clearfix"></div>
+                
+            </div>
+        </div>
+        <p class="pull-right" style=""><input type="submit" value="Enviar" class="btn btn-primary" /></p>
+        <p><a href="<?php echo $this->url(array("controller" => "intranet")); ?>" class="btn btn-danger">Cancelar</a></p>
+    </form>
+    </div>
+    
+</div>

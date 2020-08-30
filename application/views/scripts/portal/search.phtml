@@ -1,0 +1,40 @@
+<div id="lista_noticias">
+<div class="titulo_">Localizar</div>
+<form action="<?php echo $this->url(array("controller" => "portal", "action" => "search")); ?>" method="get">
+	<table class="table_comentario">
+		<tr>
+			<td width="100px" align="right">Procurar Por: </td>
+			<td><input type="text" name="filtro_busca" id="filtro_busca" size="40" maxlength="100" value="<?php echo $this->dados["filtro_busca"]; ?>" /></td>
+		</tr>
+		<tr>
+			<td></td>
+			<td><input type="submit" value="Enviar" /></td>
+		</tr>
+	</table>
+</form>
+    <ul>
+        <div class="titulo_">Resultado da Busca</div>
+<?php if ($this->registros && count($this->registros)) {
+    foreach ($this->registros as $registro) {
+        $arquivo = $registro->findParentRow("TbArquivo");
+?>
+        <li>        
+            <?php if ($arquivo) { echo $arquivo->miniatura(array("width" => 90, "align" => "left")); } ?>
+            <div class="titulo">
+            <a href="<?php echo $this->url(array("action" => "viewinfo", "id" => $registro->getId())); ?>">
+            <?php echo $registro->findParentRow("TbInfoTipo")->toString(); ?> - <?php echo $registro->titulo; ?>
+            </a>
+            </div>
+            <div class="desc"><a href="<?php echo $this->url(array("action" => "viewinfo", "id" => $registro->getId())); ?>"><?php echo $registro->resumo; ?></a></div>
+        </li>
+<?php }} ?>
+        <div class="clear"></div>
+    </ul>
+    <br>
+    <?php if ($this->registros && count($this->registros)) {
+	echo $this->paginationControl($this->registros, "sliding", "minha_paginacao_control.phtml");
+} else {
+?>
+<div>Nenhum registro disponível!</div>
+<?php } ?>
+</div>

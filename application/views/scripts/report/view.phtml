@@ -1,0 +1,29 @@
+<div class="conteudo_controller">
+    <div class="row-fluid">
+        <div class="span12">
+            <div class="well">
+                <input type="hidden" name="id" id="id" value="<?php echo $this->registro->getId(); ?>" />
+                <div class="page-header">
+                    <h4>Cadastro de Relatório</h4>
+                </div>
+                    <dl class="dl-horizontal">
+                        <dt>Código:</dt>
+                        <dd><?php echo $this->registro->getId(); ?></dd>
+                    </dl>
+                    <dl class="dl-horizontal">
+                        <dt>Chave:</dt>
+                        <dd><?php echo $this->registro->chave; ?></dd>
+                    </dl>
+                    <dl class="dl-horizontal">
+                        <dt>Descrição:</dt>
+                        <dd><?php echo $this->registro->descricao; ?></dd>
+                    </dl>
+                    <dl class="dl-horizontal">
+                        <dt>Tipo:</dt>
+                        <dd><?php echo $this->registro->findParentRow("TbRelatorioTipo")->toString(); ?></dd>
+                    </dl>
+                </fieldset>
+            </div>
+        </div>
+    </div>
+</div>

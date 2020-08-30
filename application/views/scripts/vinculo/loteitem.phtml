@@ -1,0 +1,115 @@
+<div class="conteudo_controller">
+    <div class="row-fluid">
+        <div class="span12">
+<form action="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(), "action" => "loteitem")); ?>" method="post" id="formulario" class="formulario form-horizontal" enctype="multipart/form-data">
+    <div class="well well-small">
+        <dl class="dl-horizontal">
+            <dt>Vínculo:</dt>
+            <dd><?php echo $this->vinculo->toString(); ?></dd>
+        </dl>
+        <dl class="dl-horizontal">
+            <dt>Lote:</dt>
+            <dd><?php echo $this->registro->toString(); ?></dd>
+        </dl>
+        <dl class="dl-horizontal">
+            <dt>Valor Lote:</dt>
+            <dd><?php echo Escola_Util::number_format($this->registro->pega_valor_total()); ?></dd>
+        </dl>
+        <dl class="dl-horizontal">
+            <dt>Valor Previsão:</dt>
+            <dd><?php echo Escola_Util::number_format($this->registro->pega_valor_previsao()); ?></dd>
+        </dl>
+    </div>
+	<table class="table table-striped table-bordered">
+		<thead>
+			<tr>
+				<th>Tipo</th>
+                                <th>Tipo de Despesa</th>
+                <th>Referência</th>
+                <th>Valor</th>
+                <th>Status</th>
+				<th width="20px">Operações</th>
+			</tr>
+		</thead>
+<?php if ($this->registros && count($this->registros)) { ?>
+		<tbody>
+<?php
+    $vlstatus = $this->registro->findParentRow("TbVinculoLoteStatus");
+	foreach ($this->registros as $registro) {
+            $txt_bolsa_tipo = "--";
+            $bt = $registro->findParentRow("TbBolsaTipo");
+            if ($bt) {
+                $txt_bolsa_tipo = $bt->toString();
+            }
+        $status = $registro->findParentRow("TbVinculoLoteItemStatus");
+        
+?>
+			<tr>
+				<td>
+                    <a href="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(),
+															 "action" => "viewloteitem",
+															 "id" => $registro->getId())); ?>" title="Visualizar">
+					<?php echo $registro->des_tipo(); ?>
+                    </a>
+				</td>
+				<td>
+                    <a href="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(),
+															 "action" => "viewloteitem",
+															 "id" => $registro->getId())); ?>" title="Visualizar">
+					<?php echo $txt_bolsa_tipo; ?>
+                    </a>
+				</td>
+				<td>
+                    <a href="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(),
+															 "action" => "viewloteitem",
+															 "id" => $registro->getId())); ?>" title="Visualizar">
+					<?php echo $registro->mostrar_referencia(); ?>
+                    </a>
+				</td>
+				<td>
+                    <a href="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(),
+															 "action" => "viewloteitem",
+															 "id" => $registro->getId())); ?>" title="Visualizar">
+					<?php echo $registro->pega_valor()->toString(); ?>
+                    </a>
+				</td>
+				<td>
+                    <a href="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(),
+															 "action" => "viewloteitem",
+															 "id" => $registro->getId())); ?>" title="Visualizar">
+					<?php echo $status->toString(); ?>
+                    </a>
+				</td>
+				<td>
+                    <div class="btn-group">
+						<a href="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(),
+															 "action" => "viewloteitem",
+															 "id" => $registro->getId())); ?>" class="btn" data-toggle="tooltip" title="Visualizar">
+							<i class="icon-zoom-in"></i>
+						</a>
+<?php if ($vlstatus->aguardando_liberacao() || $vlstatus->aguardando_aprovacao()) { ?>
+						<a href="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(),
+                                                                                     "action" => "editarvalor",
+                                                                                     "id" => $registro->getId())); ?>" class="btn" title="Alterar Valor">
+							<i class="icon-money"></i>
+						</a>
+						<a href="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(),
+															 "action" => "excluirloteitem",
+															 "id" => $registro->getId())); ?>" class="btn link_excluir" title="Excluir">
+							<i class="icon-trash"></i>
+						</a>
+<?php } ?>
+                    </div>
+				</td>
+			</tr>
+<?php } ?>
+		</tbody>
+<?php } ?>
+	</table>
+</form>
+<?php echo $this->paginationControl($this->registros, "sliding", "minha_paginacao_control.phtml"); ?>
+        </div>
+    </div>
+</div>
+
+<?php echo $this->registro->janelaResumo();

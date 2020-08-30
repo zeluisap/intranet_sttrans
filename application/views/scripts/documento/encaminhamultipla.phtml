@@ -1,0 +1,93 @@
+<form action="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(), "action" => "salvaencaminhamultipla")); ?>" method="post" id="formulario" class="formulario form-horizontal">
+    <div class="conteudo_controller">
+        <div class="row-fluid">
+            <div class="span12">
+                <input type="hidden" name="jan_pagina" id="jan_pagina" />
+                <input type="hidden" name="operacao" id="operacao" value="" />
+                <div class="well">
+                    <fieldset>
+                        <legend>ENCAMINHAR DOCUMENTO: </legend>
+                        <dl class="dl-horizontal">
+                            <dt>Funcionário:</dt>
+                            <dd><?php echo $this->funcionario->toString(); ?></dd>
+                        </dl>
+                        <dl class="dl-horizontal">
+                            <dt>Setor Atual:</dt>
+                            <dd><?php echo $this->setor->toString(); ?></dd>
+                        </dl>
+                        <div class="control-group">
+                            <label for="despacho" class="control-label">Resumo do Despacho:</label>
+                            <div class="controls">
+                                <textarea name="despacho" id="despacho" rows="5" class="span5"></textarea>
+                            </div>
+                        </div>		
+                <?php include("janela_destino.phtml"); ?>
+                        <input type="hidden" name="tipo_destino" id="tipo_destino" value="" />
+                        <input type="hidden" name="id_destino" id="id_destino" value="" />
+                        <div class="control-group">
+                            <label for="destino" class="control-label">Destino:</label>
+                            <div class="controls">
+                                <div class="input-append">
+                                    <input type="text" name="show_destino" id="show_destino" disabled class="input-xxlarge" />
+                                    <div class="add-on">
+                                        <a href="#" id="link_destino">
+                                            <i class="icon-search icon-large"></i>
+                                        </a>                                        
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+            </div>
+        </div>
+
+        <div class="row-fluid">
+            <div class="span12">
+                <table class="table table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th>Data / Hora</th>
+                            <th>Tipo</th>
+                            <th>Número</th>
+                            <th>Interessado</th>
+                            <th>Resumo</th>
+                            <th>Situação</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+<?php 
+foreach ($this->docs as $doc) { 
+    $txt_data_hora = $txt_tipo = $txt_numero = $txt_interessado = $txt_resumo = $txt_situacao = "--";
+    $txt_data_hora = Escola_Util::formatData($doc->data_criacao) . " - " . $doc->hora_criacao;
+    $tipo = $doc->findParentRow("TbDocumentoTipo");
+    if ($tipo) {
+        $txt_tipo = $tipo->toString();
+    }
+    $txt_numero = $doc->mostrarNumero();
+    $interessado = $doc->pegaInteressado();
+    if ($interessado) {
+        $txt_interessado = $interessado->toString();
+    }
+    $txt_resumo = $doc->resumo;
+    $ds = $doc->findParentRow("TbDocumentoStatus");
+    if ($ds) {
+        $txt_situacao = $ds->toString();
+    }
+?>
+                    <input type="hidden" name="id_documento[]" id="id_documento_<?php echo $doc->getId(); ?>" value="<?php echo $doc->getId(); ?>" />
+                        <tr>
+                            <td><div class="text-center"><?php echo $txt_data_hora; ?></div></td>
+                            <td><div class="text-center"><?php echo $txt_tipo; ?></div></td>
+                            <td><div class="text-center"><?php echo $txt_numero; ?></div></td>
+                            <td><div class="text-left"><?php echo $txt_interessado; ?></div></td>
+                            <td><div class="text-left"><?php echo $txt_resumo; ?></div></td>
+                            <td><div class="text-center"><?php echo $txt_situacao; ?></div></td>
+                        </tr>
+<?php } ?>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</form>

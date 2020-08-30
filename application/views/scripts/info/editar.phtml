@@ -1,0 +1,96 @@
+<div class="conteudo_controller">
+    <div class="row-fluid">
+        <div class="span12">
+            <form action="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(), "action" => "editar")); ?>" method="post" id="formulario" class="formulario form-horizontal" enctype="multipart/form-data">
+                <input type="hidden" name="id" id="id" value="<?php echo $this->registro->getId(); ?>" />
+                <div class="well">
+                    <fieldset>
+                        <legend>CADASTRO DE INFORMAÇÕES DO SITE: </legend>
+                <?php if ($this->registro->getId()) { ?>
+                        <dl class="dl-horizontal">
+                            <dt>Código:</dt>
+                            <dd><?php echo $this->registro->getId(); ?></dd>
+                        </dl>
+                <?php } ?>
+                <?php
+                $ctrl = new Escola_Form_Element_Select_Table("id_info_tipo");
+                $ctrl->setModel("TbInfoTipo");
+                $ctrl->setPkName("id_info_tipo");
+                $ctrl->setValue($this->registro->id_info_tipo);
+                $ctrl->setLabel("Tipo: ");
+                echo $ctrl->render($this);
+                ?>
+                        <div class="control-group">
+                            <label for="data" class="control-label">Data Publicação:</label>
+                            <div class="controls">
+                                <input type="text" name="data" id="data" value="<?php echo Escola_Util::formatData($this->registro->data); ?>" class="data span2" />
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label for="titulo" class="control-label">Título:</label>
+                            <div class="controls">
+                                <input type="text" name="titulo" id="titulo" maxlength="100" value="<?php echo $this->registro->titulo; ?>" class="span5" />
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label for="arquivo_destaque" class="control-label">Imagem Destaque (Somente JPEG):</label>
+                            <div class="controls">
+                                <input type="file" name="arquivo_destaque" id="arquivo_destaque" class="span5" />
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label for="resumo" class="control-label">Resumo:</label>
+                            <div class="controls">
+                                <textarea name="resumo" id="resumo" rows="6" class="span7"><?php echo $this->registro->resumo; ?></textarea>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label for="conteudo" class="control-label">Conteúdo:</label>
+                            <div class="controls">
+                                <textarea name="conteudo" id="conteudo"><?php echo $this->registro->conteudo; ?></textarea>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label for="autor" class="control-label">Autor:</label>
+                            <div class="controls">
+                                <input type="text" name="autor" id="autor" maxlength="100" value="<?php echo $this->registro->autor; ?>" class="span5" />
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label for="fonte" class="control-label">Fonte:</label>
+                            <div class="controls">
+                                <input type="text" name="fonte" id="fonte" maxlength="100" value="<?php echo $this->registro->fonte; ?>" class="span5" />
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label for="destaque" class="control-label">Destaque:</label>
+                            <div class="controls">
+                                <select name="destaque" id="destaque">
+                                    <option value="S" <?php echo ($this->registro->destaque())?"selected":""; ?> >SIM</option>
+                                    <option value="N" <?php echo (!$this->registro->destaque())?"selected":""; ?> >NÃO</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label for="comentario" class="control-label">Permitir Comentários:</label>
+                            <div class="controls">
+                                <select name="comentario" id="comentario">
+                                    <option value="S" <?php echo ($this->registro->comentario())?"selected":""; ?> >SIM</option>
+                                    <option value="N" <?php echo (!$this->registro->comentario())?"selected":""; ?> >NÃO</option>
+                                </select>
+                            </div>
+                        </div>
+                <?php
+                $ctrl = new Escola_Form_Element_Select_Table("id_info_status");
+                $ctrl->setModel("TbInfoStatus");
+                $ctrl->setPkName("id_info_status");
+                $ctrl->setValue($this->registro->id_info_status);
+                $ctrl->setLabel("Situação: ");
+                echo $ctrl->render($this);
+                ?>
+                    </fieldset>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

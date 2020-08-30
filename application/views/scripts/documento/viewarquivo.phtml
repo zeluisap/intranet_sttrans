@@ -1,0 +1,36 @@
+<div class="conteudo_controller">
+    <div class="row-fluid">
+        <div class="span12">
+                <div class="pull-right">
+<?php echo $this->arquivo->miniatura(array("width" => 90, "align" => "right", "link" => true)); ?>
+                </div>
+            <div class="well">
+                <div class="page-header">
+                    <h4>Documento - Arquivo:</h4>
+                </div>
+                <dl class="dl-horizontal">
+                    <dt>Código:</dt>
+                    <dd><?php echo $this->registro->getId(); ?></dd>
+                </dl>
+                <dl class="dl-horizontal">
+                    <dt>Documento:</dt>
+                    <dd><?php echo $this->documento->toString(); ?></dd>
+                </dl>
+                <dl class="dl-horizontal">
+                    <dt>Criação:</dt>
+                    <dd><?php echo Escola_Util::formatData($this->arquivo->data_upload); ?> <?php echo $this->arquivo->hora_upload; ?></dd>
+                </dl>
+                <dl class="dl-horizontal">
+                    <dt>Tamanho:</dt>
+                    <dd><?php echo Escola_Util::mostrarTamanho($this->arquivo->tamanho); ?></dd>
+                </dl>
+                <?php if ($this->arquivo->legenda) { ?>
+                <dl class="dl-horizontal">
+                    <dt>Descrição:</dt>
+                    <dd><?php echo $this->arquivo->legenda; ?></dd>
+                </dl>
+<?php } ?>
+            </div>
+        </div>
+    </div>
+</div>

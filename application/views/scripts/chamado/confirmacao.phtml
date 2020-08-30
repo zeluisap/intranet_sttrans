@@ -1,0 +1,47 @@
+<div class="conteudo_controller">
+    <div class="row-fluid">
+        <div class="span12">
+            <form action="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(), "action" => "confirmacao")); ?>" method="post" id="formulario" class="formulario form-horizontal">
+                <input type="hidden" name="id" id="id" value="<?php echo $this->registro->getId(); ?>" />
+                <div class="well">
+                    <fieldset>
+                        <legend>Confirmar Atendimento: </legend>
+                <?php if ($this->registro->getId()) { ?>
+                        <dl class="dl-horizontal">
+                            <dt>Chamado:</dt>
+                            <dd><?php echo $this->registro->toString(); ?></dd>
+                        </dl>
+                <?php } ?>
+                        <div class="control-group">
+                            <label for="finaliza" class="control-label">Atendimento Resolveu o Problema?</label>
+                            <div class="controls">
+                                <select name="finaliza" id="finaliza">
+                                    <option value="">==> SELECIONE <==</option>
+                                    <option value="S">SIM</option>
+                                    <option value="N">NÃO</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div id="linha_nota" style="display:none" class="control-group">
+                            <label for="nota" class="control-label">Nota do Atendimento</label>
+                            <div class="controls">
+                                <select name="nota" id="nota">
+                                    <option value="">==</option>
+                    <?php for ($nota = 0; $nota <= 10; $nota++) { ?>
+                                    <option value="<?php echo $nota; ?>"><?php echo $nota; ?></option>
+                    <?php } ?>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label for="observacoes" class="control-label">Observações:</label>
+                            <div class="controls">
+                                <textarea name="observacoes" id="observacoes" class="span5" rows="6"></textarea>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

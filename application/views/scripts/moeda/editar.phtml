@@ -1,0 +1,48 @@
+<div class="conteudo_controller">
+    <div class="row-fluid">
+        <div class="span12">
+            <form action="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(), "action" => "editar")); ?>" method="post" id="formulario" class="formulario form-horizontal">
+                <input type="hidden" name="id" id="id" value="<?php echo $this->registro->getId(); ?>" />
+                <div class="well">
+                    <fieldset>
+                        <legend>Cadastro de Moeda: </legend>
+                <?php if ($this->registro->getId()) { ?>
+                        <dl class="dl-horizontal">
+                            <dt>ID:</dt>
+                            <dd><?php echo $this->registro->getId(); ?></dd>
+                        </dl>
+                <?php } ?>
+                        <div class="control-group">
+                            <label for="simbolo" class="control-label">Símbolo:</label>
+                            <div class="controls">
+                                <input type="text" name="simbolo" id="simbolo" class="span1" value="<?php echo $this->registro->simbolo; ?>" maxlength="5" />
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label for="descricao" class="control-label">Descrição:</label>
+                            <div class="controls">
+                                <input type="text" name="descricao" id="descricao" class="span5" value="<?php echo $this->registro->descricao; ?>" maxlength="100" />
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label for="padrao" class="control-label">Padrão:</label>
+                            <div class="controls">
+                                <select name="padrao" id="padrao">
+                                    <option value="" <?php echo (!$this->registro->padrao)?"selected":""; ?>>==> SELECIONE <==</option>
+                                    <option value="S" <?php echo ($this->registro->padrao == "S")?"selected":""; ?>>SIM</option>
+                                    <option value="N" <?php echo ($this->registro->padrao == "N")?"selected":""; ?>>NÃO</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label for="valor_ref" class="control-label">Valor Referência:</label>
+                            <div class="controls">
+                                <input type="text" name="valor_ref" id="valor_ref" class="span2 moeda" value="<?php echo $this->registro->valor_ref; ?>" />
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

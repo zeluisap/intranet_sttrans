@@ -1,0 +1,136 @@
+<div class="conteudo_controller">
+    <div class="row-fluid">
+        <div class="span12">
+        <form action="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(), "action" => "index")); ?>" method="post" id="formulario" class="formulario form-horizontal">
+            <div class="well well-small" id="idPesquisa">
+                <div class="page-header">
+                    <h4>Opções de Pesquisa</h4>
+                </div>
+                <div class="control-group">
+                    <label for="filtro_id_boleto" class="control-label">ID Boleto:</label>
+                    <div class="controls">
+                        <input type="text" name="filtro_id_boleto" id="filtro_id_boleto" value="<?php echo $this->dados["filtro_id_boleto"]; ?>" class="span2 filtro" />
+                    </div>
+                </div>                        
+                <div class="control-group">
+                    <label for="filtro_nosso_numero" class="control-label">Nosso Número:</label>
+                    <div class="controls">
+                        <input type="text" name="filtro_nosso_numero" id="filtro_nosso_numero" value="<?php echo $this->dados["filtro_nosso_numero"]; ?>" class="span3 filtro" />
+                    </div>
+                </div>                        
+                <div class="control-group">
+                    <label for="filtro_convenio" class="control-label">Convênio:</label>
+                    <div class="controls">
+                        <input type="text" name="filtro_convenio" id="filtro_convenio" value="<?php echo $this->dados["filtro_convenio"]; ?>" class="span2 filtro" />
+                    </div>
+                </div>                        
+                <div class="control-group">
+                    <label for="filtro_nome" class="control-label">Nome Cedente:</label>
+                    <div class="controls">
+                        <input type="text" name="filtro_nome" id="filtro_nome" value="<?php echo $this->dados["filtro_nome"]; ?>" class="span5 filtro" />
+                    </div>
+                </div>                        
+                <div class="control-group">
+                    <div class="controls">
+                        <input type="submit" value="Pesquisar" class="acao btn btn-primary" />
+                        <input type="button" value="Limpar Filtro" id="idLimparPesquisa" class="btn" />
+                    </div>
+                </div>
+            </div>
+        </form>
+            <table class="table table-striped table-bordered">
+                <thead>
+                    <tr>
+                        <th>Nosso Número</th>
+                        <th>Cedente</th>
+                        <th>Convênio</th>
+                        <th>Data Criação</th>
+                        <th>Data Vencimento</th>
+                        <th>Valor</th>
+                        <th>Data Pagamento</th>
+                        <th width="20px">Operações</th>
+                    </tr>
+                </thead>
+        <?php if ($this->registros && count($this->registros)) { ?>
+                <tbody>
+        <?php 
+            foreach ($this->registros as $registro) { 
+                $data_pagamento = $convenio = "--";
+                $bc = $registro->findParentRow("TbBancoConvenio");
+                if ($bc) {
+                    $convenio = $bc->convenio;
+                }
+                $valor = $registro->pegaValor();
+                $ri = $registro->pegaRetornoItem();
+                if ($ri) {
+                    $data_pagamento = Escola_Util::formatData($ri->data_pagamento);
+                }
+        ?>
+                    <tr>
+                        <td>
+                            <a href="<?php echo $this->url(array("action" => "view", "id" => $registro->getId())); ?>">
+                                <div class="text-center"><?php echo $registro->nosso_numero; ?></div>
+                            </a>
+                        </td>
+                        <td>
+                            <a href="<?php echo $this->url(array("action" => "view", "id" => $registro->getId())); ?>">
+                                <?php echo $registro->mostrarCedente(); ?>
+                            </a>
+                        </td>
+                        <td>
+                            <a href="<?php echo $this->url(array("action" => "view", "id" => $registro->getId())); ?>">
+                                <div class="text-center"><?php echo $convenio; ?></div>
+                            </a>
+                        </td>
+                        <td>
+                            <a href="<?php echo $this->url(array("action" => "view", "id" => $registro->getId())); ?>">
+                                <div class="text-center"><?php echo Escola_Util::formatData($registro->data_criacao); ?></div>
+                            </a>
+                        </td>
+                        <td>
+                            <a href="<?php echo $this->url(array("action" => "view", "id" => $registro->getId())); ?>">
+                                <div class="text-center"><?php echo Escola_Util::formatData($registro->data_vencimento); ?></div>
+                            </a>
+                        </td>
+                        <td>
+                            <a href="<?php echo $this->url(array("action" => "view", "id" => $registro->getId())); ?>">
+                                <div class="text-center"><?php echo Escola_Util::number_format($valor); ?></div>
+                            </a>
+                        </td>
+                        <td>
+                            <a href="<?php echo $this->url(array("action" => "view", "id" => $registro->getId())); ?>">
+                                <div class="text-center"><?php echo $data_pagamento; ?></div>
+                            </a>
+                        </td>
+                        <td>
+                            <div class="btn-group">	
+                                <a href="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(),
+                                                                     "action" => "view",
+                                                                     "id" => $registro->getId())); ?>" class="btn" title="Visualizar">
+                                    <i class="icon-search"></i>
+                                </a>
+<?php if (!$registro->pago()) { ?>
+                                <a href="<?php echo $this->url(array("controller" => "transporte",
+                                                                     "action" => "boleto",
+                                                                     "id_boleto" => $registro->getId())); ?>" class="btn" title="Emitir Boleto" target="_blank">
+                                    <i class="icon-credit-card"></i>
+                                </a>
+                                <a href="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(),
+                                                                     "action" => "pagamento",
+                                                                     "id" => $registro->getId())); ?>" class="btn" title="Efetuar Pagamento">
+                                    <i class="icon-money"></i>
+                                </a>
+<?php } ?>
+                            </div>
+                        </td>
+                    </tr>
+        <?php } ?>
+                </tbody>
+        <?php } ?>
+            </table>
+<?php if ($this->registros && count($this->registros)) { ?>
+<?php echo $this->paginationControl($this->registros, "sliding", "minha_paginacao_control.phtml"); ?>
+<?php } ?>
+        </div>
+    </div>
+</div>

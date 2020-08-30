@@ -1,0 +1,168 @@
+<div class="conteudo_controller">
+    <div class="row-fluid">
+        <div class="span12">
+<form action="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(), "action" => "index")); ?>" method="post" id="formulario" class="formulario form-horizontal" enctype="multipart/form-data">
+<div id="janela_pc" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <input type="hidden" name="janela_pc_id" id="janela_pc_id" />
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3 id="myModalLabel">Enviar Prestação de Contas</h3>
+    </div>
+    <div class="modal-body">
+        <div class="well well-small">
+            <fieldset>
+                <dl class="dl-horizontal">
+                    <dt>Lote: </dt>
+                    <dd id="show_lote"></dd>
+                </dl>
+                <div class="control-group">
+                    <label for="janela_pc_arquivo" class="control-label">Arquivo:</label>
+                    <div class="controls">
+                        <input type="file" name="janela_pc_arquivo" id="janela_pc_arquivo" />
+                    </div>
+                </div>
+            </fieldset>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn" data-dismiss="modal" aria-hidden="true">Fechar</button>
+        <input type="submit" value="Salvar" class="btn btn-primary" />
+    </div>
+</div>        
+<div class="well well-small" id="idPesquisa">
+        <div class="page-header">
+            <h4>Opções de Pesquisa</h4>
+        </div>
+        <div class="control-group">
+            <label for="mes" class="control-label">Projeto:</label>
+            <div class="controls">
+                <select name="id_vinculo" id="id_vinculo" class="filtro">
+                    <option value="" <?php echo (!$this->dados["id_vinculo"])?"selected":""; ?>>==> SELECIONE <==</option>
+<?php foreach ($this->vinculos as $vinculo) { ?>
+                    <option value="<?php echo $vinculo->getId(); ?>" <?php echo ($vinculo->getId() == $this->dados["id_vinculo"])?"selected":""; ?>><?php echo $vinculo->toString(); ?></option>
+<?php } ?>
+                </select>
+            </div>
+        </div>
+        <div class="control-group">
+            <label for="filtro_nome" class="control-label">Ano:</label>
+            <div class="controls">
+                <input type="text" class="filtro span1" name="ano" id="ano" value="<?php echo $this->dados["ano"]; ?>" />
+            </div>
+        </div>
+        <div class="control-group">
+            <label for="mes" class="control-label">Mês:</label>
+            <div class="controls">
+                <select name="mes" id="mes" class="filtro">
+                    <option value="">==> SELECIONE <==</option>
+<?php foreach ($this->meses as $k => $mes) { ?>
+                    <option value="<?php echo $k; ?>" <?php echo ($k == $this->dados["mes"])?"selected":""; ?>><?php echo $mes; ?></option>
+<?php } ?>
+                </select>
+            </div>
+        </div>
+<?php
+	$ctrl = new Escola_Form_Element_Select_Table("id_vinculo_lote_status");
+	$ctrl->setPkName("id_vinculo_lote_status");
+	$ctrl->setModel("TbVinculoLoteStatus");
+	$ctrl->setValue($this->dados["id_vinculo_lote_status"]);
+	$ctrl->setLabel("Situação: ");
+    $ctrl->setAttrib("class", "filtro");
+	echo $ctrl->render($this);
+?>
+        <div class="control-group">
+            <div class="controls">
+                <input type="submit" value="Pesquisar" class="acao btn btn-primary" />
+                <input type="button" value="Limpar Filtro" id="idLimparPesquisa" class="btn" />
+            </div>
+        </div>
+    </div>
+	<table class="table table-striped table-bordered">
+		<thead>
+			<tr>
+                <th>Projeto</th>
+				<th>Ano</th>
+                <th>Mês</th>
+				<th>Status</th>
+                <th>Valor Total</th>
+                <th>Valor Previsão</th>
+				<th width="20px">Operações</th>
+			</tr>
+		</thead>
+<?php if ($this->registros && count($this->registros)) { ?>
+		<tbody>
+<script type="text/javascript">
+    var pagamentos = [];
+</script>            
+<?php
+	foreach ($this->registros as $registro) {
+        $status = $registro->findParentRow("TbVinculoLoteStatus");
+        $vinculo = $registro->findParentRow("TbVinculo");
+        $action_view = array("controller" => $this->getRequest()->getControllerName(),
+                            "action" => "view",
+                            "id" => $registro->getId());
+?>
+<script type="text/javascript">
+    pagamentos[<?php echo $registro->getId(); ?>] = { "id_vinculo_lote": <?php echo $registro->getId(); ?>, 
+                                                      "referencia": "<?php echo $registro->toString(); ?>"};
+</script>
+			<tr>
+				<td>
+                    <a href="<?php echo $this->url($action_view); ?>" title="Visualizar">
+					<?php echo $vinculo->toString(); ?>
+                    </a>
+				</td>
+				<td>
+                    <a href="<?php echo $this->url($action_view); ?>" title="Visualizar">
+					<?php echo $registro->ano; ?>
+                    </a>
+				</td>
+				<td>
+                    <a href="<?php echo $this->url($action_view); ?>" title="Visualizar">
+					<?php echo Escola_Util::pegaMes($registro->mes); ?>
+                    </a>
+				</td>
+				<td>
+                    <a href="<?php echo $this->url($action_view); ?>" title="Visualizar">
+					<?php echo $status->toString(); ?>
+                    </a>
+				</td>
+				<td>
+                    <a href="<?php echo $this->url($action_view); ?>" title="Visualizar">
+					<?php echo Escola_Util::number_format($registro->pega_valor_total()); ?>
+                    </a>
+				</td>
+				<td>
+                    <a href="<?php echo $this->url($action_view); ?>" title="Visualizar">
+					<?php echo Escola_Util::number_format($registro->pega_valor_previsao()); ?>
+                    </a>
+				</td>
+				<td>
+                    <div class="btn-group">
+                        <a href="<?php echo $this->url($action_view); ?>" class="btn" data-toggle="tooltip" title="Visualizar">
+							<i class="icon-zoom-in"></i>
+						</a>
+						<a href="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(),
+															 "action" => "gerenciar",
+															 "id" => $registro->getId())); ?>" class="btn" title="Gerenciar Bolsistas">
+							<i class="icon-group"></i>
+						</a>
+<?php //if ($status->pago()) { ?>
+						<a href="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(),
+															 "action" => "prestarconta",
+															 "id" => $registro->getId())); ?>" class="btn" title="Prestação de Contas">
+							<i class="icon-book"></i>
+						</a>
+<?php //} ?>
+                    </div>
+				</td>
+			</tr>
+<?php } ?>
+		</tbody>
+<?php } ?>
+	</table>
+</form>
+<?php echo $this->paginationControl($this->registros, "sliding", "minha_paginacao_control.phtml"); ?>
+        </div>
+    </div>
+</div>

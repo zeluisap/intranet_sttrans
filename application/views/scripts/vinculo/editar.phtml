@@ -1,0 +1,195 @@
+<div class="conteudo_controller">
+    <div class="row-fluid">
+        <div class="span12">
+            <form action="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(), "action" => "editar")); ?>" method="post" id="formulario" class="formulario form-horizontal">
+                <input type="hidden" name="id" id="id" value="<?php echo $this->registro->getId(); ?>" />
+                <div class="well">
+                    <fieldset>
+                        <legend>CADASTRO DE VÍNCULO: </legend>
+                <?php if ($this->registro->getId()) { ?>
+                        <dl class="dl-horizontal">
+                            <dt>ID:</dt>
+                            <dd><?php echo $this->registro->getId(); ?></dd>
+                        </dl>
+                <?php } ?>
+<?php
+$ctrl = new Escola_Form_Element_Select_Table("id_vinculo_tipo");
+$ctrl->setPkName("id_vinculo_tipo");
+$ctrl->setModel("TbVinculoTipo");
+$ctrl->setValue($this->registro->id_vinculo_tipo);
+$ctrl->setLabel("Tipo: ");
+echo $ctrl->render($this);
+?>
+                        <div class="control-group">
+                            <label for="codigo" class="control-label">Código / Ano:</label>
+                            <div class="controls">
+                                <input type="text" name="codigo" id="codigo" class="span1" value="<?php echo $this->registro->codigo; ?>" maxlength="20" /> / <input type="text" name="ano" id="ano" class="span1" value="<?php echo $this->registro->ano; ?>" maxlength="4" />
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label for="sigla" class="control-label">Sigla:</label>
+                            <div class="controls">
+                                <input type="text" name="sigla" id="sigla" class="span2" value="<?php echo $this->registro->sigla; ?>" maxlength="20" />
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label for="descricao" class="control-label">Descrição:</label>
+                            <div class="controls">
+                                <input type="text" name="descricao" id="descricao" class="span5" value="<?php echo $this->registro->descricao; ?>" maxlength="100" />
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label for="objeto" class="control-label">Objeto:</label>
+                            <div class="controls">
+                                <textarea name="objeto" id="objeto" class="span6" rows="6"><?php echo $this->registro->objeto; ?></textarea>
+                            </div>
+                        </div>
+<?php
+$ctrl = new Escola_Form_Element_Select_Table_PessoaJuridica("id_pessoa_juridica");
+$ctrl->setValue($this->registro->id_pessoa_juridica);
+$ctrl->setLabel("Pessoa Jurídica:");
+echo $ctrl->render($this);
+?>
+                        <div class="control-group">
+                            <label for="data_inicial" class="control-label">Data Inicial:</label>
+                            <div class="controls">
+                                <input type="text" name="data_inicial" id="data_inicial" class="span2 data" value="<?php echo Escola_Util::formatData($this->registro->data_inicial); ?>" />
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label for="data_final" class="control-label">Data Final:</label>
+                            <div class="controls">
+                                <input type="text" name="data_final" id="data_final" class="span2 data" value="<?php echo Escola_Util::formatData($this->registro->data_final); ?>" />
+                            </div>
+                        </div>
+                        <?php echo $this->registro->pega_valor()->render($this); ?>
+                    </fieldset>
+                </div>
+            <div class="well">
+                <div class="page-header">
+                    <h4>Responsáveis</h4>
+                </div>
+<?php 
+$tb = new TbVinculoPessoa();
+foreach ($this->vpts as $vpt) {
+    $id_pessoa_fisica = 0;
+    $field_name = "id_pessoa_fisica_" . $vpt->chave;
+    if (isset($this->dados[$field_name]) && $this->dados[$field_name]) {
+        $id_pessoa_fisica = $this->dados[$field_name];
+    } elseif ($this->registro->getId()) {
+        $vps = $tb->listar(array("id_vinculo" => $this->registro->getId(), "id_vinculo_pessoa_tipo" => $vpt->getId()));
+        if ($vps) {
+            $vp = $vps->current();
+            if ($vp) {
+                $pf = $vp->findParentRow("TbPessoaFisica");
+                if ($pf) {
+                    $id_pessoa_fisica = $pf->getId();
+                }
+            }
+        }
+    }
+    $ctrl = new Escola_Form_Element_Select_Table_PessoaFisica($field_name);
+    $ctrl->setValue($id_pessoa_fisica);
+    $ctrl->setLabel($vpt->toString());
+    echo $ctrl->render($this);
+} 
+?>
+            </div>
+                <div class="well">
+                    <fieldset>
+                        <legend>Informações Bancárias</legend>
+                        <table class="table table-striped table-bordered tabela_info_bancaria">
+                            <thead>
+                                <tr>
+                                    <th width="20px">#</th>
+                                    <th>Tipo</th>
+                                    <th>Banco</th>
+                                    <th>Agência</th>
+                                    <th>Conta</th>
+                                    <th width="50px"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+<?php 
+if ($this->ibs) {
+    foreach ($this->ibs as $ib) {
+?>
+<script type="text/javascript">
+    obj_ib = {};
+    obj_ib.id = "<?php echo $ib["id_info_bancaria"]; ?>";
+    obj_ib.id_info_bancaria_tipo = "<?php echo $ib["id_info_bancaria_tipo"]; ?>";
+    obj_ib.info_bancaria_tipo = "<?php echo $ib["info_bancaria_tipo"]; ?>";
+    obj_ib.id_banco = "<?php echo $ib["id_banco"]; ?>";
+    obj_ib.banco = "<?php echo $ib["banco"]; ?>";
+    obj_ib.agencia = "<?php echo $ib["agencia"]; ?>";
+    obj_ib.agencia_dv = "<?php echo $ib["agencia_dv"]; ?>";
+    obj_ib.agencia_show = "<?php echo $ib["agencia_show"]; ?>";
+    obj_ib.conta = "<?php echo $ib["conta"]; ?>";
+    obj_ib.conta_dv = "<?php echo $ib["conta_dv"]; ?>";
+    obj_ib.conta_show = "<?php echo $ib["conta_show"]; ?>";
+    info_bancaria.push(obj_ib);
+</script>
+<?php }} ?>
+                            </tbody>
+                        </table>
+                        <input type="hidden" name="id_info_bancaria" id="id_info_bancaria" class="ib_field" />
+                        <input type="hidden" name="info_bancaria_indice" id="info_bancaria_indice" class="ib_field" />
+<?php
+$tb = new TbInfoBancariaTipo();
+$ibts = $tb->listar();
+if ($ibts) {
+?>
+                        <div class="linha_id_info_bancaria_tipo control-group">
+                            <label for="id_info_bancaria_tipo" class="control-label">Tipo: </label>
+                            <div class="controls">
+                                <select name="id_info_bancaria_tipo" id="id_info_bancaria_tipo" class="ib_field">
+                                    <option value="" selected="">==&gt; SELECIONE &lt;==</option>
+<?php foreach ($ibts as $ibt) { ?>
+                                    <option value="<?php echo $ibt->getId(); ?>"><?php echo $ibt->toString(); ?></option>
+<?php } ?>
+                                </select>
+                            </div>
+                        </div>
+<?php } ?>
+<?php 
+$tb = new TbBanco();
+$bancos = $tb->listar();
+if ($bancos) {
+?>
+                        <div class="linha_id_banco control-group">
+                            <label for="id_banco" class="control-label">Banco: </label>
+                            <div class="controls">
+                                <select name="id_banco" id="id_banco" class="ib_field">
+                                    <option value="">==&gt; SELECIONE &lt;==</option>
+<?php foreach ($bancos as $banco) { ?>
+                                    <option value="<?php echo $banco->getId(); ?>"><?php echo $banco->toString(); ?></option>
+<?php } ?>
+                                </select>
+                            </div>
+                        </div>
+<?php } ?>
+                        <div class="control-group">
+                            <label for="agencia" class="control-label">Agência:</label>
+                            <div class="controls">
+                                <input type="text" name="agencia" id="agencia" class="span2 ib_field" value=""> - <input type="text" name="agencia_dv" id="agencia_dv" class="span1 ib_field" value="">
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label for="conta" class="control-label">Conta:</label>
+                            <div class="controls">
+                                <input type="text" name="conta" id="conta" class="span2 ib_field" value=""> - <input type="text" name="conta_dv" id="conta_dv" class="span1 ib_field" value="">
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label for="" class="control-label"></label>
+                            <div class="controls">
+                                <input type="button" value="Adicionar" class="btn btn-primary" id="ib_btn_salvar" />
+                                <input type="button" value="Cancelar" class="btn btn-danger hide" id="ib_btn_cancelar" />
+                            </div>
+                        </div>
+                    </fieldset>                    
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

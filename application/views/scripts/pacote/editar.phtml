@@ -1,0 +1,68 @@
+<div class="conteudo_controller">
+	<div class="row-fluid">
+		<div class="span12">
+			<div class="well">
+				<form action="<?php echo $this->url(array("action" => "editar")); ?>" method="post" id="formulario" class="formulario form-horizontal">
+					<input type="hidden" name="id" id="id" value="<?php echo $this->registro->getId(); ?>" />
+					<fieldset>
+						<legend>Pacote: </legend>
+				<?php if ($this->registro->getId()) { ?>
+						<div class="control-group">
+							<label for="descricao" class="control-label">Código:</label>
+							<div class="controls">
+								<span class="read-only"><?php echo $this->registro->getId(); ?></span>
+							</div>
+						</div>
+				<?php } ?>
+						<div class="control-group">
+							<label for="sigla" class="control-label">Sigla.:</label>
+							<div class="controls">
+								<input type="text" name="sigla" id="sigla" maxlength="10" value="<?php echo $this->registro->sigla; ?>" class="span3" />
+							</div>
+						</div>
+						<div class="control-group">
+							<label for="descricao" class="control-label">Descrição.:</label>
+							<div class="controls">
+								<input type="text" name="descricao" id="descricao" maxlength="60" value="<?php echo $this->registro->descricao; ?>" class="span5" />
+							</div>
+						</div>
+						<div class="control-group">
+							<label for="resumo" class="control-label">Resumo:</label>
+							<div class="controls">
+								<textarea name="resumo" id="resumo" rows="6" class="span5"><?php echo $this->registro->resumo; ?></textarea>
+							</div>
+						</div>
+<?php
+	$ctrl = new Escola_Form_Element_Icone("icone");
+	$ctrl->setAttrib("id", "pacote_icone");
+	$ctrl->setValue($this->registro->icone);
+	echo $ctrl->render($this);
+?>
+						<div class="control-group">
+                                                    <label for="resumo" class="control-label">Status:</label>
+                                                    <div class="controls">
+                                                        <select name="status" id="status">
+                                                            <option value="A" <?php echo ($this->registro->ativo())?"selected":""; ?>>ATIVO</option>
+                                                            <option value="I" <?php echo ($this->registro->inativo())?"selected":""; ?>>INATIVO</option>                                                            
+                                                        </select>
+                                                    </div>
+						</div>
+<?php if ($this->ultima_ordem) { ?>
+						<div class="control-group">
+							<label for="ordem" class="control-label">Ordem:</label>
+							<div class="controls">
+								<select name="ordem" id="ordem">
+                                    <option value="" <?php echo (!$this->registro->ordem)?"selected":""; ?>>==> SELECIONE <==</option>
+<?php for ($i = 1; $i <= $this->ultima_ordem; $i++) { ?>
+                                    <option value="<?php echo $i; ?>" <?php echo ($i == $this->registro->ordem)?"selected":""; ?>><?php echo $i; ?></option>
+<?php } ?>
+                                </select>
+							</div>
+						</div>
+<?php } ?>
+					</fieldset>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>

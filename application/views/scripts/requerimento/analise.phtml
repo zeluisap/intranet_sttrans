@@ -1,0 +1,377 @@
+<style>
+    .btn-analise {
+        margin-top: 10px;
+        margin-right: 5px;
+    }
+</style>
+<div class="conteudo_controller">
+    <div class="row-fluid">
+        <div class="span12">
+            <div class="well">
+                <form action="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(), "action" => "editar")); ?>" method="post" id="formulario" class="formulario">
+                    <input type="hidden" name="id" id="id" value="<?php echo $this->registro->getId(); ?>" />
+                    <fieldset>
+                        <legend>REQUERIMENTO: </legend>
+                        <dl class="dl-horizontal">
+                            <dt>Número:</dt>
+                            <dd><?php echo $this->registro->mostrarNumero(); ?></dd>
+                        </dl>
+                        <dl class="dl-horizontal">
+                            <dt>Solicitante:</dt>
+                            <dd><?php echo $this->registro->mostrarPessoa(); ?></dd>
+                        </dl>
+
+                        <dl class="dl-horizontal">
+                            <dt>Ítens:</dt>
+                            <dd id="lista-itens"></dd>
+                        </dl>
+
+                    </fieldset>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- modalMotivo início -->
+<div id="modalMotivo" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3 id="myModalLabel">INFORME O MOTIVO DO INDEFERIMENTO</h3>
+    </div>
+
+    <div class="modal-body">
+
+        <div id="erro-modal"></div>
+
+        <div class="row-fluid">
+            <dl class="dl-horizontal">
+                <dt>Número:</dt>
+                <dd><?php echo $this->registro->mostrarNumero(); ?></dd>
+            </dl>
+            <dl class="dl-horizontal">
+                <dt>Solicitante:</dt>
+                <dd><?php echo $this->registro->mostrarPessoa(); ?></dd>
+            </dl>
+            <dl class="dl-horizontal">
+                <dt>Ítem:</dt>
+                <dd id="dd-item"></dd>
+            </dl>
+            <textarea id="motivo" placeholder="Motivo para o indeferimento." rows="6" class="span12"></textarea>
+        </div>
+
+    </div>
+
+    <div class="modal-footer">
+        <button id="motivo-btn-fechar" class="btn" data-dismiss="modal" aria-hidden="true">Cancelar</button>
+        <button id="motivo-btn-salvar" class="btn btn-primary" data-loading-text="Processando, aguarde...">Confirmar Indeferimento</button>
+    </div>
+
+</div>
+<!-- modalMotivo fim -->
+
+<script>
+    let registro = <?php echo json_encode($this->registro->toArray()); ?>;
+
+    let itemSelecionado = null;
+
+    function finalizarAnalise() {
+        $.modalConfirmacao({
+            "conteudo": "Confirmar Operação?",
+            "titulo": "Atenção",
+            "id": "myModal-finaliza-operacao",
+            "confirma": function(value) {
+                if (!value) {
+                    return;
+                }
+
+                finaliza();
+            }
+        });
+
+    }
+
+    async function finaliza() {
+
+        try {
+
+            await executaRequest({
+                controller: "requerimento",
+                action: "finalizaranalise",
+                dados: {
+                    id_requerimento: registro.id
+                }
+            });
+
+            mensagemAlerta({
+                tipo: 'sucesso',
+                mensagem: "OPERAÇÃO EFETUADA COM SUCESSO."
+            });
+
+            window.location.href = "<?php echo $this->url(array("controller" => "requerimento", "action" => "view")); ?>/id/" + registro.id;
+
+        } catch (error) {
+            mensagemAlerta({
+                mensagem: errorMessage(error)
+            });
+        }
+
+    }
+
+    function indeferirTodos() {
+        showModalMotivo();
+    }
+
+    function erroModal(erro) {
+        $("#erro-modal").text('');
+        if (!erro) {
+            return;
+        }
+        $('<div class="alert alert-error">' + erro + '</div>').appendTo($("#erro-modal"));
+    }
+
+    function showModalMotivo(item) {
+        erroModal();
+        itemSelecionado = null;
+        $("#dd-item").text('TODOS');
+        if (item) {
+            itemSelecionado = item;
+            $("#dd-item").text(item.descricao);
+        }
+        $("#motivo").val('');
+        $("#modalMotivo").modal('show');
+    }
+
+    function indeferir(dados) {
+        return executaRequest({
+            controller: "requerimento",
+            action: "indeferir",
+            dados
+        });
+    }
+
+    function deferir(dados) {
+        return executaRequest({
+            controller: "requerimento",
+            action: "deferir",
+            dados
+        });
+    }
+
+    async function deferirTodos() {
+        const button = $(".btn-analise-deferir");
+        try {
+
+            button.button('loading');
+            erroModal();
+
+            await executaRequest({
+                controller: "requerimento",
+                action: "deferirtodos",
+                dados: {
+                    id: registro.id
+                }
+            });
+
+            await init(true);
+
+            mensagemAlerta({
+                tipo: 'sucesso',
+                mensagem: "OPERAÇÃO EFETUADA COM SUCESSO.",
+                timeout: 3000
+            });
+
+        } catch (error) {
+            mensagemAlerta({
+                mensagem: errorMessage(error)
+            });
+        } finally {
+            button.button('reset');
+        }
+
+    }
+
+    async function clickDeferirItem(item) {
+        const button = $("#btn-analise-deferir-" + item.id);
+        let botoes = null;
+        try {
+
+            button.button('loading');
+            erroModal();
+
+            const deferido = await deferir({
+                item
+            });
+
+            await init(true);
+
+            mensagemAlerta({
+                tipo: 'sucesso',
+                mensagem: "OPERAÇÃO EFETUADA COM SUCESSO.",
+                timeout: 3000
+            });
+
+        } catch (error) {
+            mensagemAlerta({
+                mensagem: errorMessage(error)
+            });
+        } finally {
+            button.button('reset');
+        }
+
+    }
+
+    async function init(bloqueia) {
+
+        $("#salvar").hide();
+
+        const lista = $("#lista-itens");
+
+        if (!bloqueia) {
+            lista.children().remove();
+            $("<div>Carregando ítens, aguarde ... " + facebookLoading() + "</div>").appendTo(lista);
+        }
+
+        try {
+
+            registro = await executaRequest({
+                controller: "requerimento",
+                action: "get",
+                dados: {
+                    id_requerimento: registro.id
+                }
+            });
+
+            if (!(registro && registro.itens && registro.itens.length)) {
+                throw new Error("Ocorreu uma falha ao carregar os ítens do registro, atualize a página");
+            }
+            lista.children().remove();
+
+            const itens = registro.itens;
+
+            let habilitaConfirma = true;
+            for (const item of itens) {
+
+                if (item.pendente) {
+                    habilitaConfirma = false;
+                }
+
+                const ul = $("<ul>").appendTo(lista);
+                const li = $("<li>").appendTo(ul);
+                if (item.deferido) {
+                    $("<div><span style=\"font-size:10pt;\" class=\"label label-info\"><i class=\"icon-thumbs-up\"></i> DEFERIDO</span></div>").appendTo(li);
+                } else if (item.indeferido) {
+                    $("<div><span style=\"font-size:10pt;\" class=\"label label-important\"><i class=\"icon-thumbs-down\"></i> INDEFERIDO</span></div>").appendTo(li);
+                }
+                $("<div>", {
+                    text: item.descricao
+                }).appendTo(li);
+
+                if (item.indeferido && item.indeferimento_motivo) {
+                    $("<div>", {
+                        html: "<strong>MOTIVO INDEFERIMENTO</strong>: " + item.indeferimento_motivo
+                    }).appendTo(li);
+                }
+
+                if (item.obs) {
+                    $("<div>", {
+                        text: item.obs
+                    }).appendTo(li);
+                }
+                const div = $("<div>").appendTo(li);
+
+                if (!item.deferido) {
+                    $("<a>", {
+                        href: "#",
+                        class: "btn btn-analise btn-analise-deferir",
+                        id: 'btn-analise-deferir-' + item.id,
+                        html: '<i class="icon-thumbs-up"></i> Deferir',
+                        'data-loading-text': "Processando, aguarde...",
+                        click: function(event) {
+                            event.preventDefault();
+                            clickDeferirItem(item);
+                        }
+                    }).appendTo(div);
+                }
+
+                if (!item.indeferido) {
+                    $("<a>", {
+                        href: "#",
+                        class: "btn btn-analise",
+                        html: '<i class="icon-thumbs-down"></i> Indeferir',
+                        click: function(event) {
+                            event.preventDefault();
+                            showModalMotivo(item);
+                        }
+                    }).appendTo(div);
+                }
+
+                $("<hr>").appendTo(lista);
+            }
+
+            if (habilitaConfirma) {
+                $("#salvar").show();
+            }
+
+        } catch (error) {
+            lista.children().remove();
+            $("<div>", {
+                text: "Ocorreu uma falha ao carregar os ítens do registro, atualize a página.",
+                css: {
+                    color: 'red'
+                }
+            }).appendTo(lista);
+            mensagemAlerta({
+                mensagem: errorMessage(error)
+            })
+        }
+
+    }
+
+    $(document).ready(function() {
+
+        init();
+
+        $("#modalMotivo").on('shown', function() {
+            $("#motivo").focus().select();
+        });
+
+        $("#modalMotivo").on('hidden', function() {
+            itemSelecionado = null;
+        });
+
+        $("#motivo-btn-salvar").click(async function(event) {
+            try {
+                $("#motivo-btn-salvar").button('loading');
+                erroModal();
+                event.preventDefault();
+                const motivo = $("#motivo").val();
+                if (!motivo) {
+                    throw new Error("O motivo do indeferimento deve ser informado.");
+                }
+
+                const item = await indeferir({
+                    item: itemSelecionado,
+                    id_requerimento: registro.id,
+                    motivo
+                });
+
+                $("#modalMotivo").modal('hide');
+
+                await init(true);
+
+                mensagemAlerta({
+                    tipo: 'sucesso',
+                    mensagem: "OPERAÇÃO EFETUADA COM SUCESSO.",
+                    timeout: 3000
+                });
+            } catch (error) {
+                erroModal(errorMessage(error));
+            } finally {
+                $("#motivo-btn-salvar").button('reset');
+            }
+        });
+
+    });
+</script>

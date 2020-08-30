@@ -1,0 +1,38 @@
+<div class="conteudo_controller">
+    <div class="row-fluid">
+        <div class="span12">
+            <form action="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(), "action" => "editar")); ?>" method="post" id="formulario" class="formulario form-horizontal">
+                <input type="hidden" name="id" id="id" value="<?php echo $this->registro->getId(); ?>" />
+                <div class="well">
+                    <fieldset>
+                        <legend>Cadastro de Banco: </legend>
+                <?php if ($this->registro->getId()) { ?>
+                        <dl class="dl-horizontal">
+                            <dt>ID:</dt>
+                            <dd><?php echo $this->registro->getId(); ?></dd>
+                        </dl>
+                <?php } ?>
+                        <div class="control-group">
+                            <label for="codigo" class="control-label">Código:</label>
+                            <div class="controls">
+                                <input type="text" name="codigo" id="codigo" class="span1" value="<?php echo $this->registro->codigo; ?>" maxlength="5" />
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label for="sigla" class="control-label">Sigla:</label>
+                            <div class="controls">
+                                <input type="text" name="sigla" id="sigla" class="span2" value="<?php echo $this->registro->sigla; ?>" maxlength="20" />
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label for="descricao" class="control-label">Descrição:</label>
+                            <div class="controls">
+                                <input type="text" name="descricao" id="descricao" class="span5" value="<?php echo $this->registro->descricao; ?>" maxlength="100" />
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,23 @@
+<div class="conteudo_controller">
+	<div class="row-fluid">
+		<div class="span12">
+			<div class="well">
+						<div class="page-header">
+							<h3>Pacote</h3>
+						</div>
+						<dl class="dl-horizontal">
+							<dt>Código:</dt>
+							<dd><?php echo $this->registro->getId(); ?></dd>
+							<dt>Descrição.:</dt>
+							<dd><?php echo $this->registro->sigla; ?></dd>
+							<dt>Controller:</dt>
+							<dd><?php echo $this->registro->descricao; ?></dd>
+							<dt>Ícone:</dt>
+							<dd><?php echo $this->registro->icone; ?></dd>
+							<dt>Status:</dt>
+							<dd><?php echo $this->registro->mostrar_status(); ?></dd>
+					</dl>
+			</div>
+		</div>
+	</div>
+</div>

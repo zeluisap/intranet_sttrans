@@ -1,0 +1,36 @@
+<div class="conteudo_controller">
+    <div class="row-fluid">
+        <div class="span12">
+            <form action="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(), "action" => "addloteitem")); ?>" method="post" id="formulario" class="formulario form-horizontal">
+                <input type="hidden" name="id" id="id" value="<?php echo $this->registro->getId(); ?>" />
+                <div class="well">
+                    <fieldset>
+                        <legend>ADICIONAR PAGAMENTO: </legend>
+                        <dl class="dl-horizontal">
+                            <dt>Lote:</dt>
+                            <dd><?php echo $this->registro->toString(); ?></dd>
+                        </dl>
+<?php	
+$ctrl = new Escola_Form_Element_Select_Table("id_previsao_tipo");
+$ctrl->setPkName("id_previsao_tipo");
+$ctrl->setModel("TbPrevisaoTipo");
+$ctrl->setLabel("Tipo: ");
+$ctrl->setValue($this->getRequest()->getParam("id_previsao_tipo"));
+$ctrl->setAttrib("class", "span5");
+echo $ctrl->render($this);
+?>                        
+                        <div class="control-group linha_id_bolsa_tipo">
+                            <label for="id_tipo_bolsa" class="control-label">Tipo de Despesa:</label>
+                            <div class="controls">
+                                <select name="id_bolsa_tipo" id="id_bolsa_tipo" class="field span5">
+                                    <option value="">==> SELECIONE <==</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="linha_tipo_vinculo"></div>
+                    </fieldset>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

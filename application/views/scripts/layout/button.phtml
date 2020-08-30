@@ -1,0 +1,16 @@
+<?php 
+if (count($this->botao->getItens())) { 
+    $icon = "icon-list-alt";
+    if ($this->botao->getIcon()) {
+        $icon = $this->botao->getIcon();
+    }
+?>
+<div class="header">
+<span class="pull-left"><i class="<?php echo $icon; ?> icon-large"></i> <?php echo $this->botao->getTitulo(); ?></span>
+
+		
+	<?php echo $this->botao->render(); ?>
+    <div class="clear"></div>
+</div>
+
+<?php } ?>

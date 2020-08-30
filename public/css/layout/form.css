@@ -1,0 +1,135 @@
+/*
+ * HTML5 Boilerplate
+ *
+ * todos os estilos css referentes a formularios, botoes, acoes de envio, links de formulario
+ * neste arquivo
+ *
+ */
+/* =============================================================================
+   FORMS
+   ========================================================================== */
+
+   form, form fieldset, form fieldset div{ display: block; font-size: 12px;}
+   
+   /*======fieldset=========*/
+   form fieldset { 	background: #F9F9F9; 
+   					border: 1px solid #CCC;
+   					padding: 5px;
+   					width: 98%;
+   					margin: 10px auto;
+   					}
+
+   form fieldset div { padding: 5px;}
+   form fieldset label {width: 30%; 
+   						float: left; 
+   						font-weight: bold; 
+   						text-align: right; 
+   						padding-right: 5px;
+   						line-height: 20px;}
+	form fieldset label:hover { color: #298CBA; }   						
+   
+   form fieldset legend {    						
+   						color: #298CBA;    						   						
+   						background: transparent;
+   						padding: 5px;
+   						}
+
+   /*=====inputs===========*/
+   input[type=text]   
+   ,input[type=password]
+   ,input[type=file]
+   ,textarea
+   ,select
+   { border: 1px solid #CCC; padding: 5px;  background: #FFF; color: #484741;} 
+   
+   input[type=text]:focus   
+   ,input[type=password]:focus
+   ,textarea:focus
+   ,select:focus
+   ,input[type=file]:focus
+	{
+		border: 1px solid #B3C975;
+		border-color: #298CBA;
+		--background: #F1FFD1; /*verde claro*/
+		-webkit-box-shadow: 0 4px 4px #EEE; /*webkit antigo*/
+		-moz-box-shadow: 0 4px 4px #EEE; /*firefox antigo*/
+		box-shadow: 0 4px 4px #EEE;  /*todos so browsers exeto IE*/	   
+   }
+   /*====butoes======*/
+   a.button
+   ,.button
+   ,input[type=button]
+   ,input[type=submit]
+   ,input[type=cancel]
+   ,input[type=button].cancelar, input[type=cancel].cancelar,a.cancelar /*butoes com a classe cancelar*/
+   ,input[type=button].acao, input[type=submit].acao,a.acao /*butoes com a classe acao*/
+   {
+   	border-radius: 5px; -webkit-border-radius: 5px; -moz-border-radius: 5px;
+	text-shadow: rgba(255, 255, 255, 1) 0 1px 0;
+	position: relative;
+	line-height: 15px;
+	padding: 3px 10px;
+	white-space: nowrap;
+   	background: #F2F2F2 url(../../img/utilitarios/white-grad.png) repeat-x scroll left top;
+   	border:1px solid #BBB;
+	color: #464646;
+	cursor: pointer;
+   }
+    a.button:hover
+   ,.button:hover
+   ,input[type=button].cancelar:hover, input[type=cancel].cancelar:hover,a.cancelar:hover   
+   ,input[type=button]:hover
+   ,input[type=submit]:hover
+   ,input[type=cancel]:hover
+   { border-color:#333; color: #333; }
+   /*======botoes titulo==========*/
+   .conteudo .caixa-titulo .botoes {float: right;}
+	.conteudo .caixa-titulo .botoes .botao, .botao {
+		border: 1px solid #cdcdcd;
+		text-align: center;
+		padding: 5px;
+		margin: 0px 5px;	
+		float: left;
+		color: #D54E21;
+		width: 60px;
+		background: #FFF url(../../img/utilitarios/white-grad.png) repeat-x bottom;		
+	}
+	.conteudo .caixa-titulo .botoes .botao:hover, .botao:hover {
+		background:#FFF url(../../img/utilitarios/white-grad-active.png) repeat-x top;		
+	}
+	/*====== botoes ícones ======*/
+	.icone {
+        width:30px;
+		height: 25px;
+		padding: 1px;
+		float: left;
+	}
+   	/*====== borda arredondada======*/   	
+   	 form fieldset
+   	,form fieldset legend
+   	,.caixa-titulo .botoes .botao
+   	{ border-radius: 5px;}
+	/*========utilitarios========*/
+	input[type=button].acao
+	,input[type=submit].acao
+	,a.acao
+	{
+		color: #FFF;
+		text-shadow: none;
+		font-weight: bold;
+		border: 1px solid #257DA6;
+		background: #FFF url(../../img/utilitarios/button-grad.png) repeat-x bottom;
+	} 
+	input[type=button].acao:hover, input[type=submit].acao:hover,a.acao:hover{  border-color:#333;}
+	
+	input[type=button].cancelar
+	,input[type=cancel].cancelar
+	,a.cancelar
+	{color: red;}
+	
+div.bloco_icone {
+	min-height: 17px;
+	float: left;
+	width: 400px;
+	border: 1px solid #ccc;
+}

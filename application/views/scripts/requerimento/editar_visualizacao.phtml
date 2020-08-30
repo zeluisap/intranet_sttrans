@@ -1,0 +1,50 @@
+<div class="conteudo_controller">
+    <div class="row-fluid">
+        <div class="span12">
+            <div class="well">
+                <form action="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(), "action" => "editar")); ?>" method="post" id="formulario" class="formulario form-horizontal">
+
+                    <fieldset>
+                        <legend>REQUERIMENTO: </legend>
+
+                        <dl class="dl-horizontal cadastro">
+                            <dt>Número:</dt>
+                            <dd id="view-numero"></dd>
+                        </dl>
+
+                        <dl class="dl-horizontal cadastro">
+                            <dt>C.P.F.:</dt>
+                            <dd id="view-cpf"></dd>
+                        </dl>
+
+                        <dl class="dl-horizontal cadastro">
+                            <dt>Nome:</dt>
+                            <dd id="view-nome"></dd>
+                        </dl>
+
+                        <dl class="dl-horizontal cadastro">
+                            <dt>Serviços:</dt>
+                            <dd>
+                                <ul id="view-servicos">
+                                </ul>
+                            </dd>
+                        </dl>
+
+                    </fieldset>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    let requerimento = null;
+
+    async function visualizacao_init(dados) {
+
+    }
+
+    $(document).ready(function() {
+
+    });
+</script>

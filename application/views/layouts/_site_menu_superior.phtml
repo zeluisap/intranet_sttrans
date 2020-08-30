@@ -1,0 +1,16 @@
+<?php
+$tb = new TbMenuPosicao();
+$ms = $tb->getPorChave("S");
+if ($ms) {
+    $tb = new TbMenu();
+    $menus = $tb->listar(array("id_menu_posicao" => $ms->getId()));
+    if ($menus) {
+?>
+<div id="top_menu">
+    <ul>
+<?php foreach ($menus as $menu) { ?>
+        <li><div class="text-left"><a href="<?php echo $menu->url(); ?>"><?php echo $menu->descricao; ?></div></a></li>
+<?php } ?>
+    </ul>
+</div>
+<?php }} ?>

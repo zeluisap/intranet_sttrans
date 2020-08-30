@@ -1,0 +1,30 @@
+<div class="conteudo_controller">
+    <div class="row-fluid">
+        <div class="span12">
+            <form action="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(), "action" => $this->getRequest()->getActionName())); ?>" method="post" id="formulario" class="formulario form-horizontal" enctype="multipart/form-data">
+                <div class="well">
+                    <fieldset>
+                        <legend>Importar Arquivo de Retorno: </legend>
+                        <div class="control-group">
+                            <label for="arquivo" class="control-label">Tipo de Retorno:</label>
+                            <div class="controls">
+                                <select name="id_retorno_tipo" id="id_retorno_tipo">
+                                    <option value="">==> SELECIONE <==</option>
+<?php foreach ($this->rts as $rt) { ?>
+                                    <option value="<?php echo $rt->getId(); ?>"><?php echo $rt->toString(); ?></option>
+<?php } ?>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label for="arquivo" class="control-label">Arquivo de Retorno:</label>
+                            <div class="controls">
+                                <input type="file" name="arquivo" id="arquivo" class="span5" />
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

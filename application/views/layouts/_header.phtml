@@ -1,0 +1,166 @@
+<?php
+$tb_sistema = new TbSistema();
+$sistema = $tb_sistema->pegaSistema();
+?>
+<div class="navbar">
+    <div class="navbar-inner">
+            <ul class="nav pull-right">
+
+                <?php
+$usuario = TbUsuario::pegaLogado();
+$tb = new TbPacote();
+$pacotes = $tb->buscarPacotes($usuario);
+$atual = $tb->pegaAtual();
+
+$display = "oculto";
+if ($pacotes) {
+    
+    if($atual){
+        $display = "mostrar";
+?>
+          <li class="divider-vertical"></li>
+          <li class="dropdown user-menu componentes">
+            <a href="#" role="button" class="dropdown-toggle" data-toggle="dropdown">
+            <i class="icon-sitemap"></i>
+                Pacote Atual: <strong><?php echo $atual->descricao; ?></strong> <b class="caret"></b>
+            </a>
+              
+            <ul class="dropdown-menu" role="menu"  aria-labelledby="dLabel">
+<?php foreach ($pacotes as $pacote) { ?>
+                <li class="" style="width: 130px; float: left; padding: 5px">
+                
+                <a href="<?php echo $this->url(array("controller" => "auth", "action" => "pacote", "id_pacote" => $pacote->getId())); ?>" class="quick-button-small">
+                    <i class="<?php echo $pacote->icone; ?>"></i>
+                    <p><?php echo $pacote->descricao; ?></p>
+                </a>
+               
+             </li>
+ <?php } ?>
+            </ul>
+          </li>
+<?php   }} ?>
+<?php
+/*
+ * caixa do usuario
+ *
+ * nesta area as informaÃ§Ãµes referente ao usuario logado sÃ£o exibidas
+ * nome de usuario, grupos do usuario e ultimo login 
+ */
+/* =============================================================================
+   INFO USUARIO
+   ========================================================================== */
+$acl = Escola_Acl::getInstance();
+$usuario = $acl->getUsuarioLogado();
+if ($usuario) {
+    $txt_nome = $txt_cargo = $txt_setor = $txt_acesso = $txt_foto = $txt_foto_mini = "";
+    
+	$pf = $usuario->pega_pessoa_fisica();
+        if ($pf) {
+            $txt_nome = $pf->nome;
+            $pessoa = $pf->pega_pessoa();
+            if ($pessoa) {
+                if ($pessoa->email) {
+                    $email = $pessoa->email;
+                }
+                $foto = $pessoa->getFoto();
+                if ($foto) {
+                    $txt_foto = $foto->miniatura(array("class" => "img-circle"));
+                    $txt_foto_mini = Escola_Util::url(array("controller" => "arquivo", "action" => "view", "id" => $foto->getId()));
+                }
+            }
+            $tb = new TbFuncionario();
+            $funcionario = $tb->getPorPessoaFisica($pf);
+            if ($funcionario) {
+                $cargo = $funcionario->findParentRow("TbCargo");
+                if ($cargo) {
+                    $txt_cargo = $cargo->toString();
+                }
+                $lotacao = $funcionario->pegaLotacaoAtual();
+                if ($lotacao) {
+                    $setor = $lotacao->findParentRow("TbSetor");
+                    if ($setor) {
+                        $txt_setor = $setor->toString();
+                    }
+                }                
+            }            
+        }
+        $login = $usuario->ultimoLogin();
+        if ($login) {
+            $txt_acesso = new Zend_Date($login->data);
+        }
+	$grupos = $usuario->pegaTbGrupo();
+?>              <li class="divider-vertical"></li>
+                <li class="dropdown user-menu">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
+<?php if ($txt_foto_mini) { ?>
+                  <img src="<?php echo $txt_foto_mini; ?>" class="user-image" alt="User Image">
+<?php } ?>
+                  <span><?php echo $usuario->getPessoaFisica()->nome; ?></span> <i class="icon-caret-down"></i>
+                </a>
+                <ul class="dropdown-menu">
+                  <!-- User image -->
+                  <li class="user-header">
+<?php if ($txt_foto) { ?>
+                    <?php echo $txt_foto; ?>
+<?php } ?>
+                    <p>
+                      <?php echo $txt_nome; ?> <br />
+<?php if ($txt_cargo) { ?>
+                      <?php echo $txt_cargo; ?> <br />
+<?php } ?>
+<?php if ($txt_setor) { ?>
+                      <?php echo $txt_setor; ?> <br />
+<?php } ?>
+<?php if ($txt_acesso) { ?>
+                    <small>Ultimo Acesso: <?php echo $txt_acesso; ?></small>	
+<?php } ?>
+                      
+                    </p>
+                  </li>
+                  <!-- Menu Body -->
+                  <li class="user-body">
+                    <?php foreach ($grupos as $grupo) { ?>
+                      <div class="text-center">
+                        <?php echo $grupo->descricao;?>
+                      </div>
+                    <?php } ?>
+                    
+                  </li>
+                  <!-- Menu Footer-->
+                  <li class="user-footer">
+                    <div class="pull-left">
+                      <a href="<?php echo $this->url(array("controller" => "pessoal", "action" => "index")); ?>" class="btn"><i class="icon-edit-sign"></i> Editar Perfil</a>
+                    </div>
+                    <div class="pull-right">
+                      <a href="<?php echo $this->url(array("controller" => "auth", "action" => "logout")); ?>" class="btn btn-danger"><i class="icon-power-off"></i> Sair</a>
+                    </div>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+        <ul class="nav">
+            <li><button id="menuicon" class="btn pull-left <?php echo $display; ?>"><i class="icon-list"></i> Menu</button></li>
+        </ul>
+<?php 
+if ($sistema) { 
+    $pf = $sistema->findParentRow("TbPessoaJuridica"); ?>
+        
+        <a class="brand" href="<?php echo $this->url(array("controller" => "intranet")); ?>"><small style="font-size: 12px; color: #fff; font-weight: bold; margin-left: 20px"><?php echo $pf; ?></small></a>
+        <div class="menu-perfil text-center">
+            <?php if ($txt_foto) { ?>
+                    <?php echo $txt_foto; ?>
+            <?php } ?>
+        </div>
+<?php } ?>
+<?php 
+
+            } else { 
+            /* =============================================================================
+               INFO SISTEMA
+               ========================================================================== */
+            ?>
+       <a class="brand" href="<?php echo $this->url(array("controller" => "intranet")); ?>"><small style="font-size: 12px; color: #fff; font-weight: bold"><?php echo $sistema;?></small></a>
+                    	
+            <?php } ?>
+    </div>
+</div>

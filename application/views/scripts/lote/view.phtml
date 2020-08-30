@@ -1,0 +1,67 @@
+<div class="conteudo_controller">
+	<div class="row-fluid">
+		<div class="span12">
+			<div class="well">
+                <div class="page-header">
+                    <h3>Lote de Pagamento</h3>
+                </div>
+                <dl class="dl-horizontal">
+                    <dt>Código:</dt>
+                    <dd><?php echo $this->registro->getId(); ?></dd>
+                </dl>
+                <dl class="dl-horizontal">
+                    <dt>Lote.:</dt>
+                    <dd><?php echo $this->registro->toString(); ?></dd>
+                </dl>
+                <dl class="dl-horizontal">
+                    <dt>Ano:</dt>
+                    <dd><?php echo $this->registro->ano; ?></dd>
+                </dl>
+                <dl class="dl-horizontal">
+                    <dt>Mês:</dt>
+                    <dd><?php echo Escola_Util::pegaMes($this->registro->mes); ?></dd>
+                </dl>
+                <dl class="dl-horizontal">
+                    <dt>Valor Total:</dt>
+                    <dd><?php echo Escola_Util::number_format($this->registro->pega_valor_total()); ?></dd>
+                </dl>
+                <dl class="dl-horizontal">
+                    <dt>Valor Previsão:</dt>
+                    <dd><?php echo Escola_Util::number_format($this->registro->pega_valor_previsao()); ?></dd>
+                </dl>
+                <dl class="dl-horizontal">
+                    <dt>Situação:</dt>
+                    <dd><?php echo $this->registro->findParentRow("TbVinculoLoteStatus")->toString(); ?></dd>
+                </dl>
+			</div>
+<?php if ($this->ocorrencias) { ?>
+            <table class="table table-striped table-bordered">
+                <thead>
+                    <tr>
+                        <th colspan="4">Ocorrências</th>
+                    </tr>
+                    <tr>
+                        <th>Data / Hora</th>
+                        <th>Usuário</th>
+                        <th>Tipo</th>
+                        <th>Descrição</th>
+                    </tr>
+                </thead>
+                <tbody>
+<?php 
+foreach ($this->ocorrencias as $ocor) {
+    $usuario = $ocor->findParentRow("TbUsuario");
+?>
+                    <tr>
+                        <td><?php echo Escola_Util::formatData($ocor->data); ?> <?php echo $ocor->hora; ?></td>
+                        <td><?php echo $usuario->toString(); ?></td>
+                        <td><?php echo $ocor->findParentRow("TbVinculoLoteOcorrenciaTipo")->toString(); ?></td>
+                        <td><?php echo $ocor->mostrar_observacoes(); ?></td>
+                    </tr>
+<?php } ?>
+                </tbody>
+            </table>
+<?php } ?>
+		</div>
+	</div>
+</div>

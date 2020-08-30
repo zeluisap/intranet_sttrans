@@ -1,0 +1,46 @@
+<div class="conteudo_controller">
+    <div class="row-fluid">
+        <div class="span12">
+            <form action="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(), "action" => $this->getRequest()->getActionName())); ?>" method="post" id="formulario" class="formulario form-horizontal">
+<?php if ($this->registro) { ?>
+                <input type="hidden" name="id" id="id" value="<?php echo $this->registro->getId(); ?>" />
+<?php } ?>
+                <div class="well">
+                    <fieldset>
+                        <legend>CADASTRO DE PESSOA > TELEFONE: </legend>
+<?php if ($this->telefone->getId()) { ?>
+                        <dl class="dl-horizontal">
+                            <dt>Código:</dt>
+                            <dd><?php echo $this->registro->getId(); ?></dd>
+                        </dl>
+<?php } ?>
+                        <dl class="dl-horizontal">
+                            <dt>Pessoa:</dt>
+                            <dd><?php echo $this->pessoa->toString(); ?></dd>
+                        </dl>
+<?php	
+$ctrl = new Escola_Form_Element_Select_Table("id_telefone_tipo");
+$ctrl->setPkName("id_telefone_tipo");
+$ctrl->setModel("TbTelefoneTipo");
+$ctrl->setValue($this->telefone->id_telefone_tipo);
+$ctrl->setLabel("Tipo Telefone: ");
+echo $ctrl->render($this);
+?>
+                        <div class="control-group">
+                            <label for="ddd" class="control-label">DDD:</label>
+                            <div class="controls">
+                                <input type="text" name="ddd" id="ddd" value="<?php echo $this->telefone->ddd; ?>" class="span1" size="3" />
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label for="numero" class="control-label">Número:</label>
+                            <div class="controls">
+                                <input type="text" name="numero" id="numero" value="<?php echo $this->telefone->numero; ?>" class="span2" />
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

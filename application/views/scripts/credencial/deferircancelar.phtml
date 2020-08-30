@@ -1,0 +1,62 @@
+<?php 
+$txt_tipo = $txt_numero = $txt_beneficiario = $txt_status = "";
+if (isset($this->credencial)) {
+    $registro = $this->credencial;
+    $ct = $registro->findParentRow("TbCredencialTipo");
+    if ($ct) {
+        $txt_tipo = $ct->toString();
+    }
+    $numero = $registro->mostrarNumero();
+    if (!empty($numero)) {
+        $txt_numero = $numero;
+    }
+    $pf = $registro->pegaBeneficiario();
+    if ($pf) {
+        $txt_beneficiario = $pf->toString();
+    }
+    $cs = $registro->findParentRow("TbCredencialStatus");
+    if ($cs) {
+        $txt_status = $cs->toString();
+    }
+}
+?>
+<script type="text/javascript">
+    $(document).ready(function() {
+        $("#justificativa").focus();
+    });
+</script>
+<div class="conteudo_controller">
+    <div class="row-fluid">
+        <div class="span12">
+            <form action="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(), "action" => $this->getRequest()->getActionName())); ?>" method="post" id="formulario" class="formulario form-horizontal">
+                <div class="well">
+                    <fieldset>
+                        <legend>CREDENCIAL - CANCELAMENTO: </legend>
+                        <dl class="dl-horizontal">
+                            <dt>Tipo:</dt>
+                            <dd><?php echo $txt_tipo; ?></dd>
+                        </dl>
+                        <dl class="dl-horizontal">
+                            <dt>Número:</dt>
+                            <dd><?php echo $txt_numero; ?></dd>
+                        </dl>
+                        <dl class="dl-horizontal">
+                            <dt>Beneficiário:</dt>
+                            <dd><?php echo $txt_beneficiario; ?></dd>
+                        </dl>
+                        <dl class="dl-horizontal">
+                            <dt>Status:</dt>
+                            <dd><?php echo $txt_status; ?></dd>
+                        </dl>
+                        <div class="control-group linha_justificativa">
+                            <label for="justificativa" class="control-label">Justificativa:</label>
+                            <div class="controls">
+                                <textarea name="justificativa" id="justificativa" rows="5" class="span6"><?php echo $this->justificativa; ?></textarea>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

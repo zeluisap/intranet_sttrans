@@ -1,0 +1,74 @@
+<?php
+$valor_a_pagar = 0;
+
+$tb = new TbMoeda();
+$moeda = $tb->pega_padrao();
+
+$campos = array();
+$campos["nosso_numero"] = "Nosso Número";
+$campos["cedente"] = "Cedente";
+$campos["convenio"] = "Convênio";
+$campos["vencimento"] = "Vencimento";
+$campos["valor"] = "Valor";
+
+$campos_dados = array();
+foreach ($campos as $campo => $campo_nome) {
+    $campos_dados[$campo] = "--";
+}
+
+$boleto = $this->registro;
+if ($boleto) {
+    $valor_a_pagar = $boleto->pegaValor();
+    if ($boleto->nosso_numero) {
+        $campos_dados["nosso_numero"] = $boleto->nosso_numero;
+    }
+    $txt = $boleto->mostrarCedente();
+    if ($txt) {
+        $campos_dados["cedente"] = $txt;
+    }
+    $bc = $boleto->findParentRow("TbBancoConvenio");
+    if ($bc) {
+        $txt = $bc->toString();
+        if ($txt) {
+            $campos_dados["convenio"] = $txt;
+        }
+    }
+    $txt = Escola_Util::formatData($boleto->data_vencimento);
+    if ($txt) {
+        $campos_dados["vencimento"] = $txt;
+    }
+    $campos_dados["valor"] = $moeda->simbolo . " " . Escola_Util::number_format($valor_a_pagar);
+}
+
+?>
+<script type="text/javascript">
+    $(document).ready(function() {
+        $("#data_pagamento").focus().select();
+    });
+</script>
+<div class="conteudo_controller">
+    <div class="row-fluid">
+        <div class="span12">
+            <form action="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(), "action" => "pagamento")); ?>" method="post" id="formulario" class="formulario form-horizontal">
+                <input type="hidden" name="id" id="id" value="<?php echo $this->registro->getId(); ?>" />
+                <div class="well well-small">
+                    <fieldset>
+                        <legend>Confirmar Pagamento de Boleto: </legend>
+<?php foreach ($campos as $campo => $campo_nome) { ?>
+                        <dl class="dl-horizontal">
+                            <dt><?php echo $campo_nome; ?>:</dt>
+                            <dd><?php echo $campos_dados[$campo]; ?></dd>
+                        </dl>
+<?php } ?>
+                        <div class="control-group">
+                            <label for="data_pagamento" class="control-label">Data Pagamento:</label>
+                            <div class="controls">
+                                <input type="text" name="data_pagamento" id="data_pagamento" class="span2 data" value="<?php echo date("d/m/Y"); ?>" />
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

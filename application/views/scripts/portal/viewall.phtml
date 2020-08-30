@@ -1,0 +1,49 @@
+<script type="text/javascript">
+    jQuery(document).ready(function() {
+        jQuery("#bt_limpar_busca").click(function() {
+            jQuery("#filtro_busca").val("");
+            jQuery("#form_busca").submit();
+        });
+    });
+</script>
+            <div class="media">
+                <div class="media-body">
+                    <form action="<?php echo Escola_Util::url(array("controller" => $this->getRequest()->getControllerName(), "action" => $this->getRequest()->getActionName())); ?>" class="form-inline text-center" method="post" id="form_busca">
+                        <fieldset>
+                            <legend>Busca na Página</legend>
+                            <input type="text" name="filtro_busca" id="filtro_busca" class="span5" value="<?php echo $this->filtro_busca; ?>">
+                            <input type="submit" class="btn btn-primary" value="Enviar" />
+                            <input type="button" value="Limpar" class="btn btn-danger" id="bt_limpar_busca"/>
+                        </fieldset>
+                    </form>
+<?php if($this->infos){ ?>
+                    <table class="table table-bordered">
+                      <thead>
+                        <tr>
+                        <th width="60px"></th>
+                          <th width="80px">DATA</th>
+                          <th>TITULO</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+<?php 
+foreach ($this->infos as $info){ 
+    $arquivo = $info->pega_arquivo();
+    $link = Escola_Util::url(array("controller" => $this->getRequest()->getControllerName(), "action" => "view", "id" => $info->getId()));
+?>
+                        <tr>
+                            <td><a href="<?php echo $link; ?>"><?php echo $arquivo->miniatura(array("width" => 60)); ?></a></td>
+                            <td><a href="<?php echo $link; ?>"><span class="badge badge-success"><?php echo Escola_Util::formatData($info->data); ?></span></a></td>
+                            <td><a href="<?php echo $link; ?>"><?php echo $info->titulo; ?></a></td>
+                        </tr>
+<?php } ?>
+                      </tbody>
+                    </table>
+<?php } ?>
+                </div>
+<?php 
+if ($this->infos && count($this->infos)) {
+    echo $this->paginationControl($this->infos, "sliding", "minha_paginacao_control.phtml");
+}
+?>
+            </div>

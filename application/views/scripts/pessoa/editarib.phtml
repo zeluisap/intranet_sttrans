@@ -1,0 +1,53 @@
+<div class="conteudo_controller">
+    <div class="row-fluid">
+        <div class="span12">
+            <form action="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(), "action" => $this->getRequest()->getActionName())); ?>" method="post" id="formulario" class="formulario form-horizontal">
+<?php if ($this->registro) { ?>
+                <input type="hidden" name="id" id="id" value="<?php echo $this->registro->getId(); ?>" />
+<?php } ?>
+                <div class="well">
+                    <fieldset>
+                        <legend>CADASTRO DE PESSOA > INFORMAÇÃO BANCÁRIA: </legend>
+<?php if ($this->ib->getId()) { ?>
+                        <dl class="dl-horizontal">
+                            <dt>Código:</dt>
+                            <dd><?php echo $this->registro->getId(); ?></dd>
+                        </dl>
+<?php } ?>
+                        <dl class="dl-horizontal">
+                            <dt>Pessoa:</dt>
+                            <dd><?php echo $this->pessoa->toString(); ?></dd>
+                        </dl>
+<?php
+$ctrl = new Escola_Form_Element_Select_Table("id_info_bancaria_tipo");
+$ctrl->setPkName("id_info_bancaria_tipo");
+$ctrl->setModel("TbInfoBancariaTipo");
+$ctrl->setValue($this->ib->id_info_bancaria_tipo);
+$ctrl->setLabel("Tipo: ");
+echo $ctrl->render($this);
+
+$ctrl = new Escola_Form_Element_Select_Table("id_banco");
+$ctrl->setPkName("id_banco");
+$ctrl->setModel("TbBanco");
+$ctrl->setValue($this->ib->id_banco);
+$ctrl->setLabel("Banco: ");
+echo $ctrl->render($this);
+?>
+    <div class="control-group">
+        <label for="agencia" class="control-label">Agência:</label>
+        <div class="controls">
+            <input type="text" name="agencia" id="agencia" class="span2" value="<?php echo $this->ib->agencia; ?>" /> - <input type="text" name="agencia_dv" id="agencia_dv" class="span1" value="<?php echo $this->ib->agencia_dv; ?>" />
+        </div>
+    </div>
+    <div class="control-group">
+        <label for="conta" class="control-label">Conta:</label>
+        <div class="controls">
+            <input type="text" name="conta" id="conta" class="span2" value="<?php echo $this->ib->conta; ?>" /> - <input type="text" name="conta_dv" id="conta_dv" class="span1" value="<?php echo $this->ib->conta_dv; ?>" />
+        </div>
+    </div>
+                    </fieldset>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,18 @@
+.form-login {
+	width: 40%;
+	margin: 10% auto;
+}
+.form-login form fieldset{
+	background: #FFF url("login.png") no-repeat center right;
+	border-style: solid;
+}
+/*=====sobras=====*/
+
+.form-login form fieldset 
+{
+	moz-box-shadow: #CCC 0 10px 10px;
+	-webkit-box-shadow: #CCC 0 10px 10px;
+	-khtml-box-shadow: #CCC 0 10px 10px;
+	box-shadow: #CCC 0 10px 10px;
+}
+ul.tabs li.selected a{ color: #298CBA; font-weight:bold; padding: 5px 25px;}

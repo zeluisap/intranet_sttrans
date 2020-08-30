@@ -1,0 +1,30 @@
+<div class="conteudo_controller">
+    <div class="row-fluid">
+        <div class="span12">
+            <form action="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(), "action" => "imprimir")); ?>" method="post" id="formulario" class="formulario form-horizontal" enctype="multipart/form-data">
+                <div class="well well-small">
+                    <div class="page-header">
+                        <h4>Selecione o Mês</h4>
+                    </div>
+                    <div class="control-group">
+                        <label for="ano_mes" class="control-label">Mês:</label>
+                        <div class="controls">
+                            <select name="ano_mes" id="ano_mes">
+<?php
+$data = new Zend_Date();
+for ($i = 6; $i >= 1; $i--) {
+    $k = $data->get("M");
+    $mes = Escola_Util::pegaMes($k);
+    $selected = "";
+?>
+                                <option value="<?php echo $data->get("YYYY"); ?>_<?php echo $k; ?>" <?php echo $selected; ?>><?php echo $mes; ?> / <?php echo $data->get("YYYY"); ?></option>
+<?php $data->sub('1', Zend_Date::MONTH); } ?>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            <?php echo $this->grade; ?>
+            </form>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,54 @@
+<style type="text/css">
+.red {
+    border: 1px solid red;
+}
+</style>
+<form action="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(), "action" => "devolver")); ?>" method="post" id="formulario" class="formulario form-horizontal">
+    <input type="hidden" name="flag" id="flag" value="salvar" />
+    <input type="hidden" name="id_agente" id="id_agente" value="<?php echo $this->agente->getId(); ?>" />
+    <div class="conteudo_controller">
+        <div class="row-fluid">
+                <div class="span12">
+                    <div class="well well-small">
+                        <dl class="dl-horizontal">
+                            <dt>Agente: </dt>
+                            <dd><?php echo $this->agente->toString(); ?></dd>
+                        </dl>
+                    </div>
+                    <table class="table table-striped table-bordered">
+                            <thead>
+                                <tr>
+                                    <th class="span2">Auto de Infração</th>
+                                    <th class="span3">Status de Devolução</th>
+                                    <th>Observações</th>
+                                </tr>
+                            </thead>
+                    <?php if ($this->ids && count($this->ids)) { ?>
+                            <tbody>
+                    <?php 
+                        foreach ($this->ids as $id) {
+                            $registro = TbAutoInfracao::pegaPorId($id);
+                            if ($registro->entregue()) {
+                    ?>
+                                <tr>
+                                    <td>
+                                        <?php echo $registro->mostrar_codigo(); ?>
+                                    </td>
+                                    <td>
+                                        <select name="result[<?php echo $registro->getId(); ?>][aids]" id="result_<?php echo $registro->getId(); ?>_aids" class="result_aids" rel="<?php echo $registro->getId(); ?>">
+                                            <option value="" selected>==> SELECIONE <==</option>
+    <?php foreach ($this->lista_aids as $aids) { ?>
+                                            <option value="<?php echo $aids->getId(); ?>"><?php echo $aids->toString(); ?></option>
+    <?php } ?>
+                                        </select>
+                                    </td>
+                                    <td><textarea name="result[<?php echo $registro->getId(); ?>][obs]" id="result_<?php echo $registro->getId(); ?>_obs" class="span9 hide result_obs" rows="4"></textarea></td>
+                                </tr>
+                        <?php }} ?>
+                            </tbody>
+                    <?php } ?>
+                    </table>
+                </div>
+        </div>
+    </div>
+</form>

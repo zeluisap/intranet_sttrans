@@ -1,0 +1,97 @@
+<?php
+$stg = $this->ss->findParentRow("TbServicoTransporteGrupo");
+?>
+<div class="conteudo_controller">
+    <div class="row-fluid">
+        <div class="span12">
+            <div class="well">
+                <div class="page-header">
+                    <h4>Visualização de Autorização de Interdição</h4>
+                </div>
+                <dl class="dl-horizontal">
+                    <dt>Id:</dt>
+                    <dd><?php echo $this->registro->getId(); ?></dd>
+                </dl>
+                <dl class="dl-horizontal">
+                    <dt>Serviço:</dt>
+                    <dd><?php echo $stg->toString(); ?></dd>
+                </dl>
+                <dl class="dl-horizontal">
+                    <dt>Título:</dt>
+                    <dd><?php echo $this->registro->titulo; ?></dd>
+                </dl>
+                <dl class="dl-horizontal">
+                    <dt>Pessoa:</dt>
+                    <dd><?php echo $this->registro->findParentRow("TbPessoa")->toString(); ?></dd>
+                </dl>
+                <dl class="dl-horizontal">
+                    <dt>Informações:</dt>
+                    <dd><?php echo $this->registro->informacoes; ?></dd>
+                </dl>
+                <dl class="dl-horizontal">
+                    <dt>Data Solicitação:</dt>
+                    <dd><?php echo Escola_Util::formatData($this->ss->data_solicitacao); ?></dd>
+                </dl>
+                <dl class="dl-horizontal">
+                    <dt>Vencimento:</dt>
+                    <dd><?php echo Escola_Util::formatData($this->ss->data_vencimento); ?></dd>
+                </dl>
+                <dl class="dl-horizontal">
+                    <dt>Isento:</dt>
+                    <dd><?php echo $this->registro->mostrarIsento(); ?></dd>
+                </dl>
+<?php if ($this->registro->isento()) { ?>
+<?php if ($this->registro->isento_motivo) { ?>
+                <dl class="dl-horizontal">
+                    <dt>Motivo da Isenção:</dt>
+                    <dd><?php echo $this->registro->isento_motivo; ?></dd>
+                </dl>
+<?php } ?>
+<?php } else { ?>
+                <dl class="dl-horizontal">
+                    <dt>Valor:</dt>
+                    <dd><?php echo $this->ss->pega_valor()->toString(); ?></dd>
+                </dl>
+<?php } ?>
+                <dl class="dl-horizontal">
+                    <dt>Início:</dt>
+                    <dd><?php echo Escola_Util::formatData($this->ss->data_inicio); ?></dd>
+                </dl>
+                <dl class="dl-horizontal">
+                    <dt>Validade:</dt>
+                    <dd><?php echo Escola_Util::formatData($this->ss->data_validade); ?></dd>
+                </dl>
+                <dl class="dl-horizontal">
+                    <dt>Status:</dt>
+                    <dd><?php echo $this->ss->mostrarStatusHTML(); ?></dd>
+                </dl>
+            </div>
+<?php
+$pag = $this->pagamento;
+if ($pag) {
+?>
+            <div class="well">
+                <div class="page-header">
+                    <h4>Pagamento</h4>
+                </div>
+                <dl class="dl-horizontal">
+                    <dt>Data do Pagamento:</dt>
+                    <dd><?php echo Escola_Util::formatData($this->pagamento->data_pagamento); ?></dd>
+                </dl>
+                <dl class="dl-horizontal">
+                    <dt>Valor Pago:</dt>
+                    <dd><?php echo $this->pagamento->pega_valor_pago()->toString(); ?></dd>
+                </dl>
+                <dl class="dl-horizontal">
+                    <dt>Juros:</dt>
+                    <dd><?php echo $this->pagamento->pega_valor_juros()->toString(); ?></dd>
+                </dl>
+                <dl class="dl-horizontal">
+                    <dt>Desconto:</dt>
+                    <dd><?php echo $this->pagamento->pega_valor_desconto()->toString(); ?></dd>
+                </dl>
+            </div>
+<?php } ?>
+        </div>
+    </div>
+</div>

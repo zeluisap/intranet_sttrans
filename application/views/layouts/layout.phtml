@@ -1,0 +1,71 @@
+<?php echo $this->doctype(); ?>
+<!DOCTYPE HTML>
+<html lang="en-US">
+<head>
+	<?php echo $this->headMeta(); ?>
+	<?php echo $this->headTitle(); ?>
+	<?php echo $this->headLink(); ?>
+    <?php echo $this->headStyle(); ?>
+	<?php echo $this->headScript(); ?>
+</head>
+<body>
+    <?php echo $this->partial("_header.phtml");  ?>	
+<?php 
+$content = '';
+$usuario = TbUsuario::pegaLogado();
+/*================================================
+	header (navegacao, menu)
+=================================================*/
+if ($this->auth->hasIdentity()) { 
+    
+	echo $this->partial("_navegacao.phtml", array("modulo" => $this->modulo,
+                                                                                                               "acao" => $this->acao));
+	$tb = new TbPacote(); 
+	$pacote = $tb->pegaAtual();
+	if ($pacote) {
+        	echo $this->partial("_menu.phtml");
+	} 
+} 
+?>
+    <div id="corpo" >
+    <?php echo $this->layout()->button; ?>
+<div class="container-fluid">
+
+<?php 
+/*================================================
+	Mensagem de erro
+=================================================*/
+if ($this->actionErrors) { 
+	foreach ($this->actionErrors as $erro) { ?>
+				<div class="alert alert-error">
+					<button type="button" class="close" data-dismiss="alert">&times;</button>
+					<?php echo $erro; ?>
+				</div>
+<?php } } 
+/*================================================
+	Mensagem de sucesso
+=================================================*/
+if ($this->actionMessages) { 
+	foreach ($this->actionMessages as $message) { ?>
+				<div class="alert alert-info">  
+					<button type="button" class="close" data-dismiss="alert">&times;</button>
+					<?php echo $message; ?>
+				</div>
+<?php }} 
+/*================================================
+	conteudo do sistema
+=================================================*/
+?>
+
+<?php echo $this->partial("_header_grupo.phtml"); ?>
+
+                        <div class="row-fluid">
+                            <?php echo $this->layout()->content; ?>
+                        </div>
+                    </div>
+        
+		</div>
+    <div class="clear"></div>
+        <?php echo $this->partial("_footer.phtml"); ?>
+</body>
+</html>

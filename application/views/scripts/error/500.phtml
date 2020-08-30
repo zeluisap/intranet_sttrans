@@ -1,0 +1,18 @@
+<?php
+	$message = "OCORREU UMA FALHA AO PROCESSAR A SOLICITAÇÃO, CHAME O ADMINISTRADOR!";
+	if ($this->errors && $this->errors->exception->getMessage()) {
+		$message = $this->errors->exception->getMessage();
+		$file = $this->errors->exception->getFile();
+		$line = $this->errors->exception->getLine();
+	}
+?>
+<form action="<?php echo $this->url(array("controller" => "index", "action" => "index")); ?>" class="box">
+	<div class="titulo-box">ERRO</div>
+	<fieldset>
+		<?php echo $message; ?>
+		: [<?php echo $file; ?>:<?php echo $line; ?>]
+	</fieldset>
+	<div class="buttons">
+		<input type="submit" value="OK" />
+	</div>
+</form>

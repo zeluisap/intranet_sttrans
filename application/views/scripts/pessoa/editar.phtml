@@ -1,0 +1,65 @@
+<div class="conteudo_controller">
+    <div class="row-fluid">
+        <div class="span12">
+            <form action="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(), "action" => "editar")); ?>" method="post" id="formulario" class="formulario form-horizontal">
+                <input type="hidden" name="id" id="id" value="<?php echo $this->registro->getId(); ?>" />
+                <input type="hidden" name="flag" id="flag" value="salvar" />
+                <input type="hidden" name="id_pessoa_tipo" id="id_pessoa_tipo" value="<?php echo $this->registro->id_pessoa_tipo; ?>" />
+                <input type="hidden" name="jan_id_pessoa_tipo" id="jan_id_pessoa_tipo" value="<?php echo $this->registro->id_pessoa_tipo; ?>" />
+<?php if ($this->pessoa_tipo->pf()) { ?>
+                <input type="hidden" name="cpf" id="cpf" value="<?php echo $this->filho->cpf; ?>" />
+<?php } elseif ($this->pessoa_tipo->pj()) { ?>
+                <input type="hidden" name="cnpj" id="cnpj" value="<?php echo $this->filho->cnpj; ?>" />
+<?php } ?>
+                <div class="well">
+                    <fieldset>
+                        <legend>CADASTRO DE PESSOA: </legend>
+<?php if ($this->registro->getId()) { ?>
+                        <dl class="dl-horizontal">
+                            <dt>Código:</dt>
+                            <dd><?php echo $this->registro->getId(); ?></dd>
+                        </dl>
+<?php } ?>
+                        <dl class="dl-horizontal">
+                            <dt>Tipo:</dt>
+                            <dd><?php echo $this->registro->findParentRow("TbPessoaTipo")->toString(); ?></dd>
+                        </dl>
+                        <div class="control-group">
+                            <label for="email" class="control-label">E-Mail:</label>
+                            <div class="controls">
+                                <input type="text" name="email" id="email" value="<?php echo $this->registro->email; ?>" class="span5" size="60" />
+                            </div>
+                        </div>
+<?php echo $this->filho->render($this); ?>
+                        <div class="control-group">
+                            <label for="possui_cnh" class="control-label">Possui CNH:</label>
+                            <div class="controls">
+                                <select name="possui_cnh" id="possui_cnh">
+                                    <option value="S" <?php echo ($this->possui_cnh)?"selected":""; ?> >SIM</option>
+                                    <option value="N" <?php echo (!$this->possui_cnh)?"selected":""; ?> >NÃO</option>
+                                </select>
+                            </div>
+                        </div>
+<?php echo ($this->registro->pf())?$this->pessoa_motorista->render($this):""; ?>
+                    <fieldset>
+                        <legend>TELEFONES</legend>
+                        <div class="control-group">
+                            <label for="telefone_fixo" class="control-label">Fixo:</label>
+                            <div class="controls">
+                                <input type="text" name="telefone_fixo" id="telefone_fixo" value="<?php echo $this->fixo->toString(); ?>" class="span2 telefone" />
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label for="telefone_celular" class="control-label">Celular:</label>
+                            <div class="controls">
+                                <input type="text" name="telefone_celular" id="telefone_celular" value="<?php echo $this->celular->toString(); ?>" class="span2 telefone" />
+                            </div>
+                        </div>
+                    </fieldset>
+<?php echo $this->endereco->render($this); ?>
+                    </fieldset>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

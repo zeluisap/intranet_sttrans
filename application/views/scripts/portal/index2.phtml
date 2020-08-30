@@ -1,0 +1,94 @@
+<div class="hero">
+<?php if ($this->destaques) { ?>
+                <div class="span12">
+            <div id='tmpSlideshow'>
+<?php 
+$contador = 0;
+foreach ($this->destaques as $destaque) { 
+    $contador++;
+    $arquivo = $destaque->pega_arquivo();
+    $link = $this->url(array("controller" => $this->getRequest()->getControllerName(), "action" => "view", "id" => $destaque->getId()));
+    $link_imagem = Escola_Util::url(array("controller" => "arquivo", "action" => "show", "id" => $arquivo->getId(), "width" => 300, "height" => 230));
+?>
+            <div id='tmpSlide-<?php echo $contador; ?>' class='tmpSlide'>
+<?php if ($arquivo) { ?>
+                <a href="<?php echo $link; ?>">
+              <img src='<?php echo $link_imagem; ?>' alt='Slide' />   
+              </a>
+                <br>
+<?php } ?>
+                <h4><a href="<?php echo $link; ?>"><?php echo $destaque->titulo; ?></a></h4>
+                <p><a href="<?php echo $link; ?>"><?php echo $destaque->resumo; ?></a></p>
+
+            
+            </div>
+<?php } ?>
+            <div id='tmpSlideshowControls'>
+<?php 
+$contador = 0;
+foreach ($this->destaques as $destaque) { 
+    $contador++;
+?>
+              <div class='tmpSlideshowControl' id='tmpSlideshowControl-<?php echo $contador; ?>'><span><?php echo $contador; ?></span></div>
+<?php } ?>
+            </div>
+       </div>
+          
+            </div>
+<?php } ?>
+                
+          
+          <div class="row-fluid">
+             
+                <div class="span5">
+                 <div class="well">
+                  <h4>MENSAGEM DO PRESIDENTE</h4>
+                  <p>
+                      Em um mundo em que as mudanças são os carros-chefes dos acontecimentos, estar atento às demandas da sociedade e comunidade acadêmica é de fundamental importância para evolução dos processos no campo da pesquisa, extensão e ensino.
+
+  A busca constante de aprimoramento de técnicas de controle administrativo-financeiro, gerencial e a difusão da informação, tornam-se elementos essenciais no processo de apoio ao desenvolvimento Institucional.
+                  </p>
+                  <p><a class="btn" href="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(), "action" => "view", "chave" => "I", "id" => "9")); ?>">Ler mais &raquo;</a></p>
+                  <h4>CREDENCIAMENTO</h4>
+                  <p>A FUNPEA através da Portaria Interministerial n° 475, de 14 de abril de 2008 e do Decreto n° 7.423, de 31 de dezembro de 2010 torna-se credenciada junto ao MEC. Clique aqui para ver publicação no D.O.U.</p>
+                  <p><a class="btn" href="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(), "action" => "view", "chave" => "I", "id" => "5")); ?>">Ler mais  &raquo;</a></p>
+                  </div>
+                  
+                  
+                </div>
+                <div class="span7">
+<?php if ($this->noticias){ ?>
+                    <div class="well">
+                        <h4>Noticias</h4>
+                        <ul class="media-list">
+<?php foreach ($this->noticias as $noticia){ ?>
+                            <li><span class="badge badge-success"><?php echo Escola_Util::formatData($noticia->data); ?></span> 
+                                <a href="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(), "action" => "view", "id" => $noticia->getId())); ?>"><?php echo $noticia->titulo;?></a>
+                            </li>
+<?php } ?>
+                        </ul>
+                        <p><a class="btn" href="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(), "action" => "viewall", "chave" => "N")); ?>">Ler mais &raquo;</a></p>
+                    </div>
+<?php } ?>
+<?php if ($this->documentos) { ?>
+                  <div class="well">
+                  <h4>Formularios</h4>
+                   <ul class="media-list">
+<?php 
+foreach ($this->documentos as $doc) { 
+    $arquivo = $doc->pega_arquivo();
+?>
+                       <li><span class="label label-info"><?php echo Escola_Util::formatData($doc->data_criacao); ?></span> 
+                            <a href="<?php echo $this->url(array("controller" => "arquivo", "action" => "view", "id" => $arquivo->getId())); ?>" target="_blank"><?php echo $doc->resumo; ?></a>
+                      </li>
+<?php } ?>
+                  </ul>
+                  <p><a class="btn" href="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(), "action" => "documentos")); ?>">Ler mais  &raquo;</a></p>
+                  </div>
+<?php } ?>
+                </div>
+               
+          </div>
+            
+              
+        </div>

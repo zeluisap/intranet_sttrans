@@ -1,0 +1,184 @@
+<div class="conteudo_controller">
+    <div class="row-fluid">
+        <div class="span12">
+            <form action="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(), "action" => "index")); ?>" method="post" id="formulario" class="formulario form-horizontal" enctype="multipart/form-data">
+                
+                <div class="well well-small" id="idPesquisa">
+                    <fieldset>
+                        <legend>Opções de Pesquisa</legend>
+                        <div class="control-group">
+                            <label for="" class="control-label">Situação:</label>
+                            <div class="controls">
+                                <select name="filtro_tipo" id="filtro_tipo" class="filtro span4">
+                                                        <option value="" <?php echo (!$this->dados["filtro_tipo"])?"selected":""; ?>>==> SELECIONE <==</option>
+            <?php if ($this->cts) { ?>
+                                                        <option value="cx_p" <?php echo ($this->dados["filtro_tipo"] == "cx_p")?"selected":""; ?>>CAIXA DE ENTRADA - PENDENTES</option>
+                                                        <option value="cx" <?php echo ($this->dados["filtro_tipo"] == "cx")?"selected":""; ?>>CAIXA DE ENTRADA - TODOS</option>
+            <?php } ?>
+                                                        <option value="meus" <?php echo ($this->dados["filtro_tipo"] == "meus")?"selected":""; ?>>MEUS CHAMADOS</option>
+                                                        <option value="setor" <?php echo ($this->dados["filtro_tipo"] == "setor")?"selected":""; ?>>MEU SETOR</option>
+                                                    </select>
+                                                    <input type="checkbox" name="filtro_avancado" id="filtro_avancado" />Mais Opções de Pesquisa
+                            </div>
+                        </div>
+            <?php
+                $tb = new TbChamadoTipo();
+                $cts = $tb->listar();
+                if ($cts) {
+            ?>
+                        <div class="control-group linha_avancado">
+                            <label for="filtro_id_chamado_tipo" class="control-label">Tipo:</label>
+                            <div class="controls">
+                                <select name="filtro_id_chamado_tipo" id="filtro_id_chamado_tipo" class="filtro filtro_avancado">
+                                    <option value="" <?php echo (!$this->dados["filtro_id_chamado_tipo"])?"selected":""; ?>>==> SELECIONE <==</option>
+            <?php foreach ($cts as $ct) { ?>
+                                    <option value="<?php echo $ct->getId(); ?>" <?php echo ($ct->getId() == $this->dados["filtro_id_chamado_tipo"])?"selected":""; ?>><?php echo $ct->toString(); ?></option>
+            <?php } ?>
+                                </select>
+                            </div>
+                        </div>
+<?php } ?>
+                        <div class="control-group linha_avancado">
+                            <label for="filtro_nome" class="control-label">Aberto Por:</label>
+                            <div class="controls">
+                               <input type="text" name="filtro_nome" id="filtro_nome" value="<?php echo $this->dados["filtro_nome"]; ?>" class="filtro filtro_avancado span5" />
+                            </div>
+                        </div>
+                        <div class="control-group linha_avancado">
+                            <label for="filtro_setor" class="control-label">Setor:</label>
+                            <div class="controls">
+                               <input type="text" name="filtro_setor" id="filtro_setor" value="<?php echo $this->dados["filtro_setor"]; ?>" class="filtro filtro_avancado span5" />
+                            </div>
+                        </div>
+                        <div class="control-group linha_avancado">
+                            <label for="filtro_descricao_problema" class="control-label">Descrição do Problema:</label>
+                            <div class="controls">
+                               <textarea name="filtro_descricao_problema" id="filtro_descricao_problema" rows="6" class="filtro filtro_avancado span5"><?php echo $this->dados["filtro_descricao_problema"]?></textarea>
+                            </div>
+                        </div>
+<?php
+$tb = new TbChamadoStatus();
+$css = $tb->listar();
+if ($css) {
+?>
+                        <div class="control-group linha_avancado">
+                            <label for="filtro_id_chamado_status" class="control-label">Situação:</label>
+                            <div class="controls">
+                               <select name="filtro_id_chamado_status" id="filtro_id_chamado_status" class="filtro filtro_avancado">
+                                    <option value="" <?php echo (!$this->dados["filtro_id_chamado_status"])?"selected":""; ?>>==> SELECIONE <==</option>
+            <?php foreach ($css as $cs) { ?>
+                                    <option value="<?php echo $cs->getId(); ?>" <?php echo ($cs->getId() == $this->dados["filtro_id_chamado_status"])?"selected":""; ?>><?php echo $cs->toString(); ?></option>
+            <?php } ?>
+                                </select>
+                            </div>
+                        </div>
+ <?php } ?>
+                        <div class="control-group linha_avancado">
+                            <label for="filtro_descricao_problema" class="control-label">Descrição do Problema:</label>
+                            <div class="controls">
+                               <textarea name="filtro_descricao_problema" id="filtro_descricao_problema" rows="6" class="filtro filtro_avancado span5"><?php echo $this->dados["filtro_descricao_problema"]?></textarea>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <div class="controls">
+                                <input type="submit" value="Pesquisar" class="btn btn-primary" />
+                                <input type="button" value="Limpar Filtro" id="idLimparPesquisa" class="btn" />                                
+                            </div>
+                        </div>
+                   </fieldset>
+                </div>
+                <table class="table table-striped table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Data / Hora</th>
+                            <th>Tipo</th>
+                            <th>Setor</th>
+                            <th>Funcionário</th>
+                            <th>Problema</th>
+                            <th>Situação</th>
+                            <th width="20px">Operações</th>
+                        </tr>
+                    </thead>
+            <?php if ($this->registros && count($this->registros)) { ?>
+                    <tbody>
+            <?php
+                foreach ($this->registros as $registro) {
+            ?>
+                        <tr>
+                            <td>
+                                <a href="<?php echo $this->url(array("action" => "view", "id" => $registro->getId())); ?>">
+                                    <?php echo Escola_Util::formatData($registro->data_criacao); ?> - <?php echo $registro->hora_criacao; ?>
+                                </a>
+                            </td>
+                            <td>
+                                <a href="<?php echo $this->url(array("action" => "view", "id" => $registro->getId())); ?>">
+                                <?php echo $registro->findParentRow("TbChamadoTipo")->toString(); ?>
+                                </a>
+                            </td>
+                            <td>
+                                <a href="<?php echo $this->url(array("action" => "view", "id" => $registro->getId())); ?>">
+                                <?php echo $registro->findParentRow("TbSetor")->sigla; ?>
+                                </a>
+                            </td>
+                            <td>
+                                <a href="<?php echo $this->url(array("action" => "view", "id" => $registro->getId())); ?>">
+                                <?php echo $registro->findParentRow("TbFuncionario")->toString(); ?>
+                                </a>
+                            </td>
+                            <td>
+                                <a href="<?php echo $this->url(array("action" => "view", "id" => $registro->getId())); ?>">
+                                <?php echo $registro->descricao_problema; ?>
+                                </a>
+                            </td>
+                            <td>
+                                <a href="<?php echo $this->url(array("action" => "view", "id" => $registro->getId())); ?>">
+                                <?php echo $registro->mostrarStatus(); ?>
+                                </a>
+                            </td>
+                            <td>
+                                <div class="btn-group">
+                                    <a href="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(),
+                                                                         "action" => "view",
+                                                                         "id" => $registro->getId())); ?>" class="btn" title="Visualizar">
+                                        <i class="icon-search"></i>
+                                    </a>
+            <?php if ($registro->habilitaAlterar($this->funcionario)) { ?>
+                                    <a href="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(),
+                                                                         "action" => "editar",
+                                                                         "id" => $registro->getId())); ?>" class="btn" title="Editar">
+                                        <i class="icon-cog"></i>
+                                    </a>
+            <?php } ?>
+            <?php if ($registro->habilitaAlterar($this->funcionario)) { ?>
+                                    <a href="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(),
+                                                                         "action" => "excluir",
+                                                                         "id" => $registro->getId())); ?>" class="btn link_excluir" title="Excluir">
+                                        <i class="icon-trash"></i>
+                                    </a>
+            <?php } ?>
+            <?php if ($registro->habilitaAtendimento($this->funcionario)) { ?>
+                                    <a href="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(),
+                                                                         "action" => "atendimento",
+                                                                         "id" => $registro->getId())); ?>" class="btn" title="Atendimento">
+                                        <i class="icon-wrench"></i>
+                                    </a>
+            <?php } ?>
+            <?php if ($registro->habilitaConfirmacao($this->funcionario)) { ?>
+                                    <a href="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(),
+                                                                         "action" => "confirmacao",
+                                                                         "id" => $registro->getId())); ?>" class="btn" title="Confirmar Atendimento">
+                                        <i class="icon-thumbs-up"></i>
+                                    </a>
+                                </div>
+            <?php } ?>
+                            </td>
+                        </tr>
+            <?php } ?>
+                    </tbody>
+            <?php } ?>
+                </table>
+            </form>
+<?php echo $this->paginationControl($this->registros, "sliding", "minha_paginacao_control.phtml"); ?>
+        </div>
+    </div>
+</div>

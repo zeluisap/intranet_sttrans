@@ -1,0 +1,52 @@
+<style type="text/css">
+.box_form {
+	margin-top: 60px;   
+}
+.img_logo {
+	width: 200px;
+	margin-top: 60px;
+}
+.well {
+	margin-bottom: 10px;
+}
+</style>
+<div class="row-fluid">
+	<div class="span6 offset3">
+		<div class="well box_form">
+			<form action="<?php echo $this->url(array("controller" => "auth", "action" => "recovery")); ?>" method="post" id="formulario" class="formulario form-horizontal">
+				<input type="hidden" name="id_usuario_senha" id="id_usuario_senha" value="<?php echo $this->usuario_senha->id_usuario_senha; ?>" />
+				<fieldset>
+					<legend>Mudança de Senha</legend>
+						<div class="control-group">
+							<label for="cpf" class="control-label">CPF: </label>
+							<div class="controls">
+								<input type="text" name="cpf" id="cpf" disabled value="<?php echo $this->formatCpf($this->usuario->getPessoaFisica()->cpf); ?>" />
+							</div>
+						</div>
+						<div class="control-group">
+							<label for="nome" class="control-label">Nome: </label>
+							<div class="controls">
+								<input type="text" name="nome" id="nome" disabled value="<?php echo $this->usuario->getPessoaFisica()->nome; ?>" class="span12" />
+							</div>
+						</div>
+						<div class="control-group">
+							<label for="senha" class="control-label">Senha: </label>
+							<div class="controls">
+								<input type="password" name="senha" id="senha" />
+							</div>
+						</div>
+						<div class="control-group">
+							<label for="senha_confirmar" class="control-label">Confirmar Senha: </label>
+							<div class="controls">
+								<input type="password" name="senha_confirmar" id="senha_confirmar" />
+							</div>
+						</div>
+						<div class="form-actions">
+								<input type="submit" value="ENVIAR" class="btn btn-danger" />
+								<a href="<?php echo $this->url(array("controller" => "intranet")); ?>" class="btn">Cancelar</a>
+						</div>
+				</fieldset>
+			</form>
+		</div>
+	</div>
+</div>

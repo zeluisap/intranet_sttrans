@@ -1,0 +1,88 @@
+<div class="conteudo_controller">
+    <div class="row-fluid">
+        <div class="span12">
+            <div class="well well-small">
+                <dl class="dl-horizontal">
+                    <dt>Motorista:</dt>
+                    <dd><?php echo $this->motorista->toString(); ?></dd>
+                </dl>
+            </div>
+            <table class="table table-striped table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Serviço</th>
+                            <th>Código</th>
+                            <th>Valor</th>
+                            <th>Data Vencimento</th>
+                            <th>Data Início</th>
+                            <th>Data Validade</th>
+                            <th>Status</th>
+                            <th width="20px">Operações</th>
+                        </tr>
+                    </thead>
+            <?php if ($this->registros && count($this->registros)) { ?>
+                    <tbody>
+            <?php 
+                foreach ($this->registros as $registro) {
+                    $stg = $registro->findParentRow("TbServicoTransporteGrupo");
+                    $servico = $stg->findParentRow("TbServico");
+            ?>
+                        <tr>
+                            <td>
+                                <?php echo $servico->toString(); ?>
+                            </td>
+                            <td>
+                                <?php echo $registro->mostrar_numero(); ?>
+                            </td>
+                            <td>
+                                <?php echo $registro->pega_valor()->toString(); ?>
+                            </td>
+                            <td>
+                                <?php echo Escola_Util::formatData($registro->data_vencimento); ?>
+                            </td>
+                            <td>
+                                <?php echo Escola_Util::formatData($registro->data_inicio); ?>
+                            </td>
+                            <td>
+                                <?php echo Escola_Util::formatData($registro->data_validade); ?>
+                            </td>
+                            <td>
+                                <?php echo $registro->mostrarStatus(); ?>
+                            </td>
+                            <td>
+                                <div class="btn-group">	
+<?php 
+if ($registro->pago()) { 
+    if ($registro->valido()) {
+?>
+                                    <a href="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(),
+                                                                         "action" => "emitir",
+                                                                         "id" => $registro->getId())); ?>" class="btn" title="Emitir Carteira">
+                                        <i class="icon-print"></i>
+                                    </a>
+<?php }} else { ?>
+                                    <a href="<?php echo $this->url(array("controller" => "transporte",
+                                                                         "action" => "boleto",
+                                                                         "id" => $registro->getId())); ?>" class="btn" title="Emitir Boleto" target="_blank">
+                                        <i class="icon-barcode"></i>
+                                    </a>
+                                    <a href="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(),
+                                                                         "action" => "pgto",
+                                                                         "id" => $registro->getId())); ?>" class="btn" title="Confirmar Pagamento">
+                                        <i class="icon-money"></i>
+                                    </a>
+<?php } ?>
+                                </div>
+                            </td>
+                        </tr>
+            <?php } ?>
+                    </tbody>
+            <?php } ?>
+                </table>
+<?php if ($this->registros && count($this->registros)) {
+ echo $this->paginationControl($this->registros, "sliding", "minha_paginacao_control.phtml");
+}
+?>
+        </div>
+    </div>
+</div>

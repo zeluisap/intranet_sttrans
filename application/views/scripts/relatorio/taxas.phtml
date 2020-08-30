@@ -1,0 +1,57 @@
+<div class="conteudo_controller">
+    <div class="row-fluid">
+        <div class="span12">
+            <form action="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(), "action" => $this->getRequest()->getActionName())); ?>" method="post" id="formulario" class="formulario form-horizontal" enctype="multipart/form-data">
+                <input type="hidden" name="operacao" id="operacao" value="imprimir" />
+                <div class="well well-small">
+                    <div class="page-header">
+                        <h4>Relatórios de Trânsito e Transporte - Relação de Taxas</h4>
+                    </div>
+                    <dl class="dl-horizontal">
+                        <dt>Relatório:</dt>
+                        <dd><?php echo $this->relatorio->toString(); ?></dd>
+                    </dl>
+<?php
+$ctrl = new Escola_Form_Element_Select_Table("id_transporte_grupo");
+$ctrl->setPkName("id_transporte_grupo");
+$ctrl->setModel("TbTransporteGrupo");
+$ctrl->setValue($this->dados["id_transporte_grupo"]);
+$ctrl->setLabel("Grupo de Transporte: ");
+$ctrl->setAttrib("class", "span5");
+echo $ctrl->render($this);
+?>
+                    <div class="control-group">
+                        <label for="data" class="control-label">Periodo:</label>
+                        <div class="controls">
+                            <input type="text" name="data_inicio" class="data span2" value="<?php echo $this->dados["data_inicio"]; ?>">
+                            à
+                            <input type="text" name="data_fim" class="data span2" value="<?php echo $this->dados["data_fim"]; ?>">
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label for="nome_proprietario" class="control-label">Proprietário:</label>
+                        <div class="controls">
+                            <input type="text" name="nome_proprietario" id="nome_proprietario" class="span5" value="<?php echo $this->dados["nome_proprietario"]; ?>" />
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label for="tipo" class="control-label">Tipo de Saída:</label>
+                        <div class="controls">
+                            <select name="tipo" id="tipo">
+                                <option value="HTML" <?php echo ($this->dados["tipo"] == "HTML")?"selected":""; ?>>VISUALIZAR</option>
+                                <option value="PDF" <?php echo ($this->dados["tipo"] == "PDF")?"selected":""; ?>>PDF</option>
+                                <option value="XLS" <?php echo ($this->dados["tipo"] == "XLS")?"selected":""; ?>>EXCEL</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            <?php
+                if (!$this->errors && $this->rel && $this->method) {
+                    $method = $this->method;
+                    echo $this->rel->$method();
+                } 
+            ?>
+            </form>
+        </div>
+    </div>
+</div>

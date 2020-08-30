@@ -1,0 +1,123 @@
+<div class="conteudo_controller">
+    <div class="row-fluid">
+        <div class="span12">
+            <form action="<?php echo $this->url(array("controller" => "auth", "action" => "sistema")); ?>" method="post" id="formulario" class="formulario form-horizontal">
+                <div class="well">
+                    <fieldset>
+                        <legend>SISTEMA: </legend>
+                        <div class="control-group">
+                            <label for="sistema_sigla" class="control-label">Sigla:</label>
+                            <div class="controls">
+                                <input type="text" name="sistema_sigla" id="sistema_sigla" maxlength="20" value="<?php echo $this->request->getPost("sistema_sigla"); ?>" class="span2" />
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label for="sistema_descricao" class="control-label">Descrição:</label>
+                            <div class="controls">
+                                <input type="text" name="sistema_descricao" id="sistema_descricao" maxlength="60" value="<?php echo $this->request->getPost("sistema_descricao"); ?>" class="span5" />
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label for="sistema_email" class="control-label">E-Mail:</label>
+                            <div class="controls">
+                                <input type="text" name="sistema_email" id="sistema_email" maxlength="60" value="<?php echo $this->request->getPost("sistema_email"); ?>" class="span5" />
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label for="sistema_versao" class="control-label">Versão:</label>
+                            <div class="controls">
+                                <input type="text" name="sistema_versao" id="sistema_versao" maxlength="10" value="<?php echo $this->request->getPost("sistema_versao"); ?>" class="span2" />
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+                <div class="well">
+                    <fieldset>
+                        <legend>CLIENTE: </legend>
+                        <div class="control-group">
+                            <label for="cliente_sigla" class="control-label">Sigla:</label>
+                            <div class="controls">
+                                <input type="text" name="cliente_sigla" id="cliente_sigla" maxlength="20" value="<?php echo $this->request->getPost("cliente_sigla"); ?>" class="span2" />
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label for="cliente_razao_social" class="control-label">Nome:</label>
+                            <div class="controls">
+                                <input type="text" name="cliente_razao_social" id="cliente_razao_social" maxlength="60" value="<?php echo $this->request->getPost("cliente_razao_social"); ?>" class="span5" />
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label for="cliente_email" class="control-label">E-Mail:</label>
+                            <div class="controls">
+                                <input type="text" name="cliente_email" id="cliente_email" maxlength="60" value="<?php echo $this->request->getPost("cliente_email"); ?>" class="span5" />
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+                <div class="well">
+                    <fieldset>
+                        <legend>ADMINISTRADOR: </legend>
+                <?php
+                $ctrl = new Escola_Form_Element_Cpf("administrador_cpf");
+                $ctrl->setValue($this->request->getPost("administrador_cpf"));
+                ?>
+                        <div class="control-group">
+                            <label for="<?php echo $ctrl->getId(); ?>" class="control-label">C.P.F.:</label>
+                            <div class="controls"><?php echo $ctrl->render($this); ?></div>
+                        </div>
+                        <div class="control-group">
+                            <label for="administrador_nome" class="control-label">Nome:</label>
+                            <div class="controls">
+                                <input type="text" name="administrador_nome" id="administrador_nome" maxlength="60" value="<?php echo $this->request->getPost("administrador_nome"); ?>" class="span5" />
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label for="administrador_email" class="control-label">E-Mail:</label>
+                            <div class="controls">
+                                <input type="text" name="administrador_email" id="administrador_email" maxlength="60" value="<?php echo $this->request->getPost("administrador_email"); ?>" class="span5" />
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label for="administrador_data_nascimento" class="control-label">Data de Nascimento:</label>
+                            <div class="controls">
+                                <input type="text" name="administrador_data_nascimento" id="administrador_data_nascimento" value="<?php echo $this->request->getPost("administrador_data_nascimento"); ?>" class="data span2" />
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label for="administrador_identidade_numero" class="control-label">Identidade - Número:</label>
+                            <div class="controls">
+                                <input type="text" name="administrador_identidade_numero" id="administrador_identidade_numero" maxlength="30" value="<?php echo $this->request->getPost("administrador_identidade_numero"); ?>" class="span2" />
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label for="administrador_identidade_orgao_expedidor" class="control-label">Identidade - Órgão Expedidor:</label>
+                            <div class="controls">
+                                <input type="text" name="administrador_identidade_orgao_expedidor" id="administrador_identidade_orgao_expedidor" maxlength="20" value="<?php echo $this->request->getPost("administrador_identidade_orgao_expedidor"); ?>" class="span2" />
+                            </div>
+                        </div>
+                <?php
+                    $ctrl = new Escola_Form_Element_Select_Table("administrador_identidade_id_uf");
+                    $ctrl->setPkName("id_uf");
+                    $ctrl->setModel("TbUf");
+                    $ctrl->setValue($this->getRequest()->getPost("administrador_identidade_id_uf"));
+                    $ctrl->setLabel("Identidade - UF: ");
+                    echo $ctrl->render($this);
+                ?>
+                        <div class="control-group">
+                            <label for="administrador_senha" class="control-label">Senha:</label>
+                            <div class="controls">
+                                <input type="password" name="administrador_senha" id="administrador_senha" class="span2" />
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label for="administrador_senha_confirmar" class="control-label">Confirmação da Senha:</label>
+                            <div class="controls">
+                                <input type="password" name="administrador_senha_confirmar" id="administrador_senha_confirmar" class="span2" />
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

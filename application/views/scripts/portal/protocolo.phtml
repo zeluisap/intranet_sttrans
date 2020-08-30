@@ -1,0 +1,19 @@
+<div id="lista_noticias">
+<div class="titulo_">Consultar Protocolo</div>
+	<form action="<?php echo $this->url(array("controller" => "portal", "action" => "viewprotocolo")); ?>" method="get">
+		<table width="100%">
+			<tr>
+				<td width="200px" align="right">Ano: </td>
+				<td><input type="text" name="filtro_ano" id="filtro_ano" size="4" maxlength="4" value="<?php echo $this->dados["filtro_ano"]; ?>" /></td>
+			</tr>
+			<tr>
+				<td align="right">Número do Processo: </td>
+				<td><input type="text" name="filtro_numero" id="filtro_numero" size="6" value="<?php echo $this->dados["filtro_numero"]; ?>" /></td>
+			</tr>
+			<tr>
+				<td></td>
+				<td><input type="submit" value="Enviar" /></td>
+			</tr>
+		</table>
+	</form>
+</div>

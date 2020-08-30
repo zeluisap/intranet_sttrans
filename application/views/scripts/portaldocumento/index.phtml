@@ -1,0 +1,71 @@
+<div class="conteudo_controller">
+    <div class="row-fluid">
+        <div class="span12">
+            <table class="table table-striped table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Ícone</th>
+                            <th>Tipo</th>
+                            <th>Descrição</th>
+                            <th>Tamanho</th>
+                            <th width="20px">Operações</th>
+                        </tr>
+                    </thead>
+            <?php if ($this->registros && count($this->registros)) { ?>
+                    <tbody>
+            <?php 
+                foreach ($this->registros as $registro) { 
+                    $arquivo = $registro->pega_arquivo();
+            ?>
+                        <tr>
+                            <td>
+                                <a href="<?php echo $this->url(array("action" => "view", "id" => $registro->getId())); ?>">
+                                    <?php echo ($arquivo)?$arquivo->miniatura(50):""; ?>
+                                </a>
+                            </td>
+                            <td>
+                                <a href="<?php echo $this->url(array("action" => "view", "id" => $registro->getId())); ?>">
+                                    <?php echo $registro->findParentRow("TbDocumentoTipo")->toString(); ?>
+                                </a>
+                            </td>
+                            <td>
+                                <a href="<?php echo $this->url(array("action" => "view", "id" => $registro->getId())); ?>">
+                                    <?php echo $registro->resumo; ?>
+                                </a>
+                            </td>
+                            <td>
+                                <a href="<?php echo $this->url(array("action" => "view", "id" => $registro->getId())); ?>">
+                                    <?php echo ($arquivo)?$arquivo->mostrarTamanho():""; ?>
+                                </a>
+                            </td>
+                            <td>
+                                <div class="btn-group">	
+                                    <a href="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(),
+                                                                         "action" => "view",
+                                                                         "id" => $registro->getId())); ?>" class="btn" title="Visualizar">
+                                        <i class="icon-search"></i>
+                                    </a>
+                                    <a href="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(),
+                                                                         "action" => "editar",
+                                                                         "id" => $registro->getId())); ?>" class="btn" title="Editar">
+                                        <i class="icon-cog"></i>
+                                    </a>
+                                    <a href="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(),
+                                                                         "action" => "excluir",
+                                                                         "id" => $registro->getId())); ?>" class="btn link_excluir" title="Excluir">
+                                        <i class="icon-trash"></i>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+            <?php } ?>
+                    </tbody>
+            <?php } ?>
+                </table>
+<?php if ($this->registros && count($this->registros)) {
+ echo $this->paginationControl($this->registros, "sliding", "minha_paginacao_control.phtml");
+}
+?>
+        </div>
+    </div>
+</div>

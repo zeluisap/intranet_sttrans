@@ -1,0 +1,70 @@
+<div class="conteudo_controller">
+    <div class="row-fluid">
+        <div class="span12">
+            <form action="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(), "action" => "editar")); ?>" method="post" id="formulario" class="formulario form-horizontal" enctype="multipart/form-data">
+                <input type="hidden" name="id" id="id" value="<?php echo $this->registro->getId(); ?>" />
+                <div class="well">
+                    <fieldset>
+                        <legend>CADASTRO DE DOCUMENTO ADMINISTRATIVO: </legend>
+                <?php if ($this->registro->getId()) { ?>
+                        <dl class="dl-horizontal">
+                            <dt>Código:</dt>
+                            <dd><?php echo $this->registro->getId(); ?></dd>
+                        </dl>
+                <?php } ?>
+                <?php
+                $tb = new TbDocumentoTipoTarget();
+                $dtt = $tb->getPorChave("A");
+                $tb = new TbDocumentoTipo();
+                $dts = $tb->listar(array("filtro_id_documento_tipo_target" => $dtt->getId()));
+                if ($dts && count($dts)) {
+                ?>
+
+                        <div class="control-group">
+                            <label for="id_documento_tipo" class="control-label">Tipo:</label>
+                            <div class="controls">
+                                                        <select name="id_documento_tipo" id="id_documento_tipo" class="filtro">
+                                                            <option value="" <?php echo (!$this->registro->id_documento_tipo)?"selected":""; ?>>==> SELECIONE <==</option>
+                <?php foreach ($dts as $dt) { ?>
+                                                            <option value="<?php echo $dt->getId(); ?>"  <?php echo ($this->registro->id_documento_tipo == $dt->getId())?"selected":""; ?>><?php echo $dt->toString(); ?></option>
+                <?php } ?>
+                                                        </select>
+                            </div>
+                        </div>
+                <?php } ?>
+                        <div class="control-group linha_numero">
+                            <label for="numero" class="control-label">Número:</label>
+                            <div class="controls">
+                                <input type="text" name="numero" id="numero" maxlength="50" value="<?php echo $this->registro->numero; ?>" class="span2" />
+                            </div>
+                        </div>
+                        <div class="control-group linha_numero">
+                            <label for="ano" class="control-label">Ano:</label>
+                            <div class="controls">
+                                <input type="text" name="ano" id="ano" maxlength="4" value="<?php echo $this->registro->ano; ?>" class="span1" />
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label for="resumo" class="control-label">Resumo:</label>
+                            <div class="controls">
+                                <textarea name="resumo" id="resumo" rows="6" class="filtro span5"><?php echo $this->registro->resumo; ?></textarea>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label for="localizacao_fisica" class="control-label">Localização Física:</label>
+                            <div class="controls">
+                                <textarea name="localizacao_fisica" id="localizacao_fisica" rows="6" class="filtro span5"><?php echo $this->registro->localizacao_fisica; ?></textarea>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label for="arquivo" class="control-label">Arquivo:</label>
+                            <div class="controls">
+                                <input type="file" name="arquivo" id="arquivo" />
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

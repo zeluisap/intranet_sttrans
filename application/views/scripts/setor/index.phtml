@@ -1,0 +1,114 @@
+<div class="conteudo_controller">
+    <div class="row-fluid">
+        <div class="span12">
+            <form action="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(), "action" => "index")); ?>" method="post" id="formulario" class="formulario form-horizontal">
+            <div class="well well-small" id="idPesquisa">
+                <fieldset>
+                    <legend>Opções de Pesquisa</legend>
+                    <div class="control-group">
+                        <label for="filtro_sigla" class="control-label">Sigla:</label>
+                        <div class="controls">
+                            <input type="text" class="filtro span2" name="filtro_sigla" id="filtro_sigla" value="<?php echo $this->getRequest()->getPost("filtro_sigla"); ?>" />
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label for="filtro_descricao" class="control-label">Descrição:</label>
+                        <div class="controls">
+                            <input type="text" class="filtro span5" name="filtro_descricao" id="filtro_descricao" value="<?php echo $this->getRequest()->getPost("filtro_descricao"); ?>" />
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <div class="controls">
+                            <input type="submit" value="Pesquisar" class="btn btn-primary" />
+                            <input type="button" value="Limpar Filtro" id="idLimparPesquisa" class="btn" />
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
+                <table class="table table-striped table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Tipo</th>
+                            <th>Nível</th>
+                            <th>Sigla</th>
+                            <th>Descrição</th>
+                            <th>Setor Superior</th>
+                            <th>Protocolo</th>
+                            <th width="20px">Operações</th>
+                        </tr>
+                    </thead>
+            <?php if (count($this->registros)) { ?>
+                    <tbody>
+            <?php 
+                foreach ($this->registros as $registro) {
+                    $superior = "";
+                    $sup = $registro->findParentRow("TbSetor");
+                    if ($sup) {
+                        $superior = $sup->toString();
+                    }
+            ?>
+                        <tr>
+                            <td>
+                                <a href="<?php echo $this->url(array("action" => "view", "id" => $registro->getId())); ?>">
+                                    <?php echo $registro->findParentRow("TbSetorTipo")->descricao; ?>
+                                </a>
+                            </td>
+                            <td>
+                                <a href="<?php echo $this->url(array("action" => "view", "id" => $registro->getId())); ?>">
+                                    <?php echo $registro->findParentRow("TbSetorNivel")->descricao; ?>
+                                </a>
+                            </td>
+                            <td>
+                                <a href="<?php echo $this->url(array("action" => "view", "id" => $registro->getId())); ?>">
+                                <?php echo $registro->sigla; ?>
+                                </a>
+                            </td>
+                            <td>
+                                <a href="<?php echo $this->url(array("action" => "view", "id" => $registro->getId())); ?>">
+                                <?php echo $registro->descricao; ?>
+                                </a>
+                            </td>
+                            <td>
+                                <a href="<?php echo $this->url(array("action" => "view", "id" => $registro->getId())); ?>">
+                                <?php echo $superior;  ?>
+                                </a>
+                            </td>
+                            <td>
+                                <a href="<?php echo $this->url(array("action" => "view", "id" => $registro->getId())); ?>">
+                                <?php echo $registro->mostrarProtocolo();  ?>
+                                </a>
+                            </td>
+                            <td>
+                                <div class="btn-group">	
+                                    <a href="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(),
+                                                                         "action" => "view",
+                                                                         "id" => $registro->getId())); ?>" class="btn" title="Visualiar">
+                                        <i class="icon-search"></i>
+                                    </a>
+                                    <a href="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(),
+                                                                         "action" => "editar",
+                                                                         "id" => $registro->getId())); ?>" class="btn" title="Editar">
+                                        <i class="icon-cog"></i>
+                                    </a>
+                                    <a href="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(),
+                                                                         "action" => "excluir",
+                                                                         "id" => $registro->getId())); ?>" class="btn link_excluir" title="Excluir">
+                                        <i class="icon-trash"></i>
+                                    </a>
+                                    <a href="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(),
+                                                                         "action" => "funcionario",
+                                                                         "id" => $registro->getId())); ?>" class="btn" title="Funcionários">
+                                        <i class="icon-group"></i>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+            <?php } ?>
+                    </tbody>
+            <?php } ?>
+                </table>
+            </form>
+<?php echo $this->paginationControl($this->registros, "sliding", "minha_paginacao_control.phtml"); ?>
+        </div>
+    </div>
+</div>

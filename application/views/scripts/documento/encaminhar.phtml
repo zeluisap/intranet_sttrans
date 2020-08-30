@@ -1,0 +1,50 @@
+<div class="conteudo_controller">
+    <div class="row-fluid">
+        <div class="span12">
+            <form action="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(), "action" => "encaminhar")); ?>" method="post" id="formulario" class="formulario form-horizontal">
+                <input type="hidden" name="id" id="id" value="<?php echo $this->registro->getId(); ?>" />
+                <input type="hidden" name="jan_pagina" id="jan_pagina" />
+                <input type="hidden" name="operacao" id="operacao" value="" />
+                <div class="well">
+                    <fieldset>
+                        <legend>ENCAMINHAR DOCUMENTO: </legend>
+                        <dl class="dl-horizontal">
+                            <dt>Documento:</dt>
+                            <dd><?php echo $this->registro->toString(); ?></dd>
+                        </dl>
+                        <dl class="dl-horizontal">
+                            <dt>Funcionário:</dt>
+                            <dd><?php echo $this->funcionario->toString(); ?></dd>
+                        </dl>
+                        <dl class="dl-horizontal">
+                            <dt>Setor Atual:</dt>
+                            <dd><?php echo $this->setor->toString(); ?></dd>
+                        </dl>
+                        <div class="control-group">
+                            <label for="despacho" class="control-label">Resumo do Despacho:</label>
+                            <div class="controls">
+                                <textarea name="despacho" id="despacho" rows="5" class="span5"></textarea>
+                            </div>
+                        </div>		
+                <?php include("janela_destino.phtml"); ?>
+                        <input type="hidden" name="tipo_destino" id="tipo_destino" value="" />
+                        <input type="hidden" name="id_destino" id="id_destino" value="" />
+                        <div class="control-group">
+                            <label for="destino" class="control-label">Destino:</label>
+                            <div class="controls">
+                                <div class="input-append">
+                                    <input type="text" name="show_destino" id="show_destino" disabled class="input-xxlarge" />
+                                    <div class="add-on">
+                                        <a href="#" id="link_destino">
+                                            <i class="icon-search icon-large"></i>
+                                        </a>                                        
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

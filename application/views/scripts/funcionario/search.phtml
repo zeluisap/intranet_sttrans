@@ -1,0 +1,86 @@
+<div class="conteudo_controller">
+    <div class="row-fluid">
+        <div class="span12">
+            <form action="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(), "action" => "search")); ?>" method="post" id="formulario" class="formulario form-horizontal">
+            <div class="well well-small" id="idPesquisa">
+                <fieldset>
+                    <legend>Opções de Pesquisa</legend>
+                    <div class="control-group">
+                        <label for="filtro_nome" class="control-label">Nome: </label>
+                        <div class="controls">
+                            <input type="text" class="filtro span5" name="filtro_nome" id="filtro_nome" size="50" value="<?php echo $this->dados["filtro_nome"]; ?>" />
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label for="filtro_setor" class="control-label">Setor:</label>
+                        <div class="controls">
+                            <input type="text" class="filtro span5" name="filtro_setor" id="filtro_setor" size="50" value="<?php echo $this->dados["filtro_setor"]; ?>" />
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <div class="controls">
+                            <input type="submit" value="Pesquisar" class="acao btn btn-primary" />
+                            <input type="button" value="Limpar Filtro" id="idLimparPesquisa" class="btn" />
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
+            <table class="table table-striped table-bordered">
+                    <thead>
+                        <tr>
+                            <th width="90px"></th>
+                            <th>Matrícula</th>
+                            <th>Nome</th>
+                            <th>Cargo</th>
+                            <th>Setor</th>
+                        </tr>
+                    </thead>
+            <?php if ($this->registros && count($this->registros)) { ?>
+                    <tbody>
+            <?php
+                $tb = new TbFuncionario();
+                foreach ($this->registros as $registro) {
+                    $registro = $tb->getPorId($registro["id_funcionario"]);
+                    $setor = "";
+                    $pf = $registro->findParentRow("TbPessoaFisica");
+                    $lotacao = $registro->pegaLotacaoPrincipal();
+                    if ($lotacao) {
+                        $setor = $lotacao->findParentRow("TbSetor")->toString();
+                    }
+            ?>
+                        <tr>
+                            <td>
+                                <a href="#" rel="<?php echo $registro->getId(); ?>" class="janela_funcionario">
+                                <?php echo $pf->mostrarFoto(70, "center"); ?>
+                                </a>
+                            </td>
+                            <td>
+                                <a href="#" rel="<?php echo $registro->getId(); ?>" class="janela_funcionario">
+                                <?php echo $registro->matricula; ?>
+                                </a>
+                            </td>
+                            <td>
+                                <a href="#" rel="<?php echo $registro->getId(); ?>" class="janela_funcionario">
+                                <?php echo $pf->nome; ?>
+                                </a>
+                            </td>
+                            <td>
+                                <a href="#" rel="<?php echo $registro->getId(); ?>" class="janela_funcionario">
+                                <?php echo $registro->findParentRow("TbCargo")->toString(); ?>
+                                </a>
+                            </td>
+                            <td>
+                                <a href="#" rel="<?php echo $registro->getId(); ?>" class="janela_funcionario">
+                                <?php echo $setor; ?>
+                                </a>
+                            </td>
+                        </tr>
+            <?php } ?>
+                    </tbody>
+            <?php } ?>
+                </table>
+            </form>
+<?php echo $this->paginationControl($this->registros, "sliding", "minha_paginacao_control.phtml"); ?>
+        </div>
+    </div>
+</div>

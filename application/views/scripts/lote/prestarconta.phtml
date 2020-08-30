@@ -1,0 +1,97 @@
+<div class="conteudo_controller">
+    <div class="row-fluid">
+        <div class="span12">
+            <form action="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(), "action" => $this->getRequest()->getActionName())); ?>" method="post" id="formulario" class="formulario form-horizontal" enctype="multipart/form-data">
+                <div class="well well-small">
+                    <dl class="dl-horizontal">
+                        <dt>Vínculo:</dt>
+                        <dd><?php echo $this->vinculo->toString(); ?></dd>
+                    </dl>
+                    <dl class="dl-horizontal">
+                        <dt>Lote:</dt>
+                        <dd><?php echo $this->registro->toString(false); ?></dd>
+                    </dl>
+                </div>
+                <table class="table table-striped table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Tipo de Ítem de Lote</th>
+                            <th>Tipo de Despesa</th>
+                            <th>Quantidade</th>
+                            <th>Valor</th>
+                            <th>Data / Hora</th>
+                            <th>Descrição</th>
+                            <th>Arquivo</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+<?php if ($this->tipos && count($this->tipos)) { ?>
+                        <tbody>
+<?php
+                $tb_pt = new TbPrevisaoTipo();
+                $tb_bt = new TbBolsaTipo();
+                foreach ($this->tipos as $tipo) {
+                    $id_previsao_tipo = $id_bolsa_tipo = 0;
+                    $txt_tipo = $txt_despesa_tipo = $txt_quantidade = $txt_valor = "--";
+                    $txt_data_hora = $txt_descricao = $txt_arquivo = "--";
+                    $pt = $tb_pt->getPorChave($tipo->tipo);
+                    if ($pt) {
+                        $id_previsao_tipo = $pt->getId();
+                        $txt_tipo = $pt->toString();
+                    }
+                    $bt = $tb_bt->getPorId($tipo->id_bolsa_tipo);
+                    if ($bt) {
+                        $id_bolsa_tipo = $bt->getId();
+                        $txt_despesa_tipo = $bt->toString();
+                    }
+                    $txt_quantidade = $tipo->quantidade;
+                    $txt_valor = Escola_Util::format_moeda($tipo->valor);
+                    $pc = $this->registro->pegaPrestacaoConta($id_previsao_tipo, $id_bolsa_tipo);
+                    if ($pc) {
+                        $txt_data_hora = Escola_Util::formatData($pc->pc_data) . " - " . $pc->pc_hora; 
+                        if ($pc->descricao) {
+                            $txt_descricao = $pc->descricao;
+                        }
+                        $arquivo = $pc->findParentRow("TbArquivo");
+                        if ($arquivo) {
+                            $txt_arquivo = $arquivo->miniatura(array("width" => 60, "link" => true));
+                        }                        
+                    }
+?>
+                            <input type="hidden" name="chave[]" value="<?php echo $tipo->tipo; ?>_<?php echo $tipo->id_bolsa_tipo; ?>" />
+                                <tr>
+                                        <td><?php echo $txt_tipo; ?></td>
+                                        <td><?php echo $txt_despesa_tipo; ?></td>
+                                        <td><div class="text-center"><?php echo $txt_quantidade; ?></div></td>
+                                        <td><div class="text-center"><?php echo $txt_valor; ?></div></td>
+                                        <td><div class="text-center"><?php echo $txt_data_hora; ?></div></td>
+                                        <td><div class="text-center"><?php echo $txt_descricao; ?></div></td>
+                                        <td><div class="text-center"><?php echo $txt_arquivo; ?></div></td>
+                                        <td>
+                                            <div class="text-left">
+                                                <div class="btn-group">
+                                                    <a href="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(),
+                                                                                         "action" => "prestarcontaitem",
+                                                                                         "tipo" => $tipo->tipo, "id_bolsa_tipo" => $tipo->id_bolsa_tipo)); ?>" class="btn" data-toggle="tooltip" title="Prestar Conta">
+                                                            <i class="icon-book"></i>
+                                                    </a>
+<?php if ($pc) { ?>
+                                                    <a href="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(),
+                                                                                         "action" => "prestarcontacancelar",
+                                                                                         "id" => $pc->getId())); ?>" class="btn link_confirma" data-toggle="tooltip" title="Cancelar Prestação de Contas">
+                                                            <i class="icon-remove-circle"></i>
+                                                    </a>
+<?php } ?>
+                                                </div>
+                                            
+                                            </div>
+                                        </td>
+                                </tr>
+<?php } ?>
+                        </tbody>
+<?php } ?>
+                </table>
+            </form>
+        </div>
+    </div>
+</div>

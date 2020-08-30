@@ -1,0 +1,157 @@
+<div class="conteudo_controller">
+    <div class="row-fluid">
+        <div class="span12">
+                <form action="<?php echo $this->url(array("action" => "editar")); ?>" method="post" id="formulario" class="formulario form-horizontal">
+                    <input type="hidden" name="id" id="id" value="<?php echo $this->registro->getId(); ?>" />
+                    <div class="well well-small">
+                    <fieldset>
+                        <legend>Cadastro de Usuários: </legend>
+                <?php if ($this->registro->getId()) { ?>
+                        <dl class="dl-horizontal">
+                            <dt>Código:</dt>
+                            <dd><?php echo $this->registro->getId(); ?></dd>
+                        </dl>
+                        <dl class="dl-horizontal">
+                            <dt>C.P.F.:</dt>
+                            <dd><?php echo $this->formatCpf($this->registro->getPessoaFisica()->cpf); ?></dd>
+                        </dl>
+                <?php } else { ?>
+                        <div class="control-group">
+                            <label for="cpf" class="control-label">C.P.F.:</label>
+                            <div class="controls">
+                                <input type="text" name="cpf" id="cpf" class="cpf span2" value="<?php echo $this->registro->getPessoaFisica()->cpf; ?>" />
+                            </div>
+                        </div>
+                <?php } ?>
+                        <div class="control-group">
+                            <label for="nome" class="control-label">Nome:</label>
+                            <div class="controls">
+                                <input type="text" name="nome" id="nome" maxlength="60" value="<?php echo $this->registro->getPessoaFisica()->nome; ?>" class="span5" />
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label for="email" class="control-label">E-Mail:</label>
+                            <div class="controls">
+                                <input type="text" name="email" id="email" size="60" maxlength="60" value="<?php echo $this->registro->getPessoaFisica()->getPessoa()->email; ?>" class="span5" />
+                            </div>
+                        </div>
+
+                        <div class="control-group">
+                            <label for="nome_mae" class="control-label">Nome da Mãe:</label>
+                            <div class="controls">
+                                <input type="text" name="nome_mae" id="nome_mae" maxlength="60" value="<?php echo $this->registro->getPessoaFisica()->nome_mae; ?>" class="span5" />
+                            </div>
+                        </div>
+
+                <?php
+                    $ctrl = new Escola_Form_Element_Select_Table("id_usuario_situacao");
+                    $ctrl->setPkName("id_usuario_situacao");
+                    $ctrl->setModel("TbUsuarioSituacao");
+                    $ctrl->setValue($this->registro->id_usuario_situacao);
+                    $ctrl->setLabel("Situação: ");
+                    echo $ctrl->render($this);
+                ?>
+                        <div class="control-group">
+                            <label for="data_nascimento" class="control-label">Data de Nascimento:</label>
+                            <div class="controls">
+                                <input type="text" name="data_nascimento" id="data_nascimento" size="10" maxlength="10" value="<?php echo $this->registro->getPessoaFisica()->mostrarDataNascimento(); ?>" class="data span2" />
+                            </div>
+                        </div>
+                <?php
+                    $ctrl = new Escola_Form_Element_Select_Table("id_estado_civil");
+                    $ctrl->setPkName("id_estado_civil");
+                    $ctrl->setModel("TbEstadoCivil");
+                    $ctrl->setValue($this->registro->getPessoaFisica()->id_estado_civil);
+                    $ctrl->setLabel("Estado Civil: ");
+                    echo $ctrl->render($this);
+                ?>
+                <?php
+                    $ctrl = new Escola_Form_Element_Select_Table_Crud_Pais("id_pais");
+                    $ctrl->setPkName("id_pais");
+                    $ctrl->setModel("TbPais");
+                    $ctrl->setLabel("País: ");
+                    $ctrl->setValue($this->id_pais);
+                    echo $ctrl->render($this);
+
+                    $ctrl = new Escola_Form_Element_Select_Table_Crud_Uf("id_uf");
+                    $ctrl->setPkName("id_uf");
+                    $ctrl->setModel("TbUf");
+                    $ctrl->setValue($this->id_uf);
+                    $ctrl->setLabel("Unidade Federativa: ");
+                    $ctrl->set_id_pais("id_pais");
+                    echo $ctrl->render($this);
+
+                    $ctrl = new Escola_Form_Element_Select_Table_Crud_Municipio("nascimento_id_municipio");
+                    $ctrl->setPkName("id_municipio");
+                    $ctrl->setModel("TbMunicipio");
+                    $ctrl->setValue($this->id_municipio);
+                    $ctrl->setLabel("Município: ");
+                    $ctrl->set_id_uf("id_uf");
+                    echo $ctrl->render($this);
+                ?>	
+                        <div class="control-group">
+                <?php 
+                $fixo = $this->getRequest()->getPost("telefone_fixo"); 
+                if (!$fixo) {
+                    $fixos = $this->registro->getPessoaFisica()->getPessoa()->getTelefones("f");
+                    if ($fixos) {
+                        $fixo = $fixos[0]->toString();
+                    }
+                }
+                ?>
+                            <label for="telefone_fixo" class="control-label">Telefone Fixo: </label>
+                            <div class="controls">
+                                <input type="text" name="telefone_fixo" id="telefone_fixo" size="15" maxlength="15" value="<?php echo $fixo; ?>" class="telefone" />
+                            </div>
+                        </div>
+                <?php 
+                $celular = $this->getRequest()->getPost("telefone_celular"); 
+                if (!$celular) {
+                    $celulares = $this->registro->getPessoaFisica()->getPessoa()->getTelefones("c");
+                    if ($celulares) {
+                        $celular = $celulares[0]->toString();
+                    }
+                }
+                ?>
+                        <div class="control-group">
+                            <label for="telefone_celular" class="control-label">Telefone Celular: </label>
+                            <div class="controls">
+                                <input type="text" name="telefone_celular" id="telefone_celular" size="15" maxlength="15" value="<?php echo $celular; ?>" class="telefone" />
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+                <div class="well well-small">
+                    <fieldset>
+                        <legend>Identidade: </legend>
+                        <div class="control-group">
+                            <label for="identidade_numero" class="control-label">Número:</label>
+                            <div class="controls">
+                                <input type="text" name="identidade_numero" id="identidade_numero" size="30" maxlength="30" value="<?php echo $this->registro->getPessoaFisica()->identidade_numero; ?>" />
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label for="identidade_orgao_expedidor" class="control-label">Órgão Expedidor:</label>
+                            <div class="controls">
+                                <input type="text" name="identidade_orgao_expedidor" id="identidade_orgao_expedidor" size="20" maxlength="20" value="<?php echo $this->registro->getPessoaFisica()->identidade_orgao_expedidor; ?>" />
+                            </div>
+                        </div>
+                <?php
+                    $ctrl = new Escola_Form_Element_Select_Table("identidade_id_uf");
+                    $ctrl->setPkName("id_uf");
+                    $ctrl->setModel("TbUf");
+                    $ctrl->setValue($this->registro->getPessoaFisica()->identidade_id_uf);
+                    $ctrl->setLabel("Unidade Federativa: ");
+                    echo $ctrl->render($this);
+                ?>
+                    </fieldset>
+                </div>
+                <div class="well well-small">
+                <?php 
+                    $end = $this->registro->getPessoaFisica()->getPessoa()->getEndereco();
+                    echo $end->render($this); ?>
+                    </div>
+                </form>
+        </div>
+    </div>
+</div>

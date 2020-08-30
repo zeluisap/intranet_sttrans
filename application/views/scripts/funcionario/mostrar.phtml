@@ -1,0 +1,67 @@
+<form action="<?php echo $this->url(array("controller" => "funcionario", "action" => "index")); ?>" method="post" id="formulario" class="formulario">
+	<div class="janela_modal" id="janela_mensagem" style="display:none">
+		<table class="lista_box">
+			<thead>
+				<tr>
+					<th>ENVIAR MENSAGEM</th>
+				</tr>
+			</thead>
+			<tr>
+				<td>
+					<div align="center">
+						<br />
+						<table width="100%">
+							<tr>
+								<td colspan="2">
+									<textarea name="jan_mensagem" id="jan_mensagem"></textarea>
+								</td>
+							</tr>
+							<tr>
+								<td></td>
+							</tr>
+							<tr>
+								<td>
+									
+								</td>
+								<td>
+									<div align="left">
+										<input type="submit" value="ENVIAR" class="acao" id="bt_jan_enviar" />
+										<input type="button" value="CANCELAR" id="bt_jan_cancelar" />
+									</div>
+								</td>
+							</tr>
+						</table>
+						<br />
+					</div>
+				</td>
+			</tr>
+		</table>
+	</div>
+	<fieldset>
+		<legend>FUNCIONÁRIO: </legend>
+		<div>
+			<label for="matricula">Setor:</label>
+			<span class="read-only"><?php echo $this->lotacao->findParentRow("TbSetor")->toString(); ?></span>
+		</div>
+		<div>
+			<label for="Nome">Nome:</label>
+			<?php echo $this->pf->nome; ?>
+		</div>
+		<div>
+			<label for="Nome">E-Mail:</label>
+			<?php echo $this->pf->pega_pessoa()->email; ?>
+		</div>
+		<div>
+			<label for="data_nascimento">Data de Nascimento:</label><?php echo $this->pf->mostrarDataNascimento(); ?>
+		</div>
+		<div>
+			<label for="matricula">Matrícula:</label><?php echo $this->funcionario->matricula; ?>
+		</div>
+		<div>
+			<label for="matricula">Cargo:</label><?php echo $this->funcionario->findParentRow("TbCargo")->toString(); ?>
+		</div>
+		<div>
+			<label for="matricula">Telefone(s):</label><?php echo $this->pf->pega_pessoa()->mostrarTelefones(); ?>
+		</div>
+	</fieldset>
+</form>

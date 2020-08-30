@@ -1,0 +1,58 @@
+<div class="conteudo_controller">
+	<div class="row-fluid">
+		<div class="span12">
+<form action="<?php echo $this->url(array("controller" => "grupo", "action" => "permissoes")); ?>" method="post" id="formulario" class="formulario">
+	<input type="hidden" name="id" id="id" value="<?php echo $this->grupo->getId(); ?>" />
+	<div class="well">
+		<dl class="dl-horizontal">
+			<dt>Grupo:</dt>
+			<dd><?php echo $this->grupo->descricao; ?></dd>
+		</dl>
+	</div>
+	<table class="table table-stripled table-bordered">
+		<thead>
+			<tr>
+				<th>Módulo</th>
+				<th colspan="<?php echo $this->colspan; ?>">Permissões</th>
+			</tr>
+		</thead>
+<?php if ($this->modulos) { ?>
+		<tbody>
+<?php 
+	foreach ($this->modulos as $modulo) { 
+		$acaos = $modulo->findDependentRowSet("TbAcao");
+?>
+			<tr>
+				<td>
+					<?php echo $modulo->descricao; ?>
+				</td>
+<?php 
+		$i = 0;
+		foreach ($acaos as $acao) { 
+			$i++;
+			$checked = "";
+			if ($this->grupo->isAllowed($acao)) {
+				$checked = " checked";
+			}
+?>
+				<td width="150px">
+					<input type="checkbox" name="acao[]" id="acao_<?php echo $acao->getId(); ?>" value="<?php echo $acao->getId(); ?>" <?php echo $checked; ?> />
+					<label for="acao_<?php echo $acao->getId(); ?>">
+					<?php echo $acao->descricao; ?>
+					</label>
+				</td>
+<?php } ?>
+<?php while ($i < $this->colspan) {
+	$i++;
+ ?>
+			<td width="150px"></td>
+<?php } ?>
+			</tr>
+<?php } ?>
+		</tbody>
+<?php } ?>
+	</table>
+</form>
+</div>
+	</div>
+</div>

@@ -1,0 +1,52 @@
+<div class="conteudo_controller">
+    <div class="row-fluid">
+        <div class="span12">
+            <form action="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(), "action" => "editarprevisao")); ?>" method="post" id="formulario" class="formulario form-horizontal">
+                <input type="hidden" name="id" id="id" value="<?php echo $this->registro->getId(); ?>" />
+                <div class="well">
+                    <fieldset>
+                        <legend>CADASTRO DE PREVISÃO: </legend>
+                        <dl class="dl-horizontal">
+                            <dt>Vínculo:</dt>
+                            <dd><?php echo $this->vinculo->toString(); ?></dd>
+                        </dl>
+                <?php if ($this->registro->getId()) { ?>
+                        <dl class="dl-horizontal"> 
+                            <dt>ID:</dt>
+                            <dd><?php echo $this->registro->getId(); ?></dd>
+                        </dl>
+                <?php } ?>
+                        <dl class="dl-horizontal">
+                            <dt>Tipo de Previsão:</dt>
+                            <dd><?php echo $this->pt->toString(); ?></dd>
+                        </dl>
+<?php if ($this->bt) { ?>
+                        <dl class="dl-horizontal">
+                            <dt>Tipo de Despesa:</dt>
+                            <dd><?php echo $this->bt->toString(); ?></dd>
+                        </dl>
+<?php } ?>
+                        <dl class="dl-horizontal">
+                            <dt>Ano:</dt>
+                            <dd><?php echo $this->registro->ano; ?></dd>
+                        </dl>
+                        <dl class="dl-horizontal">
+                            <dt>Mês:</dt>
+                            <dd><?php echo Escola_Util::pegaMes($this->registro->mes); ?></dd>
+                        </dl>
+<?php if ($this->pt->bolsista()) { ?>
+                        <div class="control-group">
+                            <label for="valor" class="control-label">Quantidade de Bolsistas: </label>
+                            <div class="controls">
+                                <input type="text" name="valor" id="valor" class="span1" value="<?php echo $this->registro->pega_valor()->valor; ?>" />
+                            </div>
+                        </div>
+<?php } else { ?>
+                        <?php echo $this->registro->pega_valor()->render($this); ?>
+<?php } ?>
+                    </fieldset>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

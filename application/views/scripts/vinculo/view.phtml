@@ -1,0 +1,80 @@
+<div class="conteudo_controller">
+    <div class="row-fluid">
+        <div class="span12">
+            <div class="well">
+                <div class="page-header">
+                    <h4>Informações do Vínculo</h4>
+                </div>
+                <dl class="dl-horizontal">
+                    <dt>ID:</dt>
+                    <dd><?php echo $this->registro->getId(); ?></dd>
+                </dl>
+                <dl class="dl-horizontal">
+                    <dt>Tipo:</dt>
+                    <dd><?php echo $this->registro->findParentRow("TbVinculoTipo")->toString(); ?></dd>
+                </dl>
+                <dl class="dl-horizontal">
+                    <dt>Código:</dt>
+                    <dd><?php echo $this->registro->mostrar_numero(); ?></dd>
+                </dl>
+                <dl class="dl-horizontal">
+                    <dt>Sigla:</dt>
+                    <dd><?php echo $this->registro->sigla; ?></dd>
+                </dl>
+                <dl class="dl-horizontal">
+                    <dt>Descrição:</dt>
+                    <dd><?php echo $this->registro->descricao; ?></dd>
+                </dl>
+                <dl class="dl-horizontal">
+                    <dt>Pessoa Jurídica:</dt>
+                    <dd><?php echo $this->registro->mostrar_pj(); ?></dd>
+                </dl>
+                <dl class="dl-horizontal">
+                    <dt>Data Inicial:</dt>
+                    <dd><?php echo Escola_Util::formatData($this->registro->data_inicial); ?></dd>
+                </dl>
+                <dl class="dl-horizontal">
+                    <dt>Data Final:</dt>
+                    <dd><?php echo $this->registro->mostrar_data_final(); ?></dd>
+                </dl>
+                <dl class="dl-horizontal">
+                    <dt>Valor Contrato:</dt>
+                    <dd><?php echo $this->registro->mostrar_saldo(); ?></dd>
+                </dl>
+                <dl class="dl-horizontal">
+                    <dt>Informações Bancárias:</dt>
+                    <dd><?php echo $this->registro->mostrar_ib(); ?></dd>
+                </dl>
+                <dl class="dl-horizontal">
+                    <dt>Status:</dt>
+                    <dd><?php echo $this->registro->findParentRow("TbVinculoStatus")->toString(); ?></dd>
+                </dl>
+            </div>
+            <div class="well">
+                <div class="page-header">
+                    <h4>Responsáveis</h4>
+                </div>
+<?php 
+$tb = new TbVinculoPessoa();
+foreach ($this->vpts as $vpt) { 
+    $txt_vp = "--";
+    $vps = $tb->listar(array("id_vinculo" => $this->registro->getId(), "id_vinculo_pessoa_tipo" => $vpt->getId()));
+    if ($vps) {
+        $vp = $vps->current();
+        if ($vp) {
+            $pf = $vp->findParentRow("TbPessoaFisica");
+            if ($pf) {
+                $txt_vp = $pf->toString();
+            }
+        }
+    }
+?>
+                <dl class="dl-horizontal">
+                    <dt><?php echo $vpt->toString(); ?>:</dt>
+                    <dd><?php echo $txt_vp; ?></dd>
+                </dl>
+<?php } ?>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,53 @@
+<div class="conteudo_controller">
+    <div class="row-fluid">
+        <div class="span12">
+            <form action="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(), "action" => "editarocorrencia")); ?>" method="post" id="formulario" class="formulario form-horizontal">
+                <input type="hidden" name="id_funcionario" id="id_funcionario" value="<?php echo $this->funcionario->getId(); ?>" />
+            <?php if ($this->registro->getId()) { ?>
+                <input type="hidden" name="id_ocorrencia" id="id_ocorrencia" value="<?php echo $this->registro->getId(); ?>" />
+            <?php } ?>
+                <div class="well">
+                    <fieldset>
+                        <legend>CADASTRO DE LOTAÇÃO: </legend>
+                        <dl class="dl-horizontal">
+                            <dt>Funcionário:</dt>
+                            <dd><?php echo $this->funcionario->toString(); ?></dd>
+                        </dl>
+                <?php if ($this->registro->getId()) { ?>
+                        <dl class="dl-horizontal">
+                            <dt>Código:</dt>
+                            <dd><?php echo $this->registro->getId(); ?></dd>
+                        </dl>
+                <?php
+                }
+                    $ctrl = new Escola_Form_Element_Select_Table("id_funcionario_ocorrencia_tipo");
+                    $ctrl->setPkName("id_funcionario_ocorrencia_tipo");
+                    $ctrl->setModel("TbFuncionarioOcorrenciaTipo");
+                    $ctrl->setValue($this->registro->id_funcionario_ocorrencia_tipo);
+                    $ctrl->setLabel("Tipo: ");
+                    echo $ctrl->render($this);
+                ?>
+                        <div class="control-group">
+                            <label for="data_inicial" class="control-label">Data Inicial:</label>
+                            <div class="controls">
+                                <input type="text" name="data_inicio" id="data_inicio" value="<?php echo $this->formatData($this->registro->data_inicio); ?>" class="data span2" />
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label for="data_final" class="control-label">Data Final:</label>
+                            <div class="controls">
+                                <input type="text" name="data_final" id="data_final" value="<?php echo $this->formatData($this->registro->data_final); ?>" class="data span2" />
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label for="observacoes" class="control-label">Observações:</label>
+                            <div class="controls">
+                                <textarea name="observacoes" id="observacoes" rows="6" class="span5"><?php echo $this->registro->observacoes; ?></textarea>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

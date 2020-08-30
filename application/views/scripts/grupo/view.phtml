@@ -1,0 +1,28 @@
+<div class="conteudo_controller">
+	<div class="row-fluid">
+		<div class="span12">
+			<div class="well">
+				<form action="<?php echo $this->url(array("controller" => "grupo", "action" => "editar")); ?>" method="post" id="formulario" class="formulario form-horizontal">
+					<input type="hidden" name="id" id="id" value="<?php echo $this->grupo->getId(); ?>" />
+					<fieldset>
+						<legend>Cadastro de Grupo: </legend>
+						<dl class="dl-horizontal">
+							<dt>Código:</dt>
+							<dd><?php echo $this->grupo->getId(); ?></dd>
+							<dt>Descrição:</dt>
+							<dd><?php echo $this->grupo->descricao; ?></dd>
+							<dt>Padrão:</dt>
+							<dd><?php echo $this->grupo->mostrarPadrao(); ?></dd>
+				<?php
+				$rg = $this->grupo->findParentRow("TbGrupo");
+				if (count($rg)) { 
+				?>
+							<dt>Grupo Inferior:</dt>
+							<dd><?php echo $rg->descricao; ?></dd>
+				<?php } ?>
+					</fieldset>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>

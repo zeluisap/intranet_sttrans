@@ -1,0 +1,112 @@
+<?php
+$lote = false;
+$txt_vinculo = $txt_lote = $txt_tipo = $txt_bolsa_tipo = "--";
+if (isset($this->lote)) {
+    $lote = $this->lote;
+    if ($lote) {
+        $txt_lote = $lote->toStringMenor();
+        $vinculo = $lote->findParentRow("TbVinculo");
+        if ($vinculo) {
+            $txt_vinculo = $vinculo->toString();
+        }
+    }
+}
+if (isset($this->tipo) && $this->tipo) {
+    $txt_tipo = $this->tipo->toString();
+}
+if (isset($this->bolsa_tipo) && $this->bolsa_tipo) {
+    $txt_bolsa_tipo = $this->bolsa_tipo->toString();
+}
+?>
+<script type="text/javascript">
+    $(document).ready(function() {
+        $("#data_cadastro").focus();
+    });
+</script>
+<div class="conteudo_controller">
+    <div class="row-fluid">
+        <div class="span12">
+            <form action="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(), "action" => $this->getRequest()->getActionName())); ?>" method="post" id="formulario" class="formulario form-horizontal" enctype="multipart/form-data">                
+<?php if ($this->obj->getId()) { ?>
+                <input type="hidden" name="id_vinculo_lote_ocorrencia_pgto" id="id_vinculo_lote_ocorrencia_pgto" value="<?php echo $this->obj->getId();; ?>" />
+<?php } ?>
+                <input type="hidden" name="id_vinculo_lote" id="id_vinculo_lote" value="<?php echo $this->lote->getId();; ?>" />
+                <input type="hidden" name="id_previsao_tipo" id="id_previsao_tipo" value="<?php echo $this->tipo->getId();; ?>" />
+                <input type="hidden" name="id_bolsa_tipo" id="id_bolsa_tipo" value="<?php echo $this->bolsa_tipo->getId();; ?>" />
+                <div class="well">
+                    <fieldset>
+                        <legend>VÍNCULO > LOTE > CONFIRMAR PAGAMENTO: </legend>
+                        <dl class="dl-horizontal">
+                            <dt>Vínculo:</dt>
+                            <dd><?php echo $txt_vinculo; ?></dd>
+                        </dl>
+                        <dl class="dl-horizontal">
+                            <dt>Lote:</dt>
+                            <dd><?php echo $txt_lote; ?></dd>
+                        </dl>
+                        <dl class="dl-horizontal">
+                            <dt>Tipo de Despesa:</dt>
+                            <dd><?php echo $txt_tipo; ?></dd>
+                        </dl>
+                        <dl class="dl-horizontal">
+                            <dt>Tipo de Ítem de Lote:</dt>
+                            <dd><?php echo $txt_bolsa_tipo; ?></dd>
+                        </dl>
+                        <div class="control-group">
+                            <label for="data_cadastro" class="control-label">Data Pagamento:</label>
+                            <div class="controls">
+                                <input type="text" name="data_cadastro" id="data_cadastro" class="span3 data" value="<?php echo Escola_Util::formatData($this->obj->data_cadastro); ?>" />
+                            </div>
+                        </div>                        
+                        <div class="control-group">
+                            <label for="hora_cadastro" class="control-label">Hora Pagamento:</label>
+                            <div class="controls">
+                                <input type="text" name="hora_cadastro" id="hora_cadastro" class="span3 hora" value="<?php echo $this->obj->hora_cadastro; ?>" />
+                            </div>
+                        </div>                        
+                        <div class="control-group">
+                            <label for="id_forma_pagamento" class="control-label">Forma de Pagamento:</label>
+                            <div class="controls">
+                                <select name="id_forma_pagamento" id="id_forma_pagamento" class="field span5">
+                                    <option value="" <?php echo (!$this->obj->id_forma_pagamento)?"selected":""; ?>>==> SELECIONE <==</option>
+<?php foreach ($this->fps as $fp) { ?>
+                                    <option value="<?php echo $fp->getId(); ?>" <?php echo ($fp->getId() == $this->obj->id_forma_pagamento)?"selected":""; ?>><?php echo $fp->toString(); ?></option>
+<?php } ?>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label for="forma_numero" class="control-label">Número do Documento de Pagamento:</label>
+                            <div class="controls">
+                                <input type="text" name="forma_numero" id="forma_numero" class="span3" value="<?php echo $this->obj->forma_numero; ?>" />
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label for="id_doc_comprovacao" class="control-label">Tipo de Documento de Comprovação:</label>
+                            <div class="controls">
+                                <select name="id_doc_comprovacao" id="id_doc_comprovacao" class="field span5">
+                                    <option value="" <?php echo (!$this->obj->id_doc_comprovacao)?"selected":""; ?>>==> SELECIONE <==</option>
+<?php foreach ($this->docs as $doc) { ?>
+                                    <option value="<?php echo $doc->getId(); ?>" <?php echo ($doc->getId() == $this->obj->id_doc_comprovacao)?"selected":""; ?>><?php echo $doc->toString(); ?></option>
+<?php } ?>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label for="doc_numero" class="control-label">Número Documento de Comprovação:</label>
+                            <div class="controls">
+                                <input type="text" name="doc_numero" id="doc_numero" class="span3" value="<?php echo $this->obj->doc_numero; ?>"/>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label for="arquivo" class="control-label">Arquivo de Comprovação:</label>
+                            <div class="controls">
+                                <input type="file" name="arquivo" id="arquivo" />
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

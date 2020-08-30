@@ -1,0 +1,33 @@
+<div class="conteudo_controller">
+    <div class="row-fluid">
+        <div class="span12">
+            <form action="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(), "action" => "editararquivo")); ?>" method="post" id="formulario" class="formulario form-horizontal" enctype="multipart/form-data">
+                <input type="hidden" name="id" id="id" value="<?php echo $this->documento->getId(); ?>" />
+            <?php if ($this->registro->getId()) { ?>
+                <input type="hidden" name="id_documento_ref" id="id_documento_ref" value="<?php echo $this->registro->getId(); ?>" />
+            <?php } ?>
+                <div class="well">
+                    <fieldset class="fieldset">
+                        <legend>ANEXO DE DOCUMENTO: </legend>
+                        <dl class="dl-horizontal">
+                            <dt>Documento:</dt>
+                            <dd><?php echo $this->documento->toString(); ?></dd>
+                        </dl>
+                        <div class="control-group">
+                            <label for="legenda" class="control-label">Legenda:</label>
+                            <div class="controls">
+                                <input type="text" name="legenda" id="legenda" value="<?php echo $this->arquivo->legenda; ?>" class="span5" />
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label for="arquivo" class="control-label">Arquivo:</label>
+                            <div class="controls">
+                                <input type="file" name="arquivo" id="arquivo" class="field" />
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

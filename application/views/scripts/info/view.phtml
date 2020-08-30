@@ -1,0 +1,59 @@
+<div class="conteudo_controller">
+    <div class="row-fluid">
+        <div class="span12">
+        <?php
+        $arquivo = $this->registro->findParentRow("TbArquivo");
+        if ($arquivo) {
+            echo $arquivo->miniatura(array("width" => 90, "align" => "right", "link" => true));
+        } 
+        ?>
+            <div class="well">
+                <div class="page-header">
+                    <h4>Cadastro de Informações do Site</h4>
+                </div>
+                <dl class="dl-horizontal">
+                    <dt>Código:</dt>
+                    <dd><?php echo $this->registro->getId(); ?></dd>
+                </dl>
+                <dl class="dl-horizontal">
+                    <dt>Tipo:</dt>
+                    <dd><?php echo $this->registro->findParentRow("TbInfoTipo")->toString(); ?></dd>
+                </dl>
+                <dl class="dl-horizontal">
+                    <dt>Data Publicação:</dt>
+                    <dd><?php echo Escola_Util::formatData($this->registro->data); ?></dd>
+                </dl>
+                <dl class="dl-horizontal">
+                    <dt>Título:</dt>
+                    <dd><?php echo $this->registro->titulo; ?></dd>
+                </dl>
+                <dl class="dl-horizontal">
+                    <dt>Resumo:</dt>
+                    <dd><?php echo $this->registro->resumo; ?></dd>
+                </dl>
+                <dl class="dl-horizontal">
+                    <dt>Conteúdo:</dt>
+                    <dd>
+                        <div class="well well-small">
+                            <?php echo $this->registro->conteudo; ?>
+                        </div>
+                    </dd>
+                </dl>
+                <dl class="dl-horizontal">
+                    <dt>Autor:</dt>
+                    <dd><?php echo $this->registro->autor; ?></dd>
+                </dl>
+                <dl class="dl-horizontal">
+                    <dt>Fonte:</dt>
+                    <dd><?php echo $this->registro->fonte; ?></dd>
+                </dl>
+                <dl class="dl-horizontal">
+                    <dt>Tipo:</dt>
+                    <dd>
+                        <?php echo $this->registro->findParentRow("TbInfoStatus")->toString(); ?>
+                    </dd>
+                </dl>
+            </fieldset>
+        </div>
+    </div>
+</div>

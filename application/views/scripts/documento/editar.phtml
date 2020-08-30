@@ -1,0 +1,53 @@
+<div class="conteudo_controller">
+    <div class="row-fluid">
+        <div class="span12">
+            <form action="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(), "action" => "editar")); ?>" method="post" id="formulario" class="formulario form-horizontal" enctype="multipart/form-data">
+                <input type="hidden" name="id" id="id" value="<?php echo $this->registro->getId(); ?>" />
+                <input type="hidden" name="jan_pagina" id="jan_pagina" />
+                <input type="hidden" name="operacao" id="operacao" value="" />
+                <div class="well">
+                    <fieldset>
+                    <legend>CADASTRO DE DOCUMENTO: </legend>
+            <?php if ($this->registro->getId()) { ?>
+                    <dl class="dl-horizontal">
+                        <dt>Código:</dt>
+                        <dd><?php echo $this->registro->getId(); ?></dd>
+                    </dl>
+            <?php } ?>
+                    <div class="control-group">
+                        <label for="id_documento_tipo" class="control-label">Tipo de Documento:</label>
+                        <div class="controls">
+<?php if ($this->registro->getId()) { 
+    $txt_dt = "";
+    $dt = $this->registro->findParentRow("TbDocumentoTipo");
+    if ($dt) {
+        $txt_dt = $dt->toString();
+    }
+?>
+                            <input type="text" name="show_documento_tipo" id="show_documento_tipo" class="input-xxlarge" disabled value="<?php echo $txt_dt; ?>" />
+<?php } else { ?>
+<?php
+            $tb = new TbDocumentoTipoTarget();
+            $dtt = $tb->getPorChave("D");
+            if ($dtt) {
+                $tb = new TbDocumentoTipo();
+                $dts = $tb->listar(array("filtro_id_documento_tipo_target" => $dtt->getId()));
+                if ($dts) {
+            ?>
+                                                    <select name="id_documento_tipo" id="id_documento_tipo">
+                                                        <option value="" <?php echo (!$this->registro->id_documento_tipo)?"selected":""; ?>>==> SELECIONE <==</option>
+            <?php foreach ($dts as $dt) { ?>
+            <?php if (!$dt->processo()) { ?>
+                                                        <option value="<?php echo $dt->getId(); ?>" <?php echo ($dt->getId() == $this->registro->id_documento_tipo)?"selected":""; ?>><?php echo $dt->toString(); ?></option>
+            <?php }} ?>
+                                                    </select>
+<?php }}} ?>
+                        </div>
+                    </div>
+                    </fieldset>
+                </div>
+                <div class="documento_conteudo"><?php echo $this->registro->toForm($this, $this->funcionario); ?></div>
+            </form>
+        </div>
+    </div>
+</div>

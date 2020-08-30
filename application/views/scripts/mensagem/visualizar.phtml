@@ -1,0 +1,70 @@
+<div class="conteudo_controller">
+    <div class="row-fluid">
+        <div class="span12">
+            <form action="<?php echo $this->url(array("action" => "index")); ?>" method="post" id="formulario" class="formulario form-horizontal">
+                <input type="hidden" name="id" id="id" value="<?php echo $this->registro->getId(); ?>" />
+
+                <div id="janela_mensagem" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                        <h3 id="myModalLabel">Responder</h3>
+                    </div>
+                    <div class="modal-body">
+                        <fieldset>
+                            <div class="control-group">
+                                <label for="assunto" class="control-label">Assunto:</label>
+                                <div class="controls">
+                                    <input type="text" name="assunto" id="assunto" class="span5" />
+                                </div>
+                            </div>
+                            <div class="control-group">
+                                <label for="mensagem" class="control-label">Mensagem:</label>
+                                <div class="controls">
+                                    <textarea name="mensagem" id="mensagem"></textarea>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn" data-dismiss="modal" aria-hidden="true">Fechar</button>
+                        <input type="submit" value="Enviar" class="btn btn-primary" />
+                    </div>
+                </div>                
+                
+            </form>
+            <div class="well">
+                <div class="page-header">
+                    <h4>Mensagem</h4>
+                </div>
+                <dl class="dl-horizontal">
+                    <dt>Data / Hora:</dt>
+                    <dd><?php echo $this->formatData($this->registro->data); ?> <?php echo $this->registro->hora; ?></dd>
+                </dl>
+                <dl class="dl-horizontal">
+                    <dt>Tipo:</dt>
+                    <dd><?php echo $this->registro->findParentRow("TbMensagemTipo")->toString(); ?></dd>
+                </dl>
+                <dl class="dl-horizontal">
+                    <dt>Autor:</dt>
+                    <dd><?php echo $this->registro->findParentRow("TbUsuario")->toString(); ?></dd>
+                </dl>
+                <dl class="dl-horizontal">
+                    <dt>Destinatário:</dt>
+                    <dd><?php echo $this->registro->mostrarDestinatario(); ?></dd>
+                </dl>
+                <dl class="dl-horizontal">
+                    <dt>Assunto:</dt>
+                    <dd><?php echo $this->registro->assunto; ?></dd>
+                </dl>
+                <dl class="dl-horizontal">
+                    <dt>Mensagem:</dt>
+                    <dd>
+                        <div class="well well-small">
+                        <?php echo $this->registro->mensagem; ?>
+                        </div>
+                    </dd>
+                </dl>
+            </div>
+        </div>
+    </div>
+</div>

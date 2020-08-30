@@ -1,0 +1,693 @@
+<style>
+    #carregando,
+    .cadastro,
+    .busca {
+        display: none;
+    }
+</style>
+<div class="conteudo_controller">
+    <div class="row-fluid">
+        <div class="span12">
+            <div class="well">
+                <form action="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(), "action" => "editar")); ?>" method="post" id="formulario" class="formulario form-horizontal">
+
+                    <input type="hidden" name="id" id="id" value="" class="cadastro-item" />
+
+                    <fieldset>
+                        <legend>REQUERIMENTO: </legend>
+
+                        <div id="carregando">
+                            Preparando dados, aguarde ...
+                        </div>
+
+                        <div class="control-group busca">
+                            <label for="cpf" class="control-label">C.P.F.:</label>
+                            <div class="controls">
+                                <input type="text" name="cpf" id="cpf" value="" class="filtro cpf span2" />
+                                <button type="button" class="btn" id="btn-cpf-procurar">Procurar</button>
+                                <div style="color: red" id="cpf-erro"></div>
+                            </div>
+                        </div>
+
+                        <dl class="dl-horizontal cadastro">
+                            <dt>C.P.F.:</dt>
+                            <dd id="show-cpf"></dd>
+                        </dl>
+
+                        <legend class="cadastro">DADOS PESSOAIS: </legend>
+                        <div class="control-group cadastro">
+                            <label for="nome" class="control-label">Nome:</label>
+                            <div class="controls">
+                                <input type="text" name="nome" id="nome" value="" class="cadastro-item span5" />
+                            </div>
+                        </div>
+
+                        <div class="control-group cadastro">
+                            <label for="email" class="control-label">E-mail:</label>
+                            <div class="controls">
+                                <input type="text" name="email" id="email" value="" class="cadastro-item span5" />
+                            </div>
+                        </div>
+
+                        <div class="control-group cadastro">
+                            <label for="data_nascimento" class="control-label">Data de Nascimento:</label>
+                            <div class="controls">
+                                <input type="text" name="data_nascimento" id="data_nascimento" value="" class="cadastro-item data span2" />
+                            </div>
+                        </div>
+
+                        <div class="control-group cadastro">
+                            <label for="nome_pai" class="control-label">Nome do pai:</label>
+                            <div class="controls">
+                                <input type="text" name="nome_pai" id="nome_pai" value="" class="cadastro-item span5" />
+                            </div>
+                        </div>
+
+                        <div class="control-group cadastro">
+                            <label for="nome_mae" class="control-label">Nome da mãe:</label>
+                            <div class="controls">
+                                <input type="text" name="nome_mae" id="nome_mae" value="" class="cadastro-item span5" />
+                            </div>
+                        </div>
+
+                        <legend class="cadastro">IDENTIDADE: </legend>
+                        <div class="control-group cadastro">
+                            <label for="identidade_numero" class="control-label">Número:</label>
+                            <div class="controls">
+                                <input type="text" name="identidade_numero" id="identidade_numero" value="" class="cadastro-item span2" />
+                            </div>
+                        </div>
+
+                        <div class="control-group cadastro">
+                            <label for="identidade_orgao_expedidor" class="control-label">Órgão Emissor:</label>
+                            <div class="controls">
+                                <input type="text" name="identidade_orgao_expedidor" id="identidade_orgao_expedidor" value="" class="cadastro-item span2" />
+                            </div>
+                        </div>
+
+                        <legend class="cadastro">ENDEREÇO: </legend>
+                        <div class="control-group cadastro">
+                            <label for="cep" class="control-label">CEP:</label>
+                            <div class="controls">
+                                <input type="text" name="cep" id="cep" value="" class="cadastro-item span2 cep" />
+                            </div>
+                        </div>
+
+                        <div class="control-group cadastro">
+                            <label for="logradouro" class="control-label">Logradouro:</label>
+                            <div class="controls">
+                                <input type="text" name="logradouro" id="logradouro" value="" class="cadastro-item span5" />
+                            </div>
+                        </div>
+
+                        <div class="control-group cadastro">
+                            <label for="endereco_numero" class="control-label">Número:</label>
+                            <div class="controls">
+                                <input type="text" name="endereco_numero" id="endereco_numero" value="" class="cadastro-item span2" />
+                            </div>
+                        </div>
+
+                        <div class="control-group cadastro">
+                            <label for="complemento" class="control-label">Complemento:</label>
+                            <div class="controls">
+                                <input type="text" name="complemento" id="complemento" value="" class="cadastro-item span5" />
+                            </div>
+                        </div>
+
+                        <div id="linha-uf" class="control-group cadastro">
+                            <label for="id_uf" class="control-label">UF:</label>
+                            <div class="controls">
+                                <select name="id_uf" id="id_uf" class="cadastro-item span5">
+                                    <option value="">==> Selecione <==</option> </select> </div> </div> <div id="linha-municipio" class="control-group cadastro">
+                                            <label for="id_municipio" class="control-label">Município:</label>
+                                            <div class="controls">
+                                                <select name="id_municipio" id="id_municipio" class="cadastro-item span5">
+                                                    <option value="">==> Selecione <==</option> </select> </div> </div> <div id="linha-bairro" class="control-group cadastro">
+                                                            <label for="id_bairro" class="control-label">Bairro:</label>
+                                                            <div class="controls">
+                                                                <select name="id_bairro" id="id_bairro" class="cadastro-item span5">
+                                                                    <option value="">==> Selecione <==</option> </select> </div> </div> <legend class="cadastro">TELEFONE(S): </legend>
+                                                                            <div class="control-group cadastro">
+                                                                                <label for="telefone_celular" class="control-label">Celular:</label>
+                                                                                <div class="controls">
+                                                                                    <input type="text" name="telefone_celular" id="telefone_celular" value="" class="cadastro-item span2 celular" />
+                                                                                </div>
+                                                                            </div>
+
+                                                                            <div class="control-group cadastro">
+                                                                                <label for="telefone_fixo" class="control-label">Fixo:</label>
+                                                                                <div class="controls">
+                                                                                    <input type="text" name="telefone_fixo" id="telefone_fixo" value="" class="cadastro-item span2 telefone" />
+                                                                                </div>
+                                                                            </div>
+
+                    </fieldset>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    let emCadastro = false;
+    let bairros = null;
+    let municipios = null;
+    let ufs = null;
+
+    function pessoaCancelar() {
+        limpaAlerta();
+        if (emCadastro && !registro) {
+            mostraCadastro(false);
+            return;
+        }
+
+        window.location = '<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(), "action" => "index")); ?>';
+    }
+
+    function mostraCadastro(flag) {
+        emCadastro = flag;
+
+        if (!flag) {
+            $(".busca").show();
+            $(".cadastro").hide();
+            $("#cpf").focus().select();
+            return;
+        }
+
+        $(".busca").hide();
+        $(".cadastro").show();
+        $("#nome").focus().select();
+    }
+
+    function cpfErro(erro) {
+        if (!erro) {
+            $("#cpf-erro").hide().text('');
+            return;
+        }
+
+        $("#cpf-erro").text(erro).fadeIn();
+        $("#cpf").focus().select();
+
+        setTimeout(function() {
+            $("#cpf-erro").fadeOut().text('');
+        }, 5000);
+    }
+
+    function carregando(flag) {
+        if (flag) {
+            $(".cadastro, .busca").hide();
+            $("#carregando").show();
+            return;
+        }
+
+        $("#carregando").hide();
+
+    }
+
+    async function salvarFormPessoa() {
+        limpaAlerta();
+
+        if (!emCadastro) {
+            cpfErro('Você precisa validar o CPF e efetuar o preenchimento do formulário!');
+            $("#cpf").focus().select();
+            return;
+        }
+
+        let cpf = $("#show-cpf").text();
+        cpf = cpf.replace(/[^0-9]+/g, '');
+
+        const pessoaDados = {
+            id_pessoa_fisica: $("#id").val(),
+            cpf,
+            nome: $("#nome").val(),
+            email: $("#email").val(),
+            data_nascimento: $("#data_nascimento").val(),
+
+            nome_mae: $("#nome_mae").val(),
+            nome_pai: $("#nome_pai").val(),
+
+            identidade_numero: $("#identidade_numero").val(),
+            identidade_orgao_expedidor: $("#identidade_orgao_expedidor").val(),
+            cep: $("#cep").val(),
+            logradouro: $("#logradouro").val(),
+            numero: $("#endereco_numero").val(),
+            complemento: $("#complemento").val(),
+            endereco_id_bairro: $("#id_bairro").val(),
+            telefone_celular: $("#telefone_celular").val(),
+            telefone_fixo: $("#telefone_fixo").val(),
+        };
+
+        const erros = getErrosSalvar(pessoaDados);
+        if (erros && erros.length) {
+            mensagemAlerta({
+                mensagem: erros
+            });
+            return null;
+        }
+
+        const resultado_pessoa = await salvarPessoa(pessoaDados);
+        dados.pessoa = resultado_pessoa;
+
+        setOperacao("requerimento");
+    }
+
+    function getErrosSalvar(pessoaDados) {
+        if (!pessoaDados) {
+            return ["Nenhuma informação recebida."];
+        }
+
+        const erros = [];
+
+        const cpf = _.get(pessoaDados, "cpf");
+        if (!cpf) {
+            erros.push("Campo C.P.F. obrigatório.");
+        } else if (validarCPF(cpf)) {
+            erros.push("Campo C.P.F. inválido.");
+        }
+
+        if (!_.get(pessoaDados, "nome")) {
+            erros.push("Campo nome obrigatório.");
+        }
+
+        const data_nascimento = _.get(pessoaDados, "data_nascimento");
+
+        if (!data_nascimento) {
+            erros.push("Campo data de nascimento obrigatório.");
+        } else if (!moment(data_nascimento, "DD/MM/YYYY").isValid()) {
+            erros.push("Campo data de nascimento é inválido.");
+        }
+
+        if (!_.get(pessoaDados, "identidade_numero")) {
+            erros.push("Campo número da identidade obrigatório.");
+        }
+
+        if (!_.get(pessoaDados, "identidade_orgao_expedidor")) {
+            erros.push("Campo órgão expedidor da identidade obrigatório.");
+        }
+
+        if (!_.get(pessoaDados, "cep")) {
+            erros.push("Campo cep obrigatório.");
+        }
+
+        if (!_.get(pessoaDados, "logradouro")) {
+            erros.push("Campo logradouro obrigatório.");
+        }
+
+        if (!_.get(pessoaDados, "numero")) {
+            erros.push("Campo número do endereço obrigatório.");
+        }
+
+        if (!_.get(pessoaDados, "endereco_id_bairro")) {
+            erros.push("Campo bairro obrigatório.");
+        }
+
+        if (!_.get(pessoaDados, "telefone_celular")) {
+            erros.push("Campo celular obrigatório.");
+        }
+
+        if (!erros.length) {
+            return null;
+        }
+
+        return erros;
+    }
+
+    async function salvarPessoa(pessoaDados) {
+        return new Promise(function(resolve, reject) {
+            var ajax_obj = $.ajax({
+                "url": "<?php echo Escola_Util::getBaseUrl(); ?>/pessoa/salvar/format/json/",
+                "type": "POST",
+                "data": pessoaDados,
+                "success": function(result) {
+                    if (result.erro && result.erro.length) {
+                        return reject(result.erro);
+                    }
+
+                    if (!result.pessoa) {
+                        return resolve(null);
+                    }
+
+                    return resolve(result.pessoa);
+                }
+            });
+
+        });
+
+    }
+
+    async function pessoa_init() {
+
+        $(".cadastro, .busca").hide();
+
+        try {
+            carregando(true);
+
+            bairros = await carregarBairros();
+            municipios = await carregarMunicipios();
+            ufs = await carregarUfs();
+
+            $("#link_cancelar").show();
+
+            $(".busca").show();
+            $("#cpf").val('').focus();
+            // $("#cpf").val('32458428215').focus();
+
+            loadUfs(ufs);
+
+            if (dados.pessoa) {
+                procurar();
+            }
+
+        } catch (error) {
+            console.error(error);
+        } finally {
+            carregando(false);
+        }
+
+    }
+
+    function carregarBairros() {
+        return new Promise(function(resolve, reject) {
+            var ajax_obj = $.ajax({
+                "url": "<?php echo Escola_Util::getBaseUrl(); ?>/bairro/listar/format/json/",
+                "type": "POST",
+                "success": function(result) {
+                    if (result.erro && result.erro.length) {
+                        return reject(result.erro);
+                    }
+
+                    if (!result.result) {
+                        return resolve(null);
+                    }
+
+                    return resolve(result.result);
+                }
+            });
+
+        });
+    }
+
+    function carregarMunicipios() {
+        return new Promise(function(resolve, reject) {
+            var ajax_obj = $.ajax({
+                "url": "<?php echo Escola_Util::getBaseUrl(); ?>/municipio/listar/format/json/",
+                "type": "POST",
+                "success": function(result) {
+                    if (result.erro && result.erro.length) {
+                        return reject(result.erro);
+                    }
+
+                    if (!result.result) {
+                        return resolve(null);
+                    }
+
+                    return resolve(result.result);
+                }
+            });
+
+        });
+    }
+
+    function carregarUfs() {
+        return new Promise(function(resolve, reject) {
+            var ajax_obj = $.ajax({
+                "url": "<?php echo Escola_Util::getBaseUrl(); ?>/uf/listar/format/json/",
+                "type": "POST",
+                "success": function(result) {
+                    if (result.erro && result.erro.length) {
+                        return reject(result.erro);
+                    }
+
+                    if (!result.result) {
+                        return resolve(null);
+                    }
+
+                    return resolve(result.result);
+                }
+            });
+
+        });
+    }
+
+
+    function loadUfs(ufs) {
+        $("#id_uf, #id_municipio, #id_bairro").children().remove();
+        $("#linha-uf, #linha-municipio, #linha-bairro").hide();
+
+        if (!(ufs && ufs.length)) {
+            return;
+        }
+
+        $("<option>", {
+            value: '',
+            text: '==> Selecione <=='
+        }).appendTo($("#id_uf"));
+
+        for (const uf of _.sortBy(ufs, 'sigla')) {
+            $("<option>", {
+                value: uf.id,
+                text: uf.sigla + " - " + uf.descricao
+            }).appendTo($("#id_uf"));
+        }
+    }
+
+    function procurarPessoa(cpf) {
+        return new Promise(function(resolve, reject) {
+            var ajax_obj = $.ajax({
+                "url": "<?php echo Escola_Util::getBaseUrl(); ?>/pessoa/dados/format/json/",
+                "type": "POST",
+                "data": {
+                    cpf
+                },
+                "success": function(result) {
+                    if (result.erro && result.erro.length) {
+                        return reject(result.erro);
+                    }
+
+                    if (!result.obj) {
+                        return resolve(null);
+                    }
+
+                    return resolve(result.obj);
+                }
+            });
+
+        });
+    }
+
+    function limpaForm(cpf) {
+        $(".cadastro-item").val('');
+        $("#nome").focus().select();
+        $("#show-cpf").text(cpf);
+
+        carregaMunicipioSantana(); //município da sttrans
+
+        mostraCadastro(true);
+    }
+
+    function carregaMunicipioSantana() {
+
+        const uf = ufs.find(function(uf) {
+            const sigla = _.get(uf, 'sigla');
+            if (!sigla) {
+                return false;
+            }
+            return sigla.toLowerCase() === 'ap';
+        })
+
+        if (!uf) {
+            return;
+        }
+
+        $("#id_uf").val(uf.id).change();
+
+        const municipio = municipios.find(function(municipio) {
+
+            if (municipio.id_uf !== uf.id) {
+                return false;
+            }
+
+            const descricao = _.get(municipio, 'descricao');
+            if (!descricao) {
+                return false;
+            }
+
+            return descricao.toLowerCase() === 'santana';
+        })
+
+        if (!municipio) {
+            return;
+        }
+
+        $("#id_municipio").val(municipio.id).change();
+
+    }
+
+    function populaForm(cpf, pessoa) {
+
+        limpaForm(cpf);
+
+        if (!pessoa) {
+            return;
+        }
+
+        mostraCadastro(true);
+
+        $("#id").val(pessoa.id_pessoa_fisica);
+        $("#show-cpf").text(formataCPF(cpf));
+        $("#nome").val(pessoa.nome);
+        $("#email").val(pessoa.email);
+        $("#data_nascimento").val(moment(pessoa.data_nascimento).format('DD/MM/yyyy'));
+        $("#nome_pai").val(pessoa.nome_pai);
+        $("#nome_mae").val(pessoa.nome_mae);
+
+        $("#identidade_numero").val(pessoa.identidade_numero);
+        $("#identidade_orgao_expedidor").val(pessoa.identidade_orgao_expedidor);
+
+        $("#logradouro").val(_.get(pessoa, 'endereco.logradouro'));
+        $("#endereco_numero").val(_.get(pessoa, 'endereco.numero'));
+        $("#cep").val(_.get(pessoa, 'endereco.cep'));
+        $("#id_uf").val(_.get(pessoa, 'endereco.id_uf')).change();
+        $("#id_municipio").val(_.get(pessoa, 'endereco.id_municipio')).change();
+        $("#id_bairro").val(_.get(pessoa, 'endereco.id_bairro')).change();
+
+        $("#telefone_celular").val(_.get(pessoa, 'telefone_celular'));
+        $("#telefone_fixo").val(_.get(pessoa, 'telefone_fixo'));
+
+    }
+
+    async function procurar() {
+        try {
+            let cpf = $("#cpf").val();
+
+            if (dados.pessoa) {
+                pessoa = dados.pessoa;
+                cpf = pessoa.cpf;
+            } else {
+                // cpfErro();
+                if (!cpf) {
+                    throw new Error("Informe um CPF!");
+                }
+
+                if (!validarCPF(cpf)) {
+                    throw new Error("CPF inválido!");
+                }
+
+                //produrar pessoa
+                pessoa = await procurarPessoa(cpf);
+            }
+
+
+            const id = _.get(pessoa, 'id_pessoa_fisica');
+            if (!id) {
+                pessoa = null;
+            }
+
+            populaForm(cpf, pessoa);
+
+            $("#link_salvar").show();
+
+        } catch (error) {
+
+            if (error && error.message) {
+                cpfErro(error.message);
+                return;
+            }
+
+
+            if (typeof error === 'string') {
+                cpfErro(error);
+                return;
+            }
+
+            cpfErro('Falha inesperada!');
+        }
+
+    }
+
+    $(document).ready(function() {
+
+
+        $(".cadastro-item").keypress(function() {
+            limpaAlerta();
+        }).change(function() {
+            limpaAlerta();
+        });
+
+        $("#id_uf").change(function() {
+
+            $("#linha-municipio, #linha-bairro").hide();
+
+            const id_uf = $("#id_uf").val();
+
+            if (!id_uf) {
+                return;
+            }
+
+            $("#id_municipio").children().remove();
+
+            $("<option>", {
+                value: '',
+                text: '==> Selecione <=='
+            }).appendTo($("#id_municipio"));
+
+            const municipios_da_uf = municipios.filter(function(municipio) {
+                return municipio.id_uf === id_uf
+            });
+
+            for (const municipio of _.sortBy(municipios_da_uf, 'descricao')) {
+                $("<option>", {
+                    value: municipio.id,
+                    text: municipio.descricao
+                }).appendTo($("#id_municipio"));
+            }
+
+            $("#linha-municipio").fadeIn();
+        })
+
+        $("#id_municipio").change(function() {
+
+            $("#linha-bairro").hide();
+
+            const id_municipio = $("#id_municipio").val();
+
+            if (!id_municipio) {
+                return;
+            }
+
+            $("#id_bairro").children().remove();
+
+            $("<option>", {
+                value: '',
+                text: '==> Selecione <=='
+            }).appendTo($("#id_bairro"));
+
+            const bairros_do_municipio = bairros.filter(function(bairro) {
+                return bairro.id_municipio === id_municipio
+            });
+
+            for (const bairro of _.sortBy(bairros_do_municipio, 'descricao')) {
+                $("<option>", {
+                    value: bairro.id,
+                    text: bairro.descricao
+                }).appendTo($("#id_bairro"));
+            }
+
+            $("#linha-bairro").fadeIn();
+        })
+
+        $("#btn-cpf-procurar").click(function() {
+            procurar();
+        })
+
+        $("#cpf").keypress(function(event) {
+            if (event.which !== 13) {
+                return true;
+            }
+
+            event.preventDefault();
+            procurar();
+
+        });
+
+    })
+</script>

@@ -1,0 +1,36 @@
+<!DOCTYPE HTML> 
+<html lang="pt-br"> 
+<head> 
+	<meta charset="ISO5899-1"> 
+	<title>Site Indisponível</title> 
+	<style type="text/css"> 
+	body {
+		padding: 20%;
+		color: #181818;
+		text-shadow: 0 1px 1px #fff;
+		font: normal 14px/22px "Helvetica Neue", Helvetica, Arial, Sans-Serif;
+ 
+		background-image: linear-gradient(bottom, rgb(200,200,200) 0%, rgb(230,230,230) 50%, rgb(200,200,200) 100%);
+		background-image: -o-linear-gradient(bottom, rgb(200,200,200) 0%, rgb(230,230,230) 50%, rgb(200,200,200) 100%);
+		background-image: -moz-linear-gradient(bottom, rgb(200,200,200) 0%, rgb(230,230,230) 50%, rgb(200,200,200) 100%);
+		background-image: -webkit-linear-gradient(bottom, rgb(200,200,200) 0%, rgb(230,230,230) 50%, rgb(200,200,200) 100%);
+		background-image: -ms-linear-gradient(bottom, rgb(200,200,200) 0%, rgb(230,230,230) 50%, rgb(200,200,200) 100%);
+ 
+		background-image: -webkit-gradient(
+			linear,
+			left bottom,
+			left top,
+			color-stop(0, rgb(200,200,200)),
+			color-stop(0.5, rgb(240,240,240)),
+			color-stop(1, rgb(200,200,200))
+		);
+	</style> 
+</head> 
+<body> 
+	<h1>Servidor Indisponível!</h1> 
+	<p>O Servidor Encontra-se Indisponível, entre em contato com a Equipe de Suporte.</p> 
+	<p>Desculpe-nos o transtorno!</p> 
+        
+        <p><a href="<?php echo $this->url(array("controller" => "index", "action" => "index"), null, true); ?>">Recarregar Site.</a></p>
+</body> 
+</html>

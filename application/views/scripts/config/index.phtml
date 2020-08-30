@@ -1,0 +1,153 @@
+<div class="conteudo_controller">
+    <div class="row-fluid">
+        <div class="span12">
+            <form action="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName())); ?>" method="post" id="formulario" class="formulario form-horizontal" enctype="multipart/form-data">
+                <div class="well">
+                    <fieldset>
+                        <legend>Sistema: </legend>
+                        <div class="control-group">
+                            <label for="sistema_sigla" class="control-label">Sigla:</label>
+                            <div class="controls">
+                                <input type="text" name="sistema[sigla]" id="sistema_sigla" maxlength="20" value="<?php echo $this->registro->sigla; ?>" class="span2" />
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label for="sistema_descricao" class="control-label">Descrição:</label>
+                            <div class="controls">
+                                <input type="text" name="sistema[descricao]" id="sistema_descricao" maxlength="60" value="<?php echo $this->registro->descricao; ?>" class="span5" />
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label for="sistema_email" class="control-label">E-Mail:</label>
+                            <div class="controls">
+                                <div class="input-append" >
+                                    <input type="text" name="sistema[email]" id="sistema_email" maxlength="60" value="<?php echo $this->registro->email; ?>" />
+                                    <div class="add-on">
+                                        <i class="icon-envelope"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                <?php
+                $tb = new TbPortalStatus();
+                $items = $tb->listar();
+                if ($items) :
+                ?>
+                        <div class="control-group">
+                            <label for="sistema_id_portal_status" class="control-label">Status do Portal:</label>
+                            <div class="controls">
+                                <select name="sistema[id_portal_status]" id="sistema_id_portal_status">
+                            <option value="" <?php echo ($this->registro->id_portal_status)?"selected":""; ?>>==> SELECIONE <==</option>
+                <?php foreach ($items as $item) : ?>
+                            <option value="<?php echo $item->getId(); ?>" <?php echo ($this->registro->id_portal_status == $item->getId())?"selected":""; ?>><?php echo $item->toString(); ?></option>
+                <?php endforeach; ?>			
+                            </select>
+                                </div>
+                        </div>
+                <?php endif; ?>
+                <?php
+                $tb = new TbPortalLayout();
+                $items = $tb->listar();
+                if ($items) :
+                ?>
+                        <div class="control-group">
+                            <label for="sistema_id_portal_layout" class="control-label">Layout do Portal:</label>
+                            <div class="controls">
+                                <select name="sistema[id_portal_layout]" id="sistema_id_portal_layout">
+                            <option value="" <?php echo ($this->registro->id_portal_layout)?"selected":""; ?>>==> SELECIONE <==</option>
+                <?php foreach ($items as $item) : ?>
+                            <option value="<?php echo $item->getId(); ?>" <?php echo ($this->registro->id_portal_layout == $item->getId())?"selected":""; ?>><?php echo $item->toString(); ?></option>
+                <?php endforeach; ?>			
+                            </select>
+                                </div>
+                        </div>
+                <?php endif; ?>
+                    </fieldset>
+                </div>
+                <div class="well">
+                    <fieldset>
+                        <legend>CLIENTE: </legend>
+                        <div class="control-group">
+                            <label for="cliente_sigla" class="control-label">Sigla:</label>
+                            <div class="controls">
+                                <input type="text" name="cliente[sigla]" id="cliente_sigla" maxlength="20" value="<?php echo $this->pf->sigla; ?>" class="span2" />
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label for="cliente_razao_social" class="control-label">Nome:</label>
+                            <div class="controls">
+                                <input type="text" name="cliente[razao_social]" id="cliente_razao_social" maxlength="60" value="<?php echo $this->pf->razao_social; ?>" class="span5" />
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label for="cliente_cnpj" class="control-label">C.N.P.J:</label>
+                            <div class="controls">
+                                <input type="text" name="cliente[cnpj]" id="cliente_cnpj" value="<?php echo $this->pf->cnpj; ?>" class="span2 cnpj" />
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label for="cliente_email" class="control-label">E-Mail:</label>
+                            <div class="controls">
+                                <div class="input-append span5">
+                                    <input type="text" name="cliente[email]" id="cliente_email" maxlength="60" value="<?php echo $this->pf->findParentRow("TbPessoa")->email; ?>" />
+                                    <div class="add-on">
+                                        <i class="icon-envelope"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label for="cliente_logo" class="control-label">Logomarca (Somente IMAGEM):</label>
+                            <div class="controls">
+                                <input type="file" name="cliente_arquivo" id="cliente_arquivo" />
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+                <div class="well">
+                    <fieldset>
+                        <legend>Configuração de E-mail (SMTP): </legend>
+                        <div class="control-group">
+                            <label for="smtp_host" class="control-label">Hostname:</label>
+                            <div class="controls">
+                                <input type="text" name="smtp[host]" id="smtp_host" maxlength="50" value="<?php echo $this->smtp->host; ?>" class="span4" />
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label for="smtp_username" class="control-label">Usuário:</label>
+                            <div class="controls">
+                                <input type="text" name="smtp[username]" id="smtp_username" maxlength="50" value="<?php echo $this->smtp->username; ?>" class="span3" />
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label for="smtp_password" class="control-label">Senha:</label>
+                            <div class="controls">
+                                <input type="password" name="smtp[password]" id="smtp_password" maxlength="20" value="<?php echo $this->smtp->password; ?>" class="span2" />
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label for="smtp_port" class="control-label">Porta:</label>
+                            <div class="controls">
+                                <input type="text" name="smtp[port]" id="smtp_port" maxlength="20" value="<?php echo $this->smtp->port; ?>" class="span1" />
+                            </div>
+                        </div>
+<?php 
+$securitys = TbSmtp::getSecurityTypes();
+?>
+                        <div class="control-group">
+                            <label for="smtp_security" class="control-label">Segurança:</label>
+                            <div class="controls">
+                                <select name="smtp[security]" id="smtp_security">
+                                    <option value="" <?php echo (!$this->smtp->security)?"selected":""; ?>>Nenhum</option>
+<?php foreach ($securitys as $security) { ?>
+                                    <option value="<?php echo $security; ?>" <?php echo ($security == $this->smtp->security)?"selected":""; ?>><?php echo $security; ?></option>
+<?php } ?>
+                                </select>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

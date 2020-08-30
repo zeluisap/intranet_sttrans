@@ -1,0 +1,38 @@
+<div class="conteudo_controller">
+    <div class="row-fluid">
+        <div class="span12">
+            <div class="well">
+                <form action="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(), "action" => "editar")); ?>" method="post" id="formulario" class="formulario form-horizontal">
+                    <input type="hidden" name="id" id="id" value="<?php echo $this->registro->getId(); ?>" />
+                    <fieldset>
+                        <legend>CADASTRO DE TIPO DE ARQUIVO: </legend>
+                <?php if ($this->registro->getId()) { ?>
+                        <dl class="dl-horizontal">
+                            <dt>Código:</dt>
+                            <dd><?php echo $this->registro->getId(); ?></dd>
+                        </dl>
+                <?php } ?>
+                        <div class="control-group">
+                            <label for="descricao" class="control-label">Descrição:</label>
+                            <div class="controls">
+                                <input type="text" name="descricao" id="descricao" maxlength="60" value="<?php echo $this->registro->descricao; ?>" class="span4" />
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label for="mime_type" class="control-label">Descrição:</label>
+                            <div class="controls">
+                                <input type="text" name="mime_type" id="mime_type" maxlength="60" value="<?php echo $this->registro->mime_type; ?>" class="span4" />
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label for="extensao" class="control-label">Extensão:</label>
+                            <div class="controls">
+                                <input type="text" name="extensao" id="extensao" maxlength="5" value="<?php echo $this->registro->extensao; ?>" class="span1" />
+                            </div>
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

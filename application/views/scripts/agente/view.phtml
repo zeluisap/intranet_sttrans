@@ -1,0 +1,35 @@
+<div class="conteudo_controller">
+    <div class="row-fluid">
+        <div class="span12">
+            <div class="well">
+                <div class="page-header">
+                    <h4>Cadastro de Agente de Trânsito</h4>
+                </div>
+                <dl class="dl-horizontal">
+                    <dt>ID:</dt>
+                    <dd><?php echo $this->registro->getId(); ?></dd>
+                </dl>
+                <dl class="dl-horizontal">
+                    <dt>Código:</dt>
+                    <dd><?php echo $this->registro->codigo; ?></dd>
+                </dl>
+                <dl class="dl-horizontal">
+                    <dt>Matrícula:</dt>
+                    <dd><?php echo $this->funcionario->matricula; ?></dd>
+                </dl>
+                <dl class="dl-horizontal">
+                    <dt>C.P.F.:</dt>
+                    <dd><?php echo Escola_Util::formatCpf($this->pf->cpf); ?></dd>
+                </dl>
+                <dl class="dl-horizontal">
+                    <dt>Nome:</dt>
+                    <dd><?php echo $this->pf->nome; ?></dd>
+                </dl>
+                <dl class="dl-horizontal">
+                    <dt>Cargo:</dt>
+                    <dd><?php echo $this->funcionario->findParentRow("TbCargo")->toString(); ?></dd>
+                </dl>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,29 @@
+<div class="conteudo_controller">
+    <div class="row-fluid">
+        <div class="span12">
+            <form action="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(), "action" => $this->getRequest()->getActionName())); ?>" method="post" id="formulario" class="formulario form-horizontal" enctype="multipart/form-data">
+                <input type="hidden" name="jan_pagina" id="jan_pagina" value="" />
+                <input type="hidden" name="operacao" id="operacao" value="<?php echo $this->operacao; ?>" />
+                <input type="hidden" name="id" id="id" value="<?php echo $this->bolsista->getId(); ?>" />
+<?php if ($this->registro->getId()) { ?>
+                <input type="hidden" name="id_documento_ref" id="id_documento_ref" value="<?php echo $this->registro->getId(); ?>" />
+<?php } ?>
+                <div class="well">
+                    <fieldset class="fieldset">
+                        <legend>ARQUIVO DE BOLSISTA: </legend>
+
+                        <dl class="dl-horizontal">
+                            <dt>Tipo de Bolsa:</dt>
+                            <dd><?php echo $this->bolsista->findParentRow("TbBolsaTipo")->toString(); ?></dd>
+                        </dl>
+                        <dl class="dl-horizontal">
+                            <dt>Bolsista:</dt>
+                            <dd><?php echo $this->bolsista->toString(); ?></dd>
+                        </dl>
+<?php echo $this->registro->toForm(array("view" => $this, "documento_tipo_target" => array("A", "P"))); ?>
+                    </fieldset>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

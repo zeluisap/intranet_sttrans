@@ -1,0 +1,46 @@
+<form action="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(), "action" => "addarquivo")); ?>" method="post" id="formulario" class="formulario" enctype="multipart/form-data">
+	<input type="hidden" name="file_count" id="file_count" value="1" />
+	<input type="hidden" name="id" id="id" value="<?php echo $this->funcionario->getId(); ?>" />
+	<table class="lista_box">
+		<thead>
+			<tr>
+				<th>Funcionário - Arquivos</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>
+					<div align="center">
+						<table width="80%">
+							<tr>
+								<td width="25%">
+									<div align="right">
+										Funcionário: 
+									</div>
+								</td>
+								<td>
+									<div align="left">
+										<strong>
+										<?php echo $this->funcionario->toString(); ?>
+										</strong>
+									</div>
+								</td>
+							</tr>
+						</table>
+					</div>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+	<fieldset class="fieldset">
+		<legend>ADICIONANDO ANEXO - <span class="id_fieldset">1</span>: </legend>
+		<div>
+			<label for="legenda">Legenda:</label>
+			<input type="text" name="legenda1" id="legenda1" size="50" maxlength="50" value="" class="legenda" />
+		</div>
+		<div>
+			<label for="arquivo">Arquivo:</label>
+			<input type="file" name="arquivo1" id="arquivo1" size="50" class="arquivo" />
+		</div>
+	</fieldset>
+</form>

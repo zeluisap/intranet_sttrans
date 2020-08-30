@@ -1,0 +1,116 @@
+<form action="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(), "action" => "setorsalvar")); ?>" method="post" id="formulario" class="formulario">
+<input type="hidden" name="id" id="id" value="<?php echo $this->chamado_tipo->getId(); ?>" />
+	<input type="hidden" name="jan_pagina" id="jan_pagina" />
+	<input type="hidden" name="operacao" id="operacao" value="" />
+	<input type="hidden" name="id_setor" id="id_setor" value="" />
+	<div class="janela_modal" id="janela_setor" style="display: none">
+			<table class="lista_box">
+				<tr>
+					<th>LOCALIZAR SETOR</th>
+				</tr>
+				<tr>
+					<td>
+						<div align="center">
+							<table width="80%">
+								<tr>
+									<td>
+										<div align="right">
+											Procurar Por: 
+										</div>
+									</td>
+									<td>
+										<div align="left">
+											<input type="text" name="jan_setor_criterio" id="jan_setor_criterio" value="" size="60" />
+										</div>
+									</td>
+								</tr>
+								<tr>
+									<td></td>
+									<td>
+										<input type="submit" value="PROCURAR" class="acao" />
+										<input type="button" value="LIMPAR FILTRO" id="bt_setor_limpar" />
+										<input type="button" value="FECHAR" class="bt_setor_cancelar" />
+									</td>
+								</tr>
+							</table>
+						</div>
+					</td>
+				</tr>
+			</table>
+			<table id="lista_setor_resposta" class="lista_box lista">
+				<thead>
+					<th width="50px">ID</th>
+					<th width="160px">Sigla</th>
+					<th>Descrição</th>
+				</thead>
+				<tbody class="corpo_setor"></tbody>
+			</table>
+		</div>
+
+	<table class="lista_box">
+		<thead>
+			<tr>
+				<th>Tipo de Chamado - Vínculo</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>
+					<div align="center">
+						<table width="80%">
+							<tr>
+								<td width="25%">
+									<div align="right">
+										Tipo de Chamado: 
+									</div>
+								</td>
+								<td>
+									<div align="left">
+										<strong>
+										<?php echo $this->chamado_tipo->toString(); ?>
+										</strong>
+									</div>
+								</td>
+							</tr>
+						</table>
+					</div>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+	<table class="lista">
+		<thead>
+			<tr>
+				<th>Sigla</th>
+				<th>Descrição</th>
+				<th colspan="5">Operações</th>
+			</tr>
+		</thead>
+<?php if ($this->registros && count($this->registros)) { ?>
+		<tbody>
+<?php
+	foreach ($this->registros as $registro) {
+?>
+			<tr>
+				<td>
+						<?php echo $registro->sigla; ?>
+				</td>
+				<td>
+					<?php echo $registro->descricao; ?>
+				</td>
+				<td width="20px">
+					<div align="center">
+						<a href="#" onclick="confirmaExcluir('<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(),
+															 "action" => "excluirsetor",
+															 "id_setor" => $registro->getId())); ?>')">
+							<img src="<?php echo $this->baseUrl(); ?>/img/icons/cancel.png" alt="Excluir" title="Excluir" />
+						</a>
+					</div>
+				</td>
+			</tr>
+<?php } ?>
+		</tbody>
+<?php } ?>
+	</table>
+<?php //echo $this->paginationControl($this->registros, "sliding", "minha_paginacao_control.phtml"); ?>
+</form>

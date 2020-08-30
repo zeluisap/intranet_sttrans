@@ -1,0 +1,77 @@
+<div class="conteudo_controller">
+    <div class="row-fluid">
+        <div class="span12">
+            <div class="well well-small">
+                <dl class="dl-horizontal">
+                    <dt>Pessoa:</dt>
+                    <dd><?php echo $this->pessoa->toString(); ?></dd>
+                </dl>
+            </div>
+            <table class="table table-striped table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Tipo</th>
+                            <th>Banco</th>
+                            <th>Agência</th>
+                            <th>Conta</th>
+                            <th width="20px">Operações</th>
+                        </tr>
+                    </thead>
+            <?php if ($this->registros && count($this->registros)) { ?>
+                    <tbody>
+<?php 
+    foreach ($this->registros as $registro) { 
+        $ib = $registro->findParentRow("TbInfoBancaria");
+?>
+                        <tr>
+                            <td>
+                                <a href="<?php echo $this->url(array("action" => "viewib", "id" => $registro->getId())); ?>">
+                                    <?php echo $ib->findParentRow("TbInfoBancariaTipo")->toString(); ?>
+                                </a>
+                            </td>
+                            <td>
+                                <a href="<?php echo $this->url(array("action" => "viewib", "id" => $registro->getId())); ?>">
+                                    <?php echo $ib->findParentRow("TbBanco")->toString(); ?>
+                                </a>
+                            </td>
+                            <td>
+                                <a href="<?php echo $this->url(array("action" => "viewib", "id" => $registro->getId())); ?>">
+                                    <?php echo $ib->mostrar_agencia(); ?>
+                                </a>
+                            </td>
+                            <td>
+                                <a href="<?php echo $this->url(array("action" => "viewib", "id" => $registro->getId())); ?>">
+                                    <?php echo $ib->mostrar_conta(); ?>
+                                </a>
+                            </td>
+                            <td>
+                                <div class="btn-group">	
+                                    <a href="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(),
+                                                                         "action" => "viewib",
+                                                                         "id" => $registro->getId())); ?>" class="btn" title="Visualizar">
+                                        <i class="icon-search"></i>
+                                    </a>
+                                    <a href="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(),
+                                                                         "action" => "editarib",
+                                                                         "id" => $registro->getId())); ?>" class="btn" title="Editar">
+                                        <i class="icon-cog"></i>
+                                    </a>
+                                    <a href="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(),
+                                                                         "action" => "excluirib",
+                                                                         "id" => $registro->getId())); ?>" class="btn link_excluir" title="Excluir">
+                                        <i class="icon-trash"></i>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+            <?php } ?>
+                    </tbody>
+            <?php } ?>
+                </table>
+<?php if ($this->registros && count($this->registros)) {
+ echo $this->paginationControl($this->registros, "sliding", "minha_paginacao_control.phtml");
+}
+?>
+        </div>
+    </div>
+</div>

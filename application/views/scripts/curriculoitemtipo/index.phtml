@@ -1,0 +1,79 @@
+<form action="<?php echo $this->url(array("action" => "index")); ?>" method="post" id="formulario" class="formulario">
+	<table class="lista">
+		<thead>
+			<tr>
+				<th>ID</th>
+				<th>Chave</th>
+				<th>Descrição</th>
+				<th colspan="3">Operações</th>
+			</tr>
+		</thead>
+		<tbody>
+<?php 
+if (!count($this->registros)) { 
+?>
+	<tr>
+		<td colspan="6">
+			<div align="center">NENHUM REGISTRO LOCALIZADO</div>
+		</td>
+	</tr>
+<?php 
+} else {
+	foreach ($this->registros as $registro) {
+?>
+			<tr>
+				<td width="100px">
+					<a href="<?php echo $this->url(array("action" => "view", "id" => $registro->getId())); ?>">
+						<?php echo $registro->getId(); ?>
+					</a>
+				</td>
+				<td width="200px">
+					<a href="<?php echo $this->url(array("action" => "view", "id" => $registro->getId())); ?>">
+					<?php echo $registro->chave; ?>
+					</a>
+				</td>
+				<td>
+					<a href="<?php echo $this->url(array("action" => "view", "id" => $registro->getId())); ?>">
+					<?php echo $registro->descricao; ?>
+					</a>
+				</td>
+				<td width="20px">
+					<div align="center">	
+						<a href="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(),
+															 "action" => "view",
+															 "id" => $registro->getId())); ?>">
+							<img src="<?php echo $this->baseUrl(); ?>/img/icons/zoom.png" alt="Visualizar" title="Visualizar" />
+						</a>
+					</div>
+				</td>
+<?php 
+	$acl = $this->getAcl();
+	if ($acl->permitir($this->getRequest()->getControllerName(), "editar")) {
+?>				
+				<td width="20px">
+					<div align="center">
+						<a href="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(),
+															 "action" => "editar",
+															 "id" => $registro->getId())); ?>">
+							<img src="<?php echo $this->baseUrl(); ?>/img/icons/cog_edit.png" alt="Editar" title="Editar" />
+						</a>
+					</div>
+				</td>
+<?php }
+	if ($acl->permitir($this->getRequest()->getControllerName(), "excluir")) {
+ ?>
+				<td width="20px">
+					<div align="center">
+						<a href="#" onclick="confirmaExcluir('<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(),
+															 "action" => "excluir",
+															 "id" => $registro->getId())); ?>')">
+							<img src="<?php echo $this->baseUrl(); ?>/img/icons/delete.png" alt="Excluir" title="Excluir" />
+						</a>
+					</div>
+				</td>
+			</tr>
+<?php } } } ?>
+		</tbody>
+	</table>
+</form>
+<?php echo $this->paginationControl($this->registros, "sliding", "minha_paginacao_control.phtml"); ?>

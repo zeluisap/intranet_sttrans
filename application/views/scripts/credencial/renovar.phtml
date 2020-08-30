@@ -1,0 +1,63 @@
+<?php 
+$txt_tipo = $txt_numero = $txt_beneficiario = $txt_status = $txt_validade = "";
+if (isset($this->credencial)) {
+    $registro = $this->credencial;
+    $ct = $registro->findParentRow("TbCredencialTipo");
+    if ($ct) {
+        $txt_tipo = $ct->toString();
+    }
+    $numero = $registro->mostrarNumero();
+    if (!empty($numero)) {
+        $txt_numero = $numero;
+    }
+    $pf = $registro->pegaBeneficiario();
+    if ($pf) {
+        $txt_beneficiario = $pf->toString();
+    }
+    $txt_status = $registro->getStatus();
+}
+if ($this->validade) {
+    $txt_validade = $this->validade;
+}
+?>
+<div class="conteudo_controller">
+    <div class="row-fluid">
+        <div class="span12">
+            <form action="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(), "action" => $this->getRequest()->getActionName())); ?>" method="post" id="formulario" class="formulario form-horizontal">
+                <div class="well">
+                    <fieldset>
+                        <legend>RENOVAR CREDENCIAL: </legend>
+                        <dl class="dl-horizontal">
+                            <dt>Tipo:</dt>
+                            <dd><?php echo $txt_tipo; ?></dd>
+                        </dl>
+                        <dl class="dl-horizontal">
+                            <dt>Número:</dt>
+                            <dd><?php echo $txt_numero; ?></dd>
+                        </dl>
+                        <dl class="dl-horizontal">
+                            <dt>Beneficiário:</dt>
+                            <dd><?php echo $txt_beneficiario; ?></dd>
+                        </dl>
+                        <dl class="dl-horizontal">
+                            <dt>Status:</dt>
+                            <dd><?php echo $txt_status; ?></dd>
+                        </dl>
+                        <div class="control-group" >
+                            <label for="validade" class="control-label">Renovar em:</label>
+                            <div class="controls">
+                                <input type="text" name="validade" id="validade" class="span1" value="<?php echo $this->validade; ?>" />
+                                Anos
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function() {
+        $("#validade").focus().select();
+    });
+</script>

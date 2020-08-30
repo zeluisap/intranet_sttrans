@@ -1,0 +1,123 @@
+<div class="conteudo_controller">
+    <div class="row-fluid">
+        <div class="span12">
+            <form action="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(), "action" => $this->getRequest()->getActionName())); ?>" method="post" id="formulario" class="formulario form-horizontal">
+<?php if ($this->registro->getId()) { ?>
+                <input type="hidden" name="id" id="id" value="<?php echo $this->registro->getId(); ?>" />
+<?php } ?>
+                <div class="well">
+                    <fieldset>
+                        <legend>CADASTRO DE ROTA > BDO: </legend>
+<?php if ($this->registro->getId()) { ?>
+                            <dl class="dl-horizontal">
+                                <dt>Código:</dt>
+                                <dd><?php echo $this->registro->getId(); ?></dd>
+                            </dl>
+<?php } ?>
+                        <dl class="dl-horizontal">
+                            <dt>Transporte:</dt>
+                            <dd><?php echo $this->transporte->toString(); ?></dd>
+                        </dl>
+                        <dl class="dl-horizontal">
+                            <dt>Rota:</dt>
+                            <dd><?php echo $this->rota->toString(); ?></dd>
+                        </dl>
+                        <div class="control-group">
+                            <label for="bdo" class="control-label">BDO:</label>
+                            <div class="controls">
+                                <input type="text" name="bdo" id="bdo" value="<?php echo $this->registro->bdo; ?>" class="span1" /> (Deixe em Branco para Numeração Automática).
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label for="data_bdo" class="control-label">Data:</label>
+                            <div class="controls">
+                                <input type="text" name="data_bdo" id="data_bdo" value="<?php echo Escola_Util::formatData($this->registro->data_bdo); ?>" class="span2 data" />
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label for="id_transporte_veiculo" class="control-label">Veículo:</label>
+                            <div class="controls">
+                                <select name="id_transporte_veiculo" id="id_transporte_veiculo" class="span5">
+                                    <option value="" <?php echo (!$this->registro->id_transporte_veiculo)?"selected":""; ?>>==> SELECIONE <==</option>
+<?php foreach ($this->tvs as $tv) { ?>
+                                    <option value="<?php echo $tv->getId(); ?>" <?php echo ($this->registro->id_transporte_veiculo == $tv->getId())?"selected":""; ?>><?php echo $tv->toString(); ?></option>
+<?php } ?>
+                                </select>
+                            </div>
+                        </div>
+<?php
+$id_tarifa = 0;
+$to = $this->registro->findParentRow("TbTarifaOcorrencia");
+if ($to && $to->getId()) {
+    $id_tarifa = $to->id_tarifa;
+}
+$ctrl = new Escola_Form_Element_Select_Table("id_tarifa");
+$ctrl->setPkName("id_tarifa");
+$ctrl->setModel("TbTarifa");
+$ctrl->setValue($id_tarifa);
+$ctrl->setLabel("Tarifa: ");
+$ctrl->setAttrib("class", "span5");
+echo $ctrl->render($this);
+?>
+                        <div class="control-group">
+                            <label for="hora_saida" class="control-label">Hora de Saída:</label>
+                            <div class="controls">
+                                <input type="text" name="hora_saida" id="hora_saida" value="<?php echo Escola_Util::formatData($this->registro->hora_saida); ?>" class="span2 hora" />
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label for="hora_chegada" class="control-label">Hora de Chegada:</label>
+                            <div class="controls">
+                                <input type="text" name="hora_chegada" id="hora_chegada" value="<?php echo Escola_Util::formatData($this->registro->hora_chegada); ?>" class="span2 hora" />
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label for="km_inicial" class="control-label">Km Inicial:</label>
+                            <div class="controls">
+                                <input type="text" name="km_inicial" id="km_inicial" value="<?php echo Escola_Util::number_format($this->registro->km_inicial); ?>" class="span2 moeda" />
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label for="km_final" class="control-label">Km Final:</label>
+                            <div class="controls">
+                                <input type="text" name="km_final" id="km_final" value="<?php echo Escola_Util::number_format($this->registro->km_final); ?>" class="span2 moeda" />
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label for="viagens" class="control-label">Viagens:</label>
+                            <div class="controls">
+                                <input type="text" name="viagens" id="viagens" value="<?php echo $this->registro->viagens; ?>" class="span2 numero" />
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+<?php if ($this->tts && count($this->tts)) { ?>
+                <div class="well">
+                    <fieldset>
+                        <legend>CADASTRO DE ROTA > BDO > PASSAGEIROS: </legend>
+<?php 
+$tb = new TbOnibusBdoTarifa();
+foreach ($this->tts as $tt) { 
+    $passageiros = 0;
+    if ($this->registro->getId()) {
+        $rs = $tb->listar(array("id_onibus_bdo" => $this->registro->getId(), "id_tarifa_tipo" => $tt->getId()));
+        if ($rs) {
+            $obj = $rs->current();
+            $passageiros = $obj->passageiros;
+        }
+    }
+?>
+                        <div class="control-group">
+                            <label for="passageiros_<?php echo $tt->getId(); ?>" class="control-label"><?php echo $tt->toString(); ?>:</label>
+                            <div class="controls">
+                                <input type="text" name="passageiros[<?php echo $tt->getId(); ?>]" id="passageiros_<?php echo $tt->getId(); ?>" value="<?php echo $passageiros; ?>" class="span2 numero" />
+                            </div>
+                        </div>
+<?php } ?>
+                    </fieldset>
+                </div>
+<?php } ?>
+            </form>
+        </div>
+    </div>
+</div>

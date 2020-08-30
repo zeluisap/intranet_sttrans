@@ -1,0 +1,21 @@
+<div id="lista_noticias">
+    <ul>
+        <div class="titulo_"><?php echo $this->infotipo->toString(); ?></div>
+<?php if ($this->noticias && count($this->noticias)) {
+    foreach ($this->noticias as $noticia) {
+        $arquivo = $noticia->findParentRow("TbArquivo");
+?>
+        <li>
+            <?php echo $arquivo->miniatura(array("width" => 90, "align" => "left")); ?>
+            <div class="titulo"><?php echo $noticia->titulo; ?></div>
+            <div class="desc"><a href="<?php echo $this->url(array("action" => "viewinfo", "id" => $noticia->getId())); ?>"><?php echo $noticia->resumo; ?></a></div>
+        </li>
+<?php }} ?>
+        <div class="clear"></div>
+    </ul>
+    <br>
+    <?php if ($this->noticias && count($this->noticias)) {
+	echo $this->paginationControl($this->noticias, "sliding", "minha_paginacao_control.phtml");
+}
+?>
+</div>

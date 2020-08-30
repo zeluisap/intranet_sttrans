@@ -1,0 +1,110 @@
+<div class="conteudo_controller">
+    <div class="row-fluid">
+        <div class="span12">
+            <form action="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(), "action" => "editar")); ?>" method="post" id="formulario" class="formulario form-horizontal">
+                <input type="hidden" name="id_mensagem" id="id_mensagem" value="<?php echo $this->registro->getId(); ?>" />
+                <div class="well">
+                    <fieldset>
+                        <legend>Cadastro de Mensagem: </legend>
+                        <div class="control-group">
+                            <label for="id_mensagem_tipo" class="control-label">Tipo:</label>
+                            <div class="controls">
+                            <select name="id_mensagem_tipo" id="id_mensagem_tipo">
+                                <option value="" <?php echo (!$this->registro->id_mensagem_tipo)?"selected":""; ?>>==> SELECIONE <==</option>
+                <?php
+                $usuario = Escola_Acl::getInstance()->getUsuarioLogado();
+                $tb = new TbFuncionario();
+                $funcionario = $tb->getPorUsuario($usuario);
+                $lotacaos = $funcionario->pegaLotacao();
+                if ($lotacaos) {
+                    $contador = $chefe = 0;
+                ?>
+                <script type="text/javascript">
+                var setores = [];
+                var chefes = [];
+                <?php foreach ($lotacaos as $lotacao) { ?>
+                setores[<?php echo $contador; ?>] = { "id": "<?php echo $lotacao->id_setor; ?>", "descricao": "<?php echo $lotacao->findParentRow("TbSetor")->toString(); ?>" };
+                <?php if ($lotacao->chefe()) { ?>
+                chefes[<?php echo $contador; ?>] = { "id": "<?php echo $lotacao->id_setor; ?>", "descricao": "<?php echo $lotacao->findParentRow("TbSetor")->toString(); ?>" };
+                <?php $chefe++; } ?>
+                <?php $contador++; } ?>
+                </script>
+                <?php
+                }
+                $tb = new TbMensagemTipo();
+                $tipos = $tb->listar();
+                if ($tipos && count($tipos)) {
+                    foreach ($tipos as $tipo) {
+                        $flag = false;
+                        if ($tipo->pessoal() || $tipo->setor()) { 
+                            $flag = true;
+                        }
+                        if ($tipo->todos() && $usuario->administrador()) {
+                            $flag = true;
+                        }
+                        if ($tipo->setor_subordinado()) {
+                            $chefe = array();
+                            if ($lotacaos) {
+                                foreach ($lotacaos as $lotacao) {
+                                    if ($lotacao->chefe()) {
+                                        $chefe[] = $lotacao;
+                                    }
+                                }
+                            }
+                            if (count($chefe)) {
+                                $flag = true;
+                            }
+                        }
+                        if ($tipo->setor_atual() && $lotacaos) {
+                            $flag = true;
+                        }
+                        if ($flag) {
+                ?>
+                                <option value="<?php echo $tipo->getId(); ?>" <?php echo ($tipo->getId() == $this->registro->id_mensagem_tipo)?"selected":""; ?>><?php echo $tipo->toString(); ?></option>
+                <?php }}} ?>
+                            </select>
+                            </div>
+                        </div>
+                <?php if ($lotacaos) { ?>
+                        <div class="linha_chave_destino control-group" style="display:none">
+                            <label for="chave_destino" class="control-label">Destino:</label>
+                            <div class="controls">
+                                <select name="chave_destino" id="chave_destino">
+                                </select>
+                            </div>
+                        </div>
+                <?php } ?>
+<?php
+$ctrl = new Escola_Form_Element_Select_Table_PessoaFisica("id_pessoa_fisica");
+$ctrl->setLabel("Pessoa Física: ");
+$mt = $this->registro->findParentRow("TbMensagemTipo");
+if ($mt && $mt->getId() && $mt->pessoal()) {
+    $ctrl->setValue($this->registro->chave_destino);
+}
+echo $ctrl->render($this);
+
+$ctrl = new Escola_Form_Element_Select_Table_Setor("id_setor");
+$ctrl->setLabel("Destino: ");
+if ($mt && $mt->getId() && $mt->setor()) {
+    $ctrl->setValue($this->registro->chave_destino);
+}
+echo $ctrl->render($this);
+?>
+                        <div class="control-group">
+                            <label for="assunto" class="control-label">Assunto:</label>
+                            <div class="controls">
+                                <input type="text" name="assunto" id="assunto" maxlength="60" value="<?php echo $this->registro->assunto; ?>" class="span5" />
+                            </div>
+                        </div>
+                        <div>
+                            <label for="mensagem">Mensagem:</label>
+                            <div class="lista">
+                            <textarea name="mensagem" id="mensagem"><?php echo $this->registro->mensagem; ?></textarea>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

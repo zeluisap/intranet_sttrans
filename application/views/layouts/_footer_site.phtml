@@ -1,0 +1,25 @@
+<div class="div_rodape">
+            <div id="informe">
+<?php
+$tb = new TbMenuPosicao();
+$ms = $tb->getPorChave("R");
+if ($ms) {
+    $tb = new TbMenu();
+    $menus = $tb->listar(array("id_menu_posicao" => $ms->getId()));
+    if ($menus) {
+?>
+                <div id="menu_rodape">
+<?php foreach ($menus as $menu) { ?>
+                    <a href="<?php echo $menu->url(); ?>"><?php echo $menu->descricao; ?></a> |
+<?php } ?>
+                </div>
+<?php }} ?>
+                <div id="busca">
+                    <input class="text_busca" type="text" name="busca"><div class="btn_buscar">
+                    <img src="<?php echo Escola_Util::getBaseUrl(); ?>/img/btn_buscar.jpg"></div>
+                </div>
+                <div id="cop">
+                  &copy; Copyright - Todos os Direitos Reservados
+                </div>
+            </div>    
+        </div>

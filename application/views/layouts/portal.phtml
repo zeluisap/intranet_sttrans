@@ -1,0 +1,117 @@
+<?php echo $this->doctype(); ?>
+<!DOCTYPE html>
+<html>
+    <head>
+		<?php echo $this->headMeta(); ?>
+		<?php echo $this->headTitle(); ?>
+		<?php echo $this->headLink(); ?>
+		<?php echo $this->headScript(); ?>
+    </head>
+    <body>
+        <div id="geral">
+            
+            <div id='menuWrapper'>
+                
+<div class='menu'>
+    
+<?php echo TbMenu::renderMenuSuperior(); ?>
+
+<form action='<?php echo $this->url(array("action" => "search")); ?>' id='search' method='get' name='searchForm' style='display:inline;'> <input id='search-box' name='filtro_busca' onblur='if (this.value == &quot;&quot;) this.value = &quot;Pesquisar...&quot;;' onfocus='if (this.value == &quot;Pesquisar...&quot;) this.value = &quot;&quot;;' size='28' type='text' value='Pesquisar...'/></form>
+
+</div>
+            </div>
+            
+            <div class="clear"></div>
+           
+            <div id="centro">
+                
+<?php
+$tb = new TbMenuPosicao();
+$ms = $tb->getPorChave("L");
+if ($ms) {
+    $tb = new TbMenu();
+    $menus = $tb->listar(array("id_menu_posicao" => $ms->getId()));
+    if ($menus) {
+?>            
+                <div id="menu">
+                    <a href="<?php echo Escola_Util::getBaseUrlPortal(); ?>">
+                    <img src="<?php echo Escola_Util::getBaseUrl(); ?>/img/logo_pms.png" border="0" class="img_topo" width="180" />
+                </a>
+                    <ul>
+<?php foreach ($menus as $menu) { ?>
+                        <a href="<?php echo $menu->url(); ?>" <?php if ($menu->externo()) { ?> target="_blank" <?php } ?>><li><?php echo $menu->descricao; ?></li></a>
+<?php } ?>
+                    </ul>
+                </div>
+<?php }} ?>
+<?php 
+/*================================================
+	Mensagem de erro
+=================================================*/
+if ($this->actionErrors) { ?>
+			<div class="errors">			
+<?php foreach ($this->actionErrors as $erro) { ?>
+				<div>
+					<div class="ui-amarelo ui-icon ui-icon-alert icon-position"></div>
+					<?php echo $erro; ?>
+				</div>
+<?php } ?>
+			</div>
+<?php } ?>
+<?php 
+/*================================================
+	Mensagem de sucesso
+=================================================*/
+if ($this->actionMessages) { ?>
+			<div class="messages">
+<?php foreach ($this->actionMessages as $message) { ?>
+				<div>  
+					<div class="ui-branco ui-icon ui-icon-check icon-position"></div>
+					<?php echo $message; ?>
+				</div>
+<?php } ?>
+			</div>
+<?php } ?>
+<?php echo $this->layout()->content; ?>
+            </div>
+            
+            <div id="rodape">
+              <div class="div_rodape">
+<a href="<?php echo Escola_Util::getBaseUrlPortal(); ?>">              
+                  <img style="margin: 5px 5px 5px 10px;" class="borda" src="<?php echo Escola_Util::getBaseUrl(); ?>/img/logo_pms_rodape.png" width="260">
+                  </a>
+              </div>
+              <div class="linha"><img src="<?php echo Escola_Util::getBaseUrl(); ?>/img/l.png"></div>
+              
+              <div class="div_rodape">
+                  <div id="informe">
+<?php
+$tb = new TbMenuPosicao();
+$ms = $tb->getPorChave("R");
+if ($ms) {
+    $tb = new TbMenu();
+    $menus = $tb->listar(array("id_menu_posicao" => $ms->getId()));
+    if ($menus) {
+?>
+                      <div id="menu_rodape">
+<?php foreach ($menus as $menu) { ?>
+                          <a href="<?php echo $menu->url(); ?>" <?php if ($menu->externo()) { ?> target="_blank" <?php } ?>><?php echo $menu->descricao; ?></a> |
+<?php } ?>
+                      </div>
+<?php }} ?>
+                      <div id="busca">
+                      	<form action='<?php echo $this->url(array("action" => "search")); ?>' method='get' id="frm_search"> 
+                          	<input class="text_busca" type="text" name="filtro_busca"><div class="btn_buscar"><img src="<?php echo Escola_Util::getBaseUrl(); ?>/img/btn_buscar.jpg" id="btn_search_submit"></div>
+                          </form>
+                      </div>
+                      <div id="cop">
+                        &copy; Copyright - Todos os Direitos Reservados
+                      </div>
+                  </div>    
+              </div>
+              
+              </div>
+            
+        </div>
+    </body>
+</html>

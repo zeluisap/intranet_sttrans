@@ -1,0 +1,47 @@
+<div class="conteudo_controller">
+    <div class="row-fluid">
+        <div class="span12">
+            <form action="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(), "action" => "baixa")); ?>" method="post" id="formulario" class="formulario form-horizontal">
+                <input type="hidden" name="id" id="id" value="<?php echo $this->registro->getId(); ?>" />
+                <div class="well well-small">
+                    <fieldset id="grupo_transporte">
+                        <legend>BAIXA DE VEÍCULO: </legend>
+                <?php if ($this->registro->getId()) { ?>
+                        <dl class="dl-horizontal">
+                            <dt>Código:</dt>
+                            <dd><?php echo $this->registro->getId(); ?></dd>
+                        </dl>
+                <?php } ?>
+                        <dl class="dl-horizontal">
+                            <dt>Transporte:</dt>
+                            <dd><?php echo $this->transporte->toString(); ?></dd>
+                        </dl>
+                        <dl class="dl-horizontal">
+                            <dt>Veículo:</dt>
+                            <dd><?php echo $this->registro->findParentRow("TbVeiculo")->toString(); ?></dd>
+                        </dl>
+                        <div class="control-group">
+                            <label for="baixa_data" class="control-label">Data da Baixa:</label>
+                            <div class="controls">
+                                <input type="text" name="baixa_data" id="baixa_data" class="span2 data" value="<?php echo date("d/m/Y"); ?>" />
+                            </div>
+                        </div>
+<?php 
+$ctrl = new Escola_Form_Element_Select_Table("id_baixa_motivo");
+$ctrl->setPkName("id_baixa_motivo");
+$ctrl->setModel("TbBaixaMotivo");
+$ctrl->setLabel("Motivo da Baixa:");
+echo $ctrl->render($this);
+?>
+                        <div class="control-group">
+                            <label for="motivo" class="control-label">Observações:</label>
+                            <div class="controls">
+                                <textarea name="motivo" id="motivo" rows="6" class="span6"></textarea>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

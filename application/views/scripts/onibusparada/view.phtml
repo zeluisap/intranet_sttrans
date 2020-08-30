@@ -1,0 +1,75 @@
+<?php 
+$span = "12";
+if ($this->registro->possuiMapa()) { 
+    $span = "8";
+} 
+?>
+<div class="conteudo_controller">
+    <div class="row-fluid">
+        <div class="span<?php echo $span; ?>">
+            <div class="well">
+                <div class="page-header">
+                    <h4>Cadastro de Parada de ônibus</h4>
+                </div>
+                <dl class="dl-horizontal">
+                    <dt>Código:</dt>
+                    <dd><?php echo $this->registro->getId(); ?></dd>
+                </dl>
+                <dl class="dl-horizontal">
+                    <dt>Tipo:</dt>
+                    <dd><?php echo $this->registro->findParentRow("TbOnibusParadaTipo")->toString(); ?></dd>
+                </dl>
+                <dl class="dl-horizontal">
+                    <dt>Descrição:</dt>
+                    <dd><?php echo $this->registro->descricao; ?></dd>
+                </dl>
+                <dl class="dl-horizontal">
+                    <dt>Endereço:</dt>
+                    <dd><?php echo $this->registro->endereco; ?></dd>
+                </dl>
+            </div>
+        </div>
+<?php if ($this->registro->possuiMapa()) { ?>
+        <div class="span4">
+            <?php echo $this->registro->mostrarMapa(array("height" => "290px")); ?>
+        </div>
+<?php } ?>
+    </div>
+<?php if ($this->rps) { ?>
+    <div class="row-fluid">
+        <div class="span12">
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th colspan="2">Rotas Vinculadas</th>
+                    </tr>
+                    <tr>
+                        <th>Rota</th>
+                        <th>Transporte</th>
+                    </tr>
+                </thead>
+                <tbody>
+<?php 
+foreach ($this->rps as $rp) { 
+    $txt_rota = $txt_transporte = "--";
+    $rota = $rp->findParentRow("TbRota");
+    if ($rota) {
+        $txt_rota = $rota->toString();
+        $transporte = $rota->findParentRow("TbTransporte");
+        if ($transporte) {
+            $txt_transporte = $transporte->toString();
+        }
+    }
+?>
+                    <tr>
+                        <td><?php echo $txt_rota; ?></td>
+                        <td><?php echo $txt_transporte; ?></td>
+                    </tr>
+<?php } ?>
+                </tbody>
+            </table>
+        </div>
+    </div>
+<?php } ?>
+    </div>
+</div>

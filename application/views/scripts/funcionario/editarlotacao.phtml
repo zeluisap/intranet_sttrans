@@ -1,0 +1,76 @@
+<div class="conteudo_controller">
+    <div class="row-fluid">
+        <div class="span12">
+            <form action="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(), "action" => "editarlotacao")); ?>" method="post" id="formulario" class="formulario form-horizontal">
+            <?php if ($this->funcionario && $this->funcionario->getId()) { ?>
+                <input type="hidden" name="id_funcionario" id="id_funcionario" value="<?php echo $this->funcionario->getId(); ?>" />
+            <?php } ?>
+            <?php if ($this->registro->getId()) { ?>
+                <input type="hidden" name="id_lotacao" id="id_lotacao" value="<?php echo $this->registro->getId(); ?>" />
+            <?php } ?>
+                <div class="well">
+                <fieldset>
+                    <legend>CADASTRO DE LOTAÇÃO: </legend>
+                    <dl class="dl-horizontal">
+                        <dt>Funcionário:</dt>
+                        <dd><?php echo $this->funcionario->toString(); ?></dd>
+                    </dl>
+            <?php if ($this->registro->getId()) { ?>
+                    <dl class="dl-horizontal">
+                        <dt>Código:</dt>
+                        <dd><?php echo $this->registro->getId(); ?></dd>
+                    </dl>
+            <?php
+            $lt = $this->registro->findParentRow("TbLotacaoTipo");
+            if ($lt) { ?>
+                    <dl class="dl-horizontal">
+                        <dt>Tipo:</dt>
+                        <dd><?php echo $lt->toString(); ?></dd>
+                    </dl>
+            <?php
+                }
+            }
+                $ctrl = new Escola_Form_Element_Select_Table("id_setor");
+                $ctrl->setPkName("id_setor");
+                $ctrl->setModel("TbSetor");
+                $ctrl->setValue($this->registro->id_setor);
+                $ctrl->setLabel("Setor: ");
+                echo $ctrl->render($this);
+
+                $tb = new TbFuncionarioFuncao();
+                if (count($tb->fetchAll())) {
+                    $ctrl = new Escola_Form_Element_Select_Table("id_funcionario_funcao");
+                    $ctrl->setPkName("id_funcionario_funcao");
+                    $ctrl->setModel("TbFuncionarioFuncao");
+                    $ctrl->setValue($this->registro->id_funcionario_funcao);
+                    $ctrl->setLabel("Função: ");
+                    echo $ctrl->render($this);
+                }
+            ?>
+                    <div class="control-group">
+                        <label for="data_inicial" class="control-label">Data Inicial:</label>
+                        <div class="controls">
+                            <input type="text" name="data_inicial" id="data_inicial" value="<?php echo $this->formatData($this->registro->data_inicial); ?>" class="data span2" />
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label for="data_final" class="control-label">Data Final:</label>
+                        <div class="controls">
+                            <input type="text" name="data_final" id="data_final" value="<?php echo $this->formatData($this->registro->data_final); ?>" class="data span2" />
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label for="chefe" class="control-label">Chefe:</label>
+                        <div class="controls">
+                            <select name="chefe" id="chefe">
+                                <option value="S" <?php echo ($this->registro->chefe())?"selected":""; ?>>SIM</option>
+                                <option value="N" <?php echo (!$this->registro->chefe())?"selected":""; ?>>NÃO</option>
+                            </select>
+                        </div>
+                    </div>
+                </fieldset>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

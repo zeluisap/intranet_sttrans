@@ -1,0 +1,114 @@
+<?php
+$itens = $this->registro->getItens();
+$deferidos = $indeferidos = [];
+foreach ($itens as $item) {
+    if ($item->deferido()) {
+        $deferidos[] = $item;
+    } elseif ($item->indeferido()) {
+        $indeferidos[] = $item;
+    }
+}
+?>
+<div class="conteudo_controller">
+    <div class="row-fluid">
+        <div class="span12">
+            <div class="well">
+                <form action="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(), "action" => "editar")); ?>" method="post" id="formulario" class="formulario">
+                    <input type="hidden" name="id" id="id" value="<?php echo $this->registro->getId(); ?>" />
+                    <fieldset>
+                        <legend>REQUERIMENTO: </legend>
+                        <dl class="dl-horizontal">
+                            <dt>Número:</dt>
+                            <dd><?php echo $this->registro->mostrarNumero(); ?></dd>
+                        </dl>
+                        <dl class="dl-horizontal">
+                            <dt>Solicitante:</dt>
+                            <dd><?php echo $this->registro->mostrarPessoa(); ?></dd>
+                        </dl>
+                        <dl class="dl-horizontal">
+                            <dt>Criação:</dt>
+                            <dd><?php echo $this->registro->mostrarCriacao(); ?></dd>
+                        </dl>
+
+                        <?php if ($this->registro->pendente()) { ?>
+                            <dl class="dl-horizontal">
+                                <dt>Situação:</dt>
+                                <dd><?php echo $this->registro->situacao; ?></dd>
+                            </dl>
+
+                            <dl class="dl-horizontal">
+                                <dt>Ítens:</dt>
+                                <dd>
+                                    <?php foreach ($itens as $item) {
+                                        $descricao = $item->getServicoDescricao();
+                                    ?>
+                                        <ul>
+                                            <li><?= $descricao ?></li>
+                                        </ul>
+                                    <?php } ?>
+                                </dd>
+                            </dl>
+                        <?php } else { ?>
+
+                            <div></div>
+                            <dl class="dl-horizontal">
+                                <dt>Analisado por:</dt>
+                                <dd><?= $this->registro->mostrarUsuarioAnalise() ?></dd>
+                            </dl>
+
+                            <dl class="dl-horizontal">
+                                <dt>Analisado em:</dt>
+                                <dd><?= $this->registro->mostrarDataHoraAnalise() ?></dd>
+                            </dl>
+
+                            <dl class="dl-horizontal">
+                                <dt>Situação:</dt>
+                                <?php if ($this->registro->deferido()) { ?>
+                                    <dd><span class="label label-info"><?= $this->registro->situacao ?></span></dd>
+                                <?php } elseif ($this->registro->indeferido()) { ?>
+                                    <dd><span class="label label-important"><?= $this->registro->situacao ?></span></dd>
+                                <?php } elseif ($this->registro->deferido_parcialmente()) { ?>
+                                    <dd><span class="label"><?= $this->registro->situacao ?></span></dd>
+                                <?php } ?>
+                            </dl>
+
+                            <?php if (count($deferidos)) { ?>
+                                <dl class=" dl-horizontal">
+                                    <dt>Deferidos:</dt>
+                                    <dd>
+                                        <?php foreach ($deferidos as $item) {
+                                            $descricao = $item->getServicoDescricao();
+                                        ?>
+                                            <ul>
+                                                <li><?= $descricao ?></li>
+                                            </ul>
+                                        <?php } ?>
+                                    </dd>
+                                </dl>
+                            <?php } ?>
+
+                            <?php if (count($indeferidos)) { ?>
+                                <dl class=" dl-horizontal">
+                                    <dt>Indeferidos:</dt>
+                                    <dd>
+                                        <?php foreach ($indeferidos as $item) {
+                                            $descricao = $item->getServicoDescricao();
+                                        ?>
+                                            <ul>
+                                                <li>
+                                                    <div><?= $descricao ?></div>
+                                                    <div>Motivo: <?= $item->indeferimento_motivo ?></div>
+                                                </li>
+                                            </ul>
+                                        <?php } ?>
+                                    </dd>
+                                </dl>
+                            <?php } ?>
+
+                        <?php } ?>
+                    </fieldset>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

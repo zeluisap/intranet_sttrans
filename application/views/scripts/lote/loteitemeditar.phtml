@@ -1,0 +1,38 @@
+<div class="conteudo_controller">
+    <div class="row-fluid">
+        <div class="span12">
+            <form action="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(), "action" => "loteitemeditar")); ?>" method="post" id="formulario" class="formulario form-horizontal">
+                <input type="hidden" name="id" id="id" value="<?php echo $this->registro->id_vinculo_lote; ?>" />
+                <input type="hidden" name="tipo" id="tipo" value="<?php echo $this->getRequest()->getParam("tipo"); ?>" />
+                <input type="hidden" name="id_vinculo_lote" id="id_vinculo_lote" value="<?php echo $this->getRequest()->getParam("id"); ?>" />
+                <div class="well">
+                    <fieldset>
+                        <legend>ALTERAR PAGAMENTO: </legend>
+                        <dl class="dl-horizontal">
+                            <dt>Lote: </dt>
+                            <dd><?php echo $this->lote->toString(); ?></dd>
+                        </dl>
+                        <dl class="dl-horizontal">
+                            <dt>Tipo: </dt>
+                            <dd><?php echo $this->pt->toString(); ?></dd>
+                        </dl>
+<?php if ($this->bt) { ?>
+                        <dl class="dl-horizontal">
+                            <dt>Tipo de Despesa: </dt>
+                            <dd><?php echo $this->bt->toString(); ?></dd>
+                        </dl>
+<?php } ?>
+<?php 
+if ($this->registro->getId()) {
+?>
+                        <input type="hidden" name="id_vinculo_lote_item" id="id_vinculo_lote_item" value="<?php echo $this->registro->getId(); ?>" />
+<?php 
+} 
+echo $this->registro->toForm($this);
+?>
+                    </fieldset>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

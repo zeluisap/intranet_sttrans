@@ -1,0 +1,104 @@
+<div class="conteudo_controller">
+    <div class="row-fluid">
+        <div class="span12">
+            <form action="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(), "action" => "index")); ?>" method="post" id="formulario" class="formulario form-horizontal" enctype="multipart/form-data">
+                <input type="hidden" name="MAX_FILE_SIZE" value="10000000" />
+                <input type="hidden" name="id" id="id" value="<?php echo $this->registro->getId(); ?>" />
+                <div class="well">
+                    <fieldset>
+                        <legend>Atualização dos Dados Pessoais: </legend>
+                        <dl class="dl-horizontal">
+                            <dt>C.P.F.:</dt>
+                            <dd><?php echo $this->formatCpf($this->pf->cpf); ?></dd>
+                        </dl>
+                        <div class="control-group">
+                            <label for="Nome" class="control-label">Nome:</label>
+                            <div class="controls">
+                                <input type="text" name="nome" id="nome" maxlength="50" value="<?php echo $this->pf->nome; ?>" class="span5" />
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label for="email" class="control-label">E-Mail:</label>
+                            <div class="controls">
+                                <input type="text" name="email" id="email" maxlength="60" value="<?php echo $this->pf->pega_pessoa()->email; ?>" class="span5" />
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label for="data_nascimento" class="control-label">Data de Nascimento:</label>
+                            <div class="controls">
+                                <input type="text" name="data_nascimento" id="data_nascimento" value="<?php echo $this->pf->mostrarDataNascimento(); ?>" class="data span2" />
+                            </div>
+                        </div>
+                        <?php
+                        $ctrl = new Escola_Form_Element_Select_Table_Crud_Estadocivil("id_estado_civil");
+                        $ctrl->setPkName("id_estado_civil");
+                        $ctrl->setModel("TbEstadoCivil");
+                        $ctrl->setValue($this->pf->id_estado_civil);
+                        $ctrl->setLabel("Estado Civil: ");
+                        echo $ctrl->render($this);
+                        ?>
+                        <div class="control-group">
+                            <label for="identidade_numero" class="control-label">Identidade - Número:</label>
+                            <div class="controls">
+                                <input type="text" name="identidade_numero" id="identidade_numero" maxlength="30" value="<?php echo $this->pf->identidade_numero; ?>" class="span3" />
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label for="identidade_orgao_expedidor" class="control-label">Identidade - Órgão Expedidor:</label>
+                            <div class="controls">
+                                <input type="text" name="identidade_orgao_expedidor" id="identidade_orgao_expedidor" maxlength="20" value="<?php echo $this->pf->identidade_orgao_expedidor; ?>" class="span3" />
+                            </div>
+                        </div>
+                        <?php
+                        $ctrl = new Escola_Form_Element_Select_Table("identidade_id_uf");
+                        $ctrl->setPkName("id_uf");
+                        $ctrl->setModel("TbUf");
+                        $ctrl->setValue($this->pf->identidade_id_uf);
+                        $ctrl->setLabel("Identidade - UF: ");
+                        echo $ctrl->render($this);
+                        ?>
+                        <?php
+                        $telefone = "";
+                        $pessoa = $this->pf->pega_pessoa();
+                        $telefones = $pessoa->getTelefones("F");
+                        if ($telefones) {
+                            $telefone = $telefones[0]->ddd . $telefones[0]->numero;
+                        }
+                        ?>
+                        <div class="control-group">
+                            <label for="telefone" class="control-label">Telefone:</label>
+                            <div class="controls">
+                                <input type="text" name="telefone" id="telefone" size="20" maxlength="20" value="<?php echo $telefone; ?>" class="telefone span2" />
+                            </div>
+                        </div>
+                        <?php
+                        $celular = "";
+                        $pessoa = $this->pf->pega_pessoa();
+                        $telefones = $pessoa->getTelefones("C");
+                        if ($telefones) {
+                            $celular = $telefones[0]->ddd . $telefones[0]->numero;
+                        }
+                        ?>
+                        <div class="control-group">
+                            <label for="celular" class="control-label">Celular:</label>
+                            <div class="controls">
+                                <input type="text" name="celular" id="celular" size="20" maxlength="20" value="<?php echo $celular; ?>" class="telefone" />
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label for="arquivo_foto" class="control-label">Foto (somente JPEG ou PNG):</label>
+                            <div class="controls">
+                                <input type="file" name="arquivo_foto" id="arquivo_foto" />
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+                <div class="well">
+                    <?php
+                    echo $this->pf->pega_pessoa()->getEndereco()->render($this);
+                    ?>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

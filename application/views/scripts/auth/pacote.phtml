@@ -1,0 +1,39 @@
+<style type="text/css">
+#linha_pacote {
+	margin-top: 50px;
+}
+.icon-10x {
+	font-size: 10em;
+}
+.desc_pacote {
+	font-size: 20px;
+	text-align: center;
+}
+.botao {
+    margin: auto 5px;
+}
+.botao_icone {
+    min-height: 200px;
+    min-width: 180px;
+}
+</style>
+<div class="container-fluid">
+    <div class="row-fluid" id="linha_pacote">
+        <div class="box blue span12">
+            <div class="box-header">
+                <i class="icon-th"></i><span class="break"></span>
+                Pacotes Disponíveis
+            </div>
+            <div class="box-content">
+                <?php foreach ($this->pacotes as $pacote) { ?>
+                <a href="<?php echo $this->url(array("controller" => "auth", "action" => "pacote", "id_pacote" => $pacote->getId())); ?>" class="quick-button span2">
+                    <i class="<?php echo $pacote->icone; ?>"></i>
+                    <p><?php echo $pacote->descricao; ?></p>
+               
+                </a>
+                <?php } ?>
+                <div class="clearfix"></div>
+            </div>	
+        </div>
+    </div>
+</div>

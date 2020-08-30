@@ -1,0 +1,147 @@
+<?php
+$url_array = array("controller" => "arquivo", "action" => "show", "width" => "140");
+if ($this->foto) {
+    $url_array["id"] = $this->foto->getId();
+}
+$url = $this->url($url_array);
+?>
+<script type="text/javascript">
+$(document).ready(function() {
+    $("#janela_capturar").on("show", function() {
+        $("#btn_capturar").show();
+        $(".janela_linha_botoes").show();
+        $(".controle_camera").hide();
+    });
+    $("#btn_importar_arquivo").click(function() {
+        $("#arquivo").click();
+    });
+    $("#arquivo").change(function() {
+        if ($(this).val().length > 0) {
+            $("#janela_capturar").modal("hide");
+            $("#formulario").submit();
+        }
+    });
+    $("#btn_capturar_camera").click(function() {
+        $(".janela_linha_botoes").toggle();
+        $(".controle_camera").toggle();
+        $("#btn_capturar").show();
+    });
+    $("#btn_capturar").click(function() {
+        $("<div>").addClass("ajax_aguarde_foto")
+        .css( { "position": "fixed",
+                "top": "5px",
+                "right": "5px",
+                "left": "auto",
+                "width": "130px",
+                "height": "40px", 
+                "border": "2px solid #ccc",
+                "background-color": "#fff",
+                "z-index": "99999",
+                "padding": "5px",
+                "line-height": "40px",
+                "font-weight": "bold",
+                "text-align": "center" } )
+        .html('<img src="<?php echo Escola_Util::getBaseUrl(); ?>/img/ajax-loader1.gif" alt="Carregando" height="20px" /> Carregando ...')
+        .appendTo("body");
+
+        webcam.snap();
+    });
+    
+    var screen = $('#screen');
+    
+	webcam.set_swf_url('<?php echo $this->baseUrl(); ?>/js/webcam/webcam.swf');
+	webcam.set_api_url('<?php echo $this->url(array("controller" => "pessoa", "action" => "webcam", "id" => $this->pessoa->getId())); ?>');	// The upload script
+	webcam.set_quality(80);				// JPEG Photo Quality
+	webcam.set_shutter_sound(true, '<?php echo $this->baseUrl(); ?>/js/webcam/shutter.mp3');
+
+	// Generating the embed code and adding it to the page:	
+	screen.html(
+		webcam.get_html(screen.width(), screen.height())
+	);    
+	
+	webcam.set_hook('onComplete', function(msg){
+        /*
+        $(".janela_linha_botoes").toggle();
+        $(".controle_camera").toggle();
+        */
+        window.location = "<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(), "action" => "foto", "id" => $this->pessoa->getId())); ?>";
+	});
+});
+</script>
+<style type="text/css">
+#screen{
+	width:400px;
+	height:370px;
+	/* margin: 66px auto 22px; */
+	background:#ccc;
+	
+	line-height: 360px;
+    text-align: center;
+	color:#666;
+}
+</style>
+<!-- janela modal -->
+<div id="janela_capturar" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3 id="myModalLabel">Forma de Captura de Foto</h3>
+    </div>
+    <div class="modal-body">
+        <div class="row-fluid janela_linha_botoes">
+            <br /><br />
+            <div class="span12">
+                <a href="#" class="btn" id="btn_capturar_camera">
+                    <div class="icon-camera-retro icon-5x"></div>
+                    <div>CAPTURAR COM CÂMERA</div>
+                </a>
+                <a href="#" class="btn" id="btn_importar_arquivo">
+                    <div class="icon-download-alt icon-5x"></div>
+                    <div>IMPORTAR DO ARQUIVO</div>
+                </a>
+                <br /><br />
+            </div>
+        </div>
+        <div class="row-fluid controle_camera hide">
+            <div id="screen"></div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <div class="pull-left controle_camera hide"><button class="btn btn-info" id="btn_capturar">Capturar Imagem</button></div>
+        <button class="btn" data-dismiss="modal" aria-hidden="true">Fechar</button>
+    </div>
+</div>
+<!-- fim janela modal -->
+<form action="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(), "action" => "setfoto")); ?>" method="post" id="formulario" class="form-horizontal" enctype="multipart/form-data">
+    <input type="hidden" name="id" id="id" value="<?php echo $this->pessoa->getId(); ?>" />
+    <input type="file" name="arquivo" id="arquivo" class="hide" />
+    <div class="conteudo_controller">
+        <div class="row-fluid">
+            <div class="span12">
+                <div class="well well-small">
+                    <div class="row-fluid">
+                        <div class="span10">
+                            <div class="page-header">
+                                <h4>Foto da Pessoa</h4>
+                            </div>
+                            <dl class="dl-horizontal">
+                                <dt>C.P.F.:</dt>
+                                <dd><?php echo Escola_Util::formatCpf($this->pf->cpf); ?></dd>
+                            </dl>
+                            <dl class="dl-horizontal">
+                                <dt>Nome:</dt>
+                                <dd><?php echo $this->pf->nome; ?></dd>
+                            </dl>
+                        </div>
+    <?php if ($this->foto) { ?>
+                        <div class="span2">
+                            <div><img src="<?php echo $url; ?>" alt="" class="img-polaroid span12" /></div>
+
+                            <div><a href="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(), "action" => "limpafoto", "id" => $this->pessoa->getId())); ?>" class="btn btn-info span12 link_confirma">Limpar Foto</a></div>
+                        </div>
+    <?php } ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

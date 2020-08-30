@@ -1,0 +1,23 @@
+<div class="conteudo_controller">
+	<div class="row-fluid">
+		<div class="span12">
+			<div class="well">
+				<div class="page-header">
+					<h3>Cadastro de Ação</h3>
+				</div>
+				<dl class="dl-horizontal">
+					<dt>Módulo:</dt>
+					<dd><?php echo $this->modulo_atual->getId(); ?> - <?php echo $this->modulo_atual->toString(); ?></dd>
+					<dt>Código:</dt>
+					<dd><?php echo $this->acao_atual->getId(); ?></dd>
+					<dt>Descrição:</dt>
+					<dd><?php echo $this->acao_atual->descricao; ?></dd>
+					<dt>Ação:</dt>
+					<dd><?php echo $this->acao_atual->action; ?></dd>
+					<dt>Principal:</dt>
+					<dd><?php echo $this->acao_atual->mostrarPrincipal(); ?></dd>
+				</dl>
+			</div>
+		</div>
+	</div>
+</div>

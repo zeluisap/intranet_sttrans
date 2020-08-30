@@ -1,0 +1,103 @@
+<form action="<?php echo $this->url(array("controller" => "auth", "action" => "register")); ?>" method="post" id="formulario" class="formulario">
+	<fieldset>
+		<legend>DADOS PESSOAIS: </legend>
+		<div>
+			<label for="cpf">C.P.F.:</label><span class="read-only"><?php echo $this->cpf; ?><input type="hidden" name="cpf" id="cpf" value="<?php echo $this->cpf; ?>" /></span>
+		</div>
+		<div>
+			<label for="nome">Nome:</label><input type="text" name="nome" id="nome" size="60" maxlength="60" value="<?php echo $this->getRequest()->getPost("nome"); ?>" />
+		</div>
+		<div>
+			<label for="email">E-Mail:</label><input type="text" name="email" id="email" size="60" maxlength="60" value="<?php echo $this->getRequest()->getPost("email"); ?>" />
+		</div>
+		<div>
+			<label for="data_nascimento">Data de Nascimento:</label><input type="text" name="data_nascimento" id="data_nascimento" size="10" maxlength="10" value="<?php echo $this->getRequest()->getPost("data_nascimento"); ?>" class="data" />
+		</div>
+		<div>
+			<label for="id_estado_civil">Estado Civil:</label>
+			<select name="id_estado_civil" id="id_estado_civil">
+				<option value="">==> SELECIONE <==</option>
+<?php foreach ($this->ecs as $ec) { 
+		$selected = "";
+		if ($ec->id_estado_civil == $this->getRequest()->getPost("id_estado_civil")) {
+			$selected = " selected ";
+		}
+?>
+				<option value="<?php echo $ec->id_estado_civil; ?>" <?php echo $selected; ?>><?php echo $ec->descricao; ?></option>
+<?php } ?>
+			</select>
+		</div>
+<?php if ($this->paises) {
+?>
+		<div>
+			<label for="id_pais">Pais de Nascimento:</label>
+			<select name="id_pais" id="id_pais">
+				<option value="">==> SELECIONE <==</option>
+<?php foreach ($this->paises as $pais) { 
+		$selected = "";
+		if ($pais->id_pais == $this->getRequest()->getPost("id_pais")) {
+			$selected = " selected ";
+		}
+?>
+				<option value="<?php echo $pais->id_pais; ?>" <?php echo $selected; ?>><?php echo $pais->descricao; ?></option>
+<?php } ?>
+			</select>
+		</div>
+		<div id="linha_uf">
+			<label for="id_uf">Unidade Federativa:</label>
+			<select name="id_uf" id="id_uf">
+			</select>
+		</div>
+<?php 
+	$ctrl = new Escola_Form_Element_Select_Dinamic("dinamic_id_uf");
+	$ctrl->setLabel("Unidade Federativa: ");
+	$ctrl->setFlag("dinamic_uf");
+	$ctrl->setIdParents(array("id_pais"));
+	$ctrl->setUrl($this->baseUrl() . "/uf/listar/format/json/");
+	$ctrl->setDados(array("id_pais" => "$('#id_pais').val()", "descricao" => "$('#dinamic_uf').val()"));
+	echo $ctrl->render($this);
+
+	$ctrl = new Escola_Form_Element_Select_Dinamic("nascimento_id_municipio");
+	$ctrl->setLabel("Município: ");
+	$ctrl->setValue($this->getRequest()->getPost("municipio"));
+	$ctrl->setFlag("municipio");
+	$ctrl->setIdParents(array("id_uf", "id_pais"));
+	$ctrl->setUrl($this->baseUrl() . "/municipio/listar/format/json/");
+	$ctrl->setDados(array("id_uf" => "$('#id_uf').val()", "dinamic_id_uf" => "$('#dinamic_id_uf').val()", "descricao" => "$('#municipio').val()"));
+	echo $ctrl->render($this);
+} ?>
+		<div>
+			<label for="telefone_fixo">Telefone Fixo: </label><input type="text" name="telefone_fixo" id="telefone_fixo" size="15" maxlength="15" value="<?php echo $this->getRequest()->getPost("telefone_fixo"); ?>" class="telefone" />
+		</div>
+		<div>
+			<label for="telefone_celular">Telefone Celular: </label><input type="text" name="telefone_celular" id="telefone_celular" size="15" maxlength="15" value="<?php echo $this->getRequest()->getPost("telefone_celular"); ?>" class="telefone" />
+		</div>
+	</fieldset>
+	<fieldset>
+		<legend>IDENTIDADE: </legend>
+		<div>
+			<label for="identidade_numero">Número:</label><input type="text" name="identidade_numero" id="identidade_numero" size="30" maxlength="30" value="<?php echo $this->getRequest()->getPost("identidade_numero"); ?>" />
+		</div>
+		<div>
+			<label for="identidade_orgao_expedidor">Órgão Expedidor:</label><input type="text" name="identidade_orgao_expedidor" id="identidade_orgao_expedidor" size="20" maxlength="20" value="<?php echo $this->getRequest()->getPost("identidade_orgao_expedidor"); ?>" />
+		</div>
+<?php
+	$ctrl = new Escola_Form_Element_Select_Table("identidade_id_uf");
+	$ctrl->setPkName("id_uf");
+	$ctrl->setModel("TbUf");
+	$ctrl->setValue($this->getRequest()->getPost("identidade_id_uf"));
+	$ctrl->setLabel("Unidade Federativa: ");
+	echo $ctrl->render($this);
+?>
+	</fieldset>
+<?php echo $this->endereco->render($this); ?>
+	<fieldset>
+		<legend>SENHAS: </legend>
+		<div>
+			<label for="senha">Senha:</label><input type="password" name="senha" id="senha" size="10" />
+		</div>
+		<div>
+			<label for="senha_confirmar">Confirmação da Senha:</label><input type="password" name="senha_confirmar" id="senha_confirmar" size="10" />
+		</div>
+	</fieldset>
+</form>

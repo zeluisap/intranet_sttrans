@@ -1,0 +1,31 @@
+<div class="conteudo_controller">
+    <div class="row-fluid">
+        <div class="span12">
+            <form action="<?php echo $this->url(array("controller" => "transporte", "action" => "boleto")); ?>" method="post" id="formulario" class="formulario form-horizontal" target="_blank">
+                <input type="hidden" name="id_pessoa" id="id_pessoa" value="<?php echo $this->pessoa->getId(); ?>" />
+<?php foreach ($this->ids as $ss) { ?>
+                <input type="hidden" name="lista[]" id="lista" value="<?php echo $ss->getId(); ?>" />
+<?php } ?>
+                <div class="well well-small">
+                    <fieldset id="grupo_transporte">
+                        <legend>VENCIMENTO DE BOLETO: </legend>
+                            <dl class="dl-horizontal">
+                                <dt>Motorista:</dt>
+                                <dd><?php echo $this->motorista->toString(); ?></dd>
+                            </dl>
+                            <dl class="dl-horizontal">
+                                <dt>Valor Total:</dt>
+                                <dd><?php echo $this->valor_total; ?></dd>
+                            </dl>
+                        <div class="control-group">
+                            <label for="codigo" class="control-label">Data de Vencimento:</label>
+                            <div class="controls">
+                                <input type="text" name="data_vencimento" id="data_vencimento" class="span2 data" value="<?php echo $this->data_vencimento; ?>" />
+                            </div>
+                        </div>                        
+                    </fieldset>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

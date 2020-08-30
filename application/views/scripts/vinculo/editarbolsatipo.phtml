@@ -1,0 +1,45 @@
+<div class="conteudo_controller">
+    <div class="row-fluid">
+        <div class="span12">
+            <form action="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(), "action" => "editarbolsatipo")); ?>" method="post" id="formulario" class="formulario form-horizontal">
+                <input type="hidden" name="id" id="id" value="<?php echo $this->registro->getId(); ?>" />
+                <div class="well">
+                    <fieldset>
+                        <legend>CADASTRO DE TIPO DE DESPESA: </legend>
+                        <dl class="dl-horizontal">
+                            <dt>Vínculo:</dt>
+                            <dd><?php echo $this->vinculo->toString(); ?></dd>
+                        </dl>
+<?php if ($this->registro->getId()) { ?>
+                        <dl class="dl-horizontal">
+                            <dt>ID:</dt>
+                            <dd><?php echo $this->registro->getId(); ?></dd>
+                        </dl>
+<?php } ?>
+<?php
+$ctrl = new Escola_Form_Element_Select_Table("id_previsao_tipo");
+$ctrl->setPkName("id_previsao_tipo");
+$ctrl->setModel("TbPrevisaoTipo");
+$ctrl->setValue($this->registro->id_previsao_tipo);
+$ctrl->setLabel("Tipo: ");
+echo $ctrl->render($this);
+?>
+                        <div class="control-group">
+                            <label for="chave" class="control-label">Chave:</label>
+                            <div class="controls">
+                                <input type="text" name="chave" id="chave" class="span1" value="<?php echo $this->registro->chave; ?>" maxlength="20" />
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label for="descricao" class="control-label">Descrição:</label>
+                            <div class="controls">
+                                <input type="text" name="descricao" id="descricao" class="span5" value="<?php echo $this->registro->descricao; ?>" maxlength="100" />
+                            </div>
+                        </div>
+                        <?php echo $this->registro->pega_valor()->render($this); ?>
+                    </fieldset>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

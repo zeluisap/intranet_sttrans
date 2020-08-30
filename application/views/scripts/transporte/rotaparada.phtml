@@ -1,0 +1,77 @@
+<div class="conteudo_controller">
+    <div class="row-fluid">
+        <div class="span12">
+            <form action="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(), "action" => $this->getRequest()->getActionName())); ?>" method="post" id="formulario" class="formulario">
+            <div class="well well-small">
+                <dl class="dl-horizontal">
+                    <dt>Transporte: </dt>
+                    <dd><?php echo $this->transporte->toString(); ?></dd>
+                </dl>
+                <dl class="dl-horizontal">
+                    <dt>Rota: </dt>
+                    <dd><?php echo $this->rota->toString(); ?></dd>
+                </dl>
+            </div>
+            <table class="table table-striped table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Ordem</th>
+                            <th>Ponto de Ônibus</th>
+                            <th width="20px">Operações</th>
+                        </tr>
+                    </thead>
+<?php if ($this->registros && count($this->registros)) { ?>
+                    <tbody>
+<?php 
+    foreach ($this->registros as $registro) { 
+        $view_url = $this->url(array("action" => "viewparada", "id" => $registro->getId()));
+        $txt_ordem = $txt_ponto = "--";
+        if ($registro->ordem) {
+            $txt_ordem = $registro->ordem;
+        }
+        $parada = $registro->findParentRow("TbOnibusParada");
+        if ($parada) {
+            $txt_ponto = $parada->toString();
+        }
+?>
+                        <tr>
+                            <td><div class="text-center">
+                                <a href="<?php echo $view_url; ?>">
+                                    <?php echo $txt_ordem; ?>
+                                </a></div>
+                            </td>
+                            <td>
+                                <a href="<?php echo $view_url; ?>">
+                                    <?php echo $txt_ponto; ?>
+                                </a>
+                            </td>
+                            <td>
+                                <div class="btn-group">	
+                                    <a href="<?php echo $view_url; ?>" class="btn" title="Visualizar">
+                                        <i class="icon-search"></i>
+                                    </a>
+                                    <a href="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(),
+                                                                         "action" => "editarparada",
+                                                                         "id_transporte" => $this->transporte->getId(), "id" => $registro->getId())); ?>" class="btn" title="Editar">
+                                        <i class="icon-cog"></i>
+                                    </a>
+                                    <a href="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(),
+                                                                         "action" => "excluirparada",
+                                                                         "id_transporte" => $this->transporte->getId(), "id" => $registro->getId())); ?>" class="btn link_excluir" title="Excluir">
+                                        <i class="icon-trash"></i>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+            <?php } ?>
+                    </tbody>
+            <?php } ?>
+                </table>
+<?php if ($this->registros && count($this->registros)) {
+ echo $this->paginationControl($this->registros, "sliding", "minha_paginacao_control.phtml");
+}
+?>
+            </form>
+        </div>
+    </div>
+</div>

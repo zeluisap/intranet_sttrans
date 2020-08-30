@@ -1,0 +1,64 @@
+<?php
+$txt_ss = $txt_id = $txt_data_vencimento = $txt_data_validade = $txt_ano_referencia = $txt_id_stg = "";
+if ($this->ss) {
+    $txt_id = $this->ss->getId();
+    $txt_ss = $this->ss->toString();
+
+    $txt_data_vencimento = Escola_Util::formatData($this->ss->data_vencimento);
+    $txt_data_validade = Escola_Util::formatData($this->ss->data_validade);
+    $txt_ano_referencia = $this->ss->ano_referencia;
+
+    $txt_id_stg = $this->stg->getId();
+}
+?>
+<div class="conteudo_controller">
+    <div class="row-fluid">
+        <div class="span12">
+            <form action="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(), "action" => $this->getRequest()->getActionName())); ?>" method="post" id="formulario" class="formulario form-horizontal">
+                <input type="hidden" name="id" id="id" value="<?php echo $txt_id; ?>" />
+                <div class="well well-small">
+                    <fieldset id="grupo_transporte">
+                        <legend>ALTERAÇAO DE SOLICITAÇAO DE SERVIÇO: </legend>
+                        <dl class="dl-horizontal">
+                            <dt>ID:</dt>
+                            <dd><?php echo $txt_id; ?></dd>
+                        </dl>
+                        <dl class="dl-horizontal">
+                            <dt>Solicitaçao de Serviço:</dt>
+                            <dd><?php echo $txt_ss; ?></dd>
+                        </dl>
+                        <div class="control-group">
+                            <label for="id_servico_transporte_grupo" class="control-label">Serviço:</label>
+                            <div class="controls">
+                                <select name="id_servico_transporte_grupo" id="id_servico_transporte_grupo" class="span5">
+                                    <option value="" <?php echo (!$txt_id_stg) ? "selected" : ""; ?>>==> SELECIONE <==</option>
+                                    <?php foreach ($this->stgs as $stg) { ?>
+                                        <option value="<?php echo $stg->getId(); ?>" <?php echo ($txt_id_stg == $stg->getId()) ? "selected" : ""; ?>><?php echo $stg->toString(); ?></option>
+                                    <?php } ?>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label for="ano_referencia" class="control-label">Ano Referência:</label>
+                            <div class="controls">
+                                <input type="text" name="ano_referencia" id="ano_referencia" class="span1" value="<?php echo $txt_ano_referencia; ?>" />
+                            </div>
+                        </div>                        
+                        <div class="control-group">
+                            <label for="data_vencimento" class="control-label">Data de Vencimento:</label>
+                            <div class="controls">
+                                <input type="text" name="data_vencimento" id="data_vencimento" class="span2 data" value="<?php echo $txt_data_vencimento; ?>" />
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label for="data_validade" class="control-label">Data de Validade:</label>
+                            <div class="controls">
+                                <input type="text" name="data_validade" id="data_validade" class="span2 data" value="<?php echo $txt_data_validade; ?>" />
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

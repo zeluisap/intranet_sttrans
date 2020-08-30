@@ -1,0 +1,31 @@
+<div class="conteudo_controller">
+	<div class="row-fluid">
+		<div class="span12">
+			<div class="well">
+					<input type="hidden" name="id" id="id" value="<?php echo $this->mod->id_modulo; ?>" />
+						<div class="page-header">
+							<h3>Módulo</h3>
+						</div>
+						<dl class="dl-horizontal">
+							<dt>Código:</dt>
+							<dd><?php echo $this->modulo->getId(); ?></dd>
+							<dt>Descrição.:</dt>
+							<dd><?php echo $this->modulo->descricao; ?></dd>
+							<dt>Controller:</dt>
+							<dd><?php echo $this->modulo->controller; ?></dd>
+							<dt>Ícone:</dt>
+							<dd><?php echo $this->modulo->icon; ?></dd>
+				<?php 
+				$sup = $this->modulo->pegaSuperior();
+				if ($sup) {
+				?>
+							<dt>Módulo Superior:</dt>
+							<dd><?php echo $sup->toString(); ?></dd>
+				<?php } ?>
+							<dt>Status:</dt>
+							<dd><?php echo $this->modulo->mostrar_status(); ?></dd>
+					</dl>
+			</div>
+		</div>
+	</div>
+</div>

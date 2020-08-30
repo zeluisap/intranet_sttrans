@@ -1,0 +1,134 @@
+<?php echo $this->doctype(); ?>
+<!DOCTYPE HTML>
+<html lang="en-US">
+<head>
+	<?php echo $this->headMeta(); ?>
+	<?php echo $this->headTitle(); ?>
+	<?php echo $this->headLink(); ?>
+	<?php echo $this->headScript(); ?>
+</head>
+
+  <body>
+        <div class="container">
+            
+              <div class="well">
+                  <div class="logo">
+                      <div class="span2">
+                          <a href="<?php echo $this->url(array("controller" => "index", "action" => "index")); ?>"><img src="<?php echo $this->baseUrl(); ?>/img/logo2.png" alt="" /></a>
+                      </div>
+                <div class="navbar span9">
+                    <div class="navbar-inner">
+                      <div class="container">
+<?php 
+$tb = new TbMenuPosicao();
+$ms = $tb->getPorChave("S");
+if ($ms) {
+    $tb = new TbMenu();
+    $menus = $tb->listar(array("id_menu_posicao" => $ms->getId(), "id_menu_superior" => "null"));
+    if ($menus) {
+?>
+                        <ul class="nav">
+<?php foreach ($menus as $menu) { 
+    $inferiores = $menu->pegaInferiores();
+    if ($inferiores) {
+?>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown"><?php echo $menu->descricao; ?><b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+<?php if ($inferiores) { ?>
+<?php foreach ($inferiores as $inferior) { ?>
+                                  <li class="text-left"><a href="<?php echo $inferior->url(); ?>"><?php echo $inferior->descricao; ?></a></li>
+<?php }} ?>
+                                </ul>
+                            </li>
+<?php } else { ?>
+                            <li class="text-left"><a href="<?php echo $menu->url(); ?>"><?php echo $menu->descricao; ?></a></li>
+<?php }} ?>
+                        </ul>
+<?php }} ?>
+                      </div>
+                    </div>
+                     </div>
+                  </div>
+                    
+            </div>
+<?php
+if ($this->actionErrors) { 
+?>
+				<div class="alert alert-error">
+					<button type="button" class="close" data-dismiss="alert">&times;</button>
+                    <ul>
+<?php	foreach ($this->actionErrors as $erro) { ?>
+                        <li><?php echo $erro; ?></li>
+<?php } ?>  
+                    </ul>
+				</div>
+<?php } 
+/*================================================
+	Mensagem de sucesso
+=================================================*/
+if ($this->actionMessages) { 
+?>
+				<div class="alert alert-info">  
+					<button type="button" class="close" data-dismiss="alert">&times;</button>
+                    <ul>
+<?php foreach ($this->actionMessages as $message) { ?>
+					<li><?php echo $message; ?></li>
+<?php } ?>
+                    </ul>
+				</div>
+<?php } ?>
+            </div>
+            
+    <div class="container container_centro">
+        <div class="well well_centro">
+            
+      <div class="row-fluid">
+        
+        <div class="span12">
+<?php 
+$nav = Escola_Navegacao::getInstance();
+echo $nav->render();
+?>
+            <?php echo $this->layout()->content; ?></div>
+          
+      </div>
+
+      
+    </div>
+        </div>
+<?php
+$tb = new TbMenuPosicao();
+$ms = $tb->getPorChave("E");
+if ($ms) {
+    $tb = new TbMenu();
+    $menus = $tb->listar(array("id_menu_posicao" => $ms->getId(), "id_menu_superior" => "null"));
+    if ($menus) {
+?>
+<div class="container">
+    <div class="well text-center">
+<?php foreach ($menus as $menu) { 
+    $target = "";
+    if ($menu->externo()) {
+        $target = 'target="_blank"';
+    }
+?>
+              <a href="<?php echo $menu->url(); ?>" title="<?php echo $menu->toString(); ?>" <?php echo $target; ?>><?php echo $menu->mostrarIcone(); ?></a>        
+<?php } ?>
+    </div>
+</div>
+    <?php }} ?>
+      <hr>
+      <div class="container">
+          
+          <footer>
+          
+        <p> Copyright © 2014. All Rights Reserved.</p>
+      </footer>
+      </div>
+      
+
+ 
+
+  </body>
+</html>

@@ -1,0 +1,76 @@
+@CHARSET "UTF-8";
+/*
+* css aplicado nos widget
+*/
+.grid { width: 23% !important;
+		display: inline;
+		float: left;
+		border:none;
+		margin: 10px 10px;
+		min-height: 200px;		
+	}
+.grid_large { width: 46% !important;
+	}
+/* caixa de widget*/
+.widget { 
+	margin: 5px;
+	background: #FFF;
+	border:1px solid #DFDFDF;
+	/*fonts*/
+	 
+	}
+.widget h1, .widget h2{
+	-moz-border-radius: 6px 6px 0 0;
+	-webkit-border-top-right-radius: 6px;
+	-webkit-border-top-left-radius: 6px;
+	-khtml-border-top-right-radius: 6px;
+	-khtml-border-top-left-radius: 6px;
+	border-top-right-radius: 6px;
+	border-top-left-radius: 6px;
+	/*fonts*/
+	font-size: 13px;
+	font-weight: bold;
+	padding: 7px 9px;
+	margin: 0;
+	line-height: 1;
+	/*background*/
+	background: #DFDFDF url(../../img/utilitarios/gray-grad.png) repeat-x bottom;
+	text-shadow: white 0 1px 0;
+	cursor: move;
+}
+.widget h1 a, .widget h2 a{ font-weight:normal; }
+.widget a.widget-action{ float:right ;}
+
+/*formularios*/
+.widget form fieldset { border: none; background:transparent;}
+.widget form{ width:100%;}
+.widget form label{ font-weight:normal; text-align:left;}
+.widget form input[type=text]
+,.widget form input[type=password]
+,.widget form textarea
+,.widget form select
+{ width:90%;}
+
+.widget p{ padding: 1px 5px; font-size:12px;}
+/*tabela no widget*/
+.widget table.table_widget { padding: 2px; border: none; width:98%;}
+.widget table.table_widget td{ border-bottom: 1px solid #EEE; padding: 2px;}
+.widget table.table_widget tr.titulo{ color:#21759B; font-weight:bold; }
+/*bordas arrendondadas*/
+.widget
+{
+-khtml-border-radius: 6px;
+-webkit-border-radius: 6px;
+-moz-border-radius: 6px;	
+border-radius: 6px;}
+/*acoes de drag drop*/
+.dragAjuda {
+		border: 3px dashed #0066CC;
+		width: auto !important;
+	}
+	.dragAtivo {
+		background-color: #f7f7f7;
+	}
+	.dragHover {
+		background-color: #F0F1FF;
+	}

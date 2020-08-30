@@ -1,0 +1,145 @@
+<div id="conteudo">
+	<div id="ver_noticia">
+		<div class="titulo">
+			<div class="data"><?php echo Escola_Util::formatData($this->info->data); ?></div>
+			<?php echo $this->info->toString(); ?>
+		</div>
+		<div class="texto">
+<?php if ($this->foto_principal) { ?>
+			<a href="<?php echo $this->foto_principal->getLink(); ?>" class="show_imagem" title="<?php echo $this->foto_principal->legenda; ?>">
+				<?php echo $this->foto_principal->miniatura(array("width" => 250, "align" => "left", "class" => "principal")); ?>
+			</a>
+<?php } ?>
+			<?php echo $this->info->conteudo; ?>
+		</div>
+<?php if ($this->info->autor) { ?>
+		<div class="autor">Autor: <strong><?php echo $this->info->autor; ?></strong></div>
+<?php } ?>
+<?php if ($this->info->fonte) { ?>
+		<div class="fonte">Fonte: <strong><?php echo $this->info->fonte; ?></strong></div>
+<?php } ?>
+<?php
+if (count($this->fotos)) {
+?>
+	<div class="galeria">
+		<div class="titulo_">Fotos</div>
+<?php foreach ($this->fotos as $foto) { ?>
+		<div class="galeria_item">
+			<a href="<?php echo $foto->getLink(); ?>" class="show_imagem" title="<?php echo $foto->legenda; ?>">
+				<?php echo $foto->miniatura(array("width" => 130, "height" => 80,  "align" => "left", "mode" => "inside")); ?>
+			</a>
+			<div class="legenda">
+				<a href="<?php echo $foto->getLink(); ?>" class="show_imagem" title="<?php echo $foto->legenda; ?>">
+					<?php echo $foto->legenda; ?>
+				</a>
+			</div>
+		</div>
+<?php } ?>
+	</div>
+	<div class="clear"></div>
+<?php } ?>
+<?php
+if (count($this->arquivos)) {
+?>
+	<div class="arquivos">
+		<div class="titulo_">Arquivos</div>
+		<table width="100%">
+<?php foreach ($this->arquivos as $arquivo) { ?>
+		<tr>
+			<td width="30px">
+				<?php echo $arquivo->miniatura(array("width" => 40, "align" => "", "link" => true)); ?>
+			</td>
+			<td>
+				<a href="<?php echo $arquivo->getLink(); ?>">
+					<?php echo Escola_Util::formatData($arquivo->data_upload); ?> <?php echo $arquivo->hora_upload; ?> -  <?php echo $arquivo->legenda; ?>
+				</a>
+			</td>
+		</tr>			
+<?php } ?>
+		</table>
+		<br />
+	</div>
+<?php } ?>
+<?php 
+$referencias = $this->info->pegaReferencia();
+if ($referencias && count($referencias)) {
+?>
+		<div id="outras_noticias">
+			<ul>
+				<div class="titulo_">Noticias Relacionadas</div>
+<?php foreach ($referencias as $ref) {
+	$info = $ref->pegaObjeto();
+?>
+				<li>
+					<a href="<?php echo $this->url(array("action" => "viewinfo", "id" => $info->getId())); ?>">
+						<?php echo $info->findParentRow("TbArquivo")->miniatura(array("width" => 80, "align" => "left")); ?>
+					</a>
+					<div class="titulo">
+						<a href="<?php echo $this->url(array("action" => "viewinfo", "id" => $info->getId())); ?>">
+							<?php echo $info->titulo; ?>
+						</a>
+					</div>
+					<div class="desc">
+						<a href="<?php echo $this->url(array("action" => "viewinfo", "id" => $info->getId())); ?>">
+							<?php echo $info->resumo; ?>
+						</a>
+					</div>
+				</li>
+<?php } ?>
+				<div class="clear"></div>
+				<br />
+			</ul>		
+		</div>
+<?php } ?>
+<?php
+if ($this->info->comentario()) { ?>
+		<div class="titulo_"><?php echo count($this->comentarios); ?> Comentário(s)</div>
+<?php 
+	if ($this->comentarios && count($this->comentarios)) {
+		foreach ($this->comentarios as $comentario) {
+?>
+			<table class="table_comentario">
+				<tr>
+					<td width="100px" align="right">Data / Hora: </td>
+					<td><?php echo Escola_Util::formatData($comentario->data); ?> <?php echo $comentario->hora; ?></td>
+				</tr>
+				<tr>
+					<td width="100px" align="right">Nome: </td>
+					<td><?php echo $comentario->nome; ?></td>
+				</tr>
+				<tr>
+					<td width="100px" align="right">E-Mail: </td>
+					<td><?php echo $comentario->email; ?></td>
+				</tr>
+				<tr>
+					<td width="100px" align="right">Comentário: </td>
+					<td><?php echo $comentario->comentario; ?></td>
+				</tr>
+			</table>
+			<br />
+<?php }} ?>
+		<form action="<?php echo $this->url(array("controller" => "portal", "action" => "comentario")); ?>" method="post">
+			<input type="hidden" name="id_info" id="id_info" value="<?php echo $this->info->getid(); ?>" />
+			<table class="table_comentario">
+				<tr>
+					<td width="100px" align="right">Nome: </td>
+					<td><input type="text" name="nome" id="nome" size="40" maxlength="100" /></td>
+				</tr>
+				<tr>
+					<td width="100px" align="right">E-Mail: </td>
+					<td><input type="text" name="email" id="email" size="40" maxlength="100" /></td>
+				</tr>
+				<tr>
+					<td width="100px" align="right">Comentário: </td>
+					<td><textarea name="comentario" id="comentario" cols="50" rows="6"></textarea></td>
+				</tr>
+				<tr>
+					<td></td>
+					<td><input type="submit" value="Enviar" /></td>
+				</tr>
+			</table>
+		</form>
+<?php } ?>
+		<br />
+	</div>
+</div>

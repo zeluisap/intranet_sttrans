@@ -1,0 +1,33 @@
+<div class="conteudo_controller">
+    <div class="row-fluid">
+        <div class="span12">
+            <form action="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(), "action" => "addanexo")); ?>" method="post" id="formulario" class="formulario form-horizontal" enctype="multipart/form-data">
+                <input type="hidden" name="id" id="id" value="<?php echo $this->info->getId(); ?>" />
+                <input type="hidden" name="file_count" id="file_count" value="1" />
+                <div class="well well-small">
+                    <dl class="dl-horizontal">
+                        <dt>Informação:</dt>
+                        <dd><?php echo $this->info->toString(); ?></dd>
+                    </dl>
+                </div>
+                <div class="well well-small fieldset">
+                    <fieldset>
+                        <legend>ADICIONANDO ANEXO - <span class="id_fieldset">1</span>: </legend>
+                        <div class="control-group">
+                            <label for="legenda" class="control-label">Legenda:</label>
+                            <div class="controls">
+                                <input type="text" name="legenda1" id="legenda1" size="50" maxlength="50" value="" class="legenda span5" />
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label for="arquivo" class="control-label">Arquivo:</label>
+                            <div class="controls">
+                                <input type="file" name="arquivo1" id="arquivo1" class="arquivo span5" />
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

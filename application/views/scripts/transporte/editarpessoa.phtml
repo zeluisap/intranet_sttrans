@@ -1,0 +1,43 @@
+<div class="conteudo_controller">
+    <div class="row-fluid">
+        <div class="span12">
+            <form action="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(), "action" => "editarpessoa")); ?>" method="post" id="formulario" class="formulario form-horizontal">
+                <input type="hidden" name="id" id="id" value="<?php echo $this->registro->getId(); ?>" />
+                <input type="hidden" name="id_transporte" id="id_transporte" value="<?php echo $this->transporte->getId(); ?>" />
+                <div class="well well-small">
+                    <fieldset id="grupo_transporte">
+                        <legend>CADASTRO DE TRANSPORTE > PESSOA: </legend>
+                <?php if ($this->registro->getId()) { ?>
+                        <dl class="dl-horizontal">
+                            <dt>ID:</dt>
+                            <dd><?php echo $this->registro->getId(); ?></dd>
+                        </dl>
+                <?php } ?>
+                        <dl class="dl-horizontal">
+                            <dt>Transporte:</dt>
+                            <dd><?php echo $this->transporte->toString(); ?></dd>
+                        </dl>
+<?php
+$ctrl = new Escola_Form_Element_Select_Table("id_transporte_pessoa_tipo");
+$ctrl->setPkName("id_transporte_pessoa_tipo");
+$ctrl->setModel("TbTransportePessoaTipo");
+$ctrl->setValue($this->registro->id_transporte_pessoa_tipo);
+$ctrl->setLabel("Tipo: ");
+echo $ctrl->render($this);
+
+$ctrl = new Escola_Form_Element_Select_Table_Pessoa("id_pessoa");
+$ctrl->setValue($this->registro->id_pessoa);
+$ctrl->setLabel("Pessoa: ");
+echo $ctrl->render($this);
+
+$ctrl = new Escola_Form_Element_Select_Table_Motorista("id_motorista");
+$ctrl->setValue($this->registro->id_motorista);
+$ctrl->setLabel("Motorista: ");
+echo $ctrl->render($this);
+?>
+                    </fieldset>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

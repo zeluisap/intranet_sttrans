@@ -1,0 +1,121 @@
+<div class="conteudo_controller">
+    <div class="row-fluid">
+        <div class="span12">
+            <div class="well well-small">
+                <dl class="dl-horizontal">
+                    <dt>Serviço:</dt>
+                    <dd><?php echo $this->servico->toString(); ?></dd>
+                </dl>
+            </div>
+            <table class="table table-striped table-bordered">
+                <thead>
+                    <tr>
+                        <th>Grupo de Transporte</th>
+                        <th>Valor</th>
+                        <th>Periodicidade</th>
+                        <th>Mês Referência</th>
+                        <th>Validade em Dias</th>
+                        <th>Juros por Dias</th>
+                        <th>Obrigatório</th>
+                        <th>Emite Documento</th>
+                        <th width="20px">Operações</th>
+                    </tr>
+                </thead>
+                <?php if ($this->registros && count($this->registros)) { ?>
+                    <tbody>
+                        <?php
+                            foreach ($this->registros as $registro) {
+                                $txt_periodicidade = "--";
+                                $periodicidade = $registro->findParentRow("TbPeriodicidade");
+                                if ($periodicidade) {
+                                    $txt_periodicidade = $periodicidade->toString();
+                                }
+                                $txt_mes_referencia = "--";
+                                if ($registro->mes_referencia) {
+                                    $txt_mes_referencia = Escola_Util::pegaMes($registro->mes_referencia);
+                                }
+                                $transporte_grupo = "--";
+                                $tg = $registro->findParentRow("TbTransporteGrupo");
+                                if ($tg) {
+                                    $transporte_grupo = $tg->toString();
+                                }
+                                $txt_emite_documento = ($registro->emite_documento) ? "SIM" : "NÃO";
+                                ?>
+                            <tr>
+                                <td>
+                                    <a href="<?php echo $this->url(array("action" => "viewvinculo", "id" => $registro->getId())); ?>">
+                                        <?php echo $transporte_grupo; ?>
+                                    </a>
+                                </td>
+                                <td>
+                                    <a href="<?php echo $this->url(array("action" => "viewvinculo", "id" => $registro->getId())); ?>">
+                                        <?php echo $registro->pega_valor()->toString(); ?>
+                                    </a>
+                                </td>
+                                <td>
+                                    <a href="<?php echo $this->url(array("action" => "viewvinculo", "id" => $registro->getId())); ?>">
+                                        <?php echo $txt_periodicidade; ?>
+                                    </a>
+                                </td>
+                                <td>
+                                    <a href="<?php echo $this->url(array("action" => "viewvinculo", "id" => $registro->getId())); ?>">
+                                        <?php echo $txt_mes_referencia; ?>
+                                    </a>
+                                </td>
+                                <td>
+                                    <a href="<?php echo $this->url(array("action" => "viewvinculo", "id" => $registro->getId())); ?>">
+                                        <?php echo $registro->validade_dias; ?>
+                                    </a>
+                                </td>
+                                <td>
+                                    <a href="<?php echo $this->url(array("action" => "viewvinculo", "id" => $registro->getId())); ?>">
+                                        <?php echo Escola_Util::number_format($registro->juros_dia); ?>
+                                    </a>
+                                </td>
+                                <td>
+                                    <a href="<?php echo $this->url(array("action" => "viewvinculo", "id" => $registro->getId())); ?>">
+                                        <?php echo $registro->mostrar_obrigatorio(); ?>
+                                    </a>
+                                </td>
+                                <td>
+                                    <a href="<?php echo $this->url(array("action" => "viewvinculo", "id" => $registro->getId())); ?>">
+                                        <?php echo $txt_emite_documento; ?>
+                                    </a>
+                                </td>
+                                <td>
+                                    <div class="btn-group">
+                                        <a href="<?php echo $this->url(array(
+                                                                "controller" => $this->getRequest()->getControllerName(),
+                                                                "action" => "viewvinculo",
+                                                                "id" => $registro->getId()
+                                                            )); ?>" class="btn" title="Visualizar">
+                                            <i class="icon-search"></i>
+                                        </a>
+                                        <a href="<?php echo $this->url(array(
+                                                                "controller" => $this->getRequest()->getControllerName(),
+                                                                "action" => "editarvinculo",
+                                                                "id" => $registro->getId()
+                                                            )); ?>" class="btn" title="Editar">
+                                            <i class="icon-cog"></i>
+                                        </a>
+                                        <a href="<?php echo $this->url(array(
+                                                                "controller" => $this->getRequest()->getControllerName(),
+                                                                "action" => "excluirvinculo",
+                                                                "id" => $registro->getId()
+                                                            )); ?>" class="btn link_excluir" title="Excluir">
+                                            <i class="icon-trash"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        <?php } ?>
+                    </tbody>
+                <?php } ?>
+            </table>
+            <?php if ($this->registros && count($this->registros)) {
+                echo $this->paginationControl($this->registros, "sliding", "minha_paginacao_control.phtml");
+            }
+            ?>
+        </div>
+    </div>
+</div>

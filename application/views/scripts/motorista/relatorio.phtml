@@ -1,0 +1,44 @@
+<div class="conteudo_controller">
+    <div class="row-fluid">
+        <div class="span12">
+            <form action="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(), "action" => $this->getRequest()->getActionName())); ?>" method="post" id="formulario" class="formulario form-horizontal" enctype="multipart/form-data">
+                <input type="hidden" name="operacao" id="operacao" value="imprimir" />
+                <div class="well well-small">
+                    <div class="page-header">
+                        <h4>Relatórios Vinculados ao Motorista</h4>
+                    </div>
+                    <dl class="dl-horizontal">
+                        <dt>Motorista:</dt>
+                        <dd><?php echo $this->motorista->toString(); ?></dd>
+                    </dl>
+                    <div class="control-group">
+                        <label for="tipo" class="control-label">Relatório(s):</label>
+                        <div class="controls">
+                            <select name="id_relatorio" id="id_relatorio" class="span6">
+                                <option value="" <?php echo (!$this->dados["id_relatorio"])?"selected":""; ?>>==> SELECIONE UM RELATÓRIO <==</option>
+<?php foreach ($this->relatorios as $relatorio) { ?>
+                                <option value="<?php echo $relatorio->getId(); ?>" <?php echo ($this->dados["id_relatorio"] == $relatorio->getId())?"selected":""; ?>><?php echo $relatorio->toString(); ?></option>
+<?php } ?>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label for="tipo" class="control-label">Tipo de Saída:</label>
+                        <div class="controls">
+                            <select name="tipo" id="tipo">
+                                <option value="HTML" <?php echo ($this->dados["tipo"] == "HTML")?"selected":""; ?>>VISUALIZAR</option>
+                                <option value="PDF" <?php echo ($this->dados["tipo"] == "PDF")?"selected":""; ?>>PDF</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            <?php
+                if (!$this->errors && $this->rel && $this->method) {
+                    $method = $this->method;
+                    echo $this->rel->$method();
+                } 
+            ?>
+            </form>
+        </div>
+    </div>
+</div>

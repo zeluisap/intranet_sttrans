@@ -1,0 +1,37 @@
+<div class="conteudo_controller">
+    <div class="row-fluid">
+        <div class="span12">
+            <div class="well">
+                <div class="page-header">
+                    <h4>Cadastro de Convênio Bancário</h4>
+                </div>
+                <dl class="dl-horizontal">
+                    <dt>Código:</dt>
+                    <dd><?php echo $this->registro->getId(); ?></dd>
+                </dl>
+                <dl class="dl-horizontal">
+                    <dt>Descrição:</dt>
+                    <dd><?php echo $this->registro->descricao; ?></dd>
+                </dl>
+                <dl class="dl-horizontal">
+                    <dt>Convênio:</dt>
+                    <dd><?php echo $this->registro->convenio; ?></dd>
+                </dl>
+                <dl class="dl-horizontal">
+                    <dt>Contrato:</dt>
+                    <dd><?php echo $this->registro->contrato; ?></dd>
+                </dl>
+                <dl class="dl-horizontal">
+                    <dt>Padrão?</dt>
+                    <dd><?php echo $this->registro->mostrarPadrao(); ?></dd>
+                </dl>
+<?php if ($this->ib) { ?>
+                <dl class="dl-horizontal">
+                    <dt>Informações Bancárias:</dt>
+                    <dd><?php echo $this->ib->toString(); ?></dd>
+                </dl>
+<?php } ?>
+            </div>
+        </div>
+    </div>
+</div>

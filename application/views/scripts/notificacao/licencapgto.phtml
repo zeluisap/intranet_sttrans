@@ -1,0 +1,14 @@
+<div class="conteudo_controller">
+    <div class="row-fluid">
+        <div class="span12">
+            <form action="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(), "action" => $this->getRequest()->getActionName())); ?>" method="post" id="formulario" class="formulario form-horizontal">
+                <div class="well well-small">
+                    <fieldset>
+                        <legend>CONFIRMAR PAGAMENTO DE NOTIFICAÇÃO DE AUTO DE INFRAÇÃO: </legend>
+<?php echo $this->registro->form_pagamento($this); ?>
+                    </fieldset>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

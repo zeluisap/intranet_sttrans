@@ -1,0 +1,51 @@
+<div class="conteudo_controller">
+    <div class="row-fluid">
+        <div class="span12">
+            <form action="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(), "action" => $this->getRequest()->getActionName())); ?>" method="post" id="formulario" class="formulario form-horizontal">
+<?php if ($this->registro->getId()) { ?>
+                <input type="hidden" name="id" id="id" value="<?php echo $this->registro->getId(); ?>" />
+<?php } ?>
+                <div class="well">
+                    <fieldset>
+                        <legend>CADASTRO DE ROTA > PONTO DE ÔNIBUS: </legend>
+<?php if ($this->registro->getId()) { ?>
+                            <dl class="dl-horizontal">
+                                <dt>Código:</dt>
+                                <dd><?php echo $this->registro->getId(); ?></dd>
+                            </dl>
+<?php } ?>
+                        <dl class="dl-horizontal">
+                            <dt>Transporte:</dt>
+                            <dd><?php echo $this->transporte->toString(); ?></dd>
+                        </dl>
+                        <dl class="dl-horizontal">
+                            <dt>Rota:</dt>
+                            <dd><?php echo $this->rota->toString(); ?></dd>
+                        </dl>
+<?php
+$ctrl = new Escola_Form_Element_Select_Table("id_onibus_parada");
+$ctrl->setPkName("id_onibus_parada");
+$ctrl->setModel("TbOnibusParada");
+$ctrl->setValue($this->registro->id_onibus_parada);
+$ctrl->setLabel("Ponto de Ônibus: ");
+$ctrl->setAttrib("class", "span5");
+echo $ctrl->render($this);
+?>
+<?php if ($this->registro->getId()) { ?>
+                        <div class="control-group">
+                            <label for="ordem" class="control-label">Ordem: </label>
+                            <div class="controls">
+                                <select name="ordem" id="ordem">
+<?php for ($i = 1; $i <= $this->ultima_ordem; $i++) { ?>
+                                    <option value="<?php echo $i; ?>" <?php echo ($i == $this->registro->ordem)?"selected":""; ?>><?php echo $i; ?></option>
+<?php } ?>
+                                </select>
+                            </div>
+                        </div>
+<?php } ?>
+                    </fieldset>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

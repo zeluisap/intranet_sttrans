@@ -1,0 +1,22 @@
+<?php 
+$grupos = $this->getHeaderGrupo();
+if (!$grupos) {
+    return;
+}
+?>
+<div class="row-fluid">
+    <div class="span12">
+        <div class="well well-small">
+            <?php 
+            foreach ($grupos as $grupo) { 
+                $legenda = Escola_Util::valorOuNulo($grupo, "legenda");
+                $valor = Escola_Util::valorOuNulo($grupo, "valor");
+            ?>
+                <dl class="dl-horizontal sem-margin-bottom">
+                    <dt><?php echo $legenda; ?>:</dt>
+                    <dd><?php echo $valor; ?></dd>
+                </dl>
+            <?php } ?>
+        </div>
+    </div>
+</div>

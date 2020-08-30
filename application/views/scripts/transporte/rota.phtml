@@ -1,0 +1,115 @@
+<div class="conteudo_controller">
+    <div class="row-fluid">
+        <div class="span12">
+            <form action="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(), "action" => "veiculo")); ?>" method="post" id="formulario" class="formulario">
+            <div class="well well-small">
+                <dl class="dl-horizontal">
+                    <dt>Transporte: </dt>
+                    <dd><?php echo $this->transporte->toString(); ?></dd>
+                </dl>
+            </div>
+            <table class="table table-striped table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Tipo de Rota</th>
+                            <th>Linha</th>
+                            <th>Tarifa</th>
+                            <th>Km</th>
+                            <th>Tempo Total</th>
+                            <th>Velocidade Média (Km/h)</th>
+                            <th width="20px">Operações</th>
+                        </tr>
+                    </thead>
+<?php if ($this->registros && count($this->registros)) { ?>
+                    <tbody>
+<?php 
+    foreach ($this->registros as $registro) { 
+        $txt_tarifa = "--";
+        $tarifa = $registro->pega_tarifa();
+        if ($tarifa) {
+            $txt_tarifa = $tarifa->toString();
+        }
+?>
+                        <tr>
+                            <td>
+                                <a href="<?php echo $this->url(array("action" => "viewrota", "id_transporte" => $this->transporte->getId(), "id" => $registro->getId())); ?>">
+                                    <?php echo $registro->findParentRow("TbRotaTipo")->toString(); ?>
+                                </a>
+                            </td>
+                            <td>
+                                <a href="<?php echo $this->url(array("action" => "viewrota", "id_transporte" => $this->transporte->getId(), "id" => $registro->getId())); ?>">
+                                    <?php echo $registro->findParentRow("TbLinha")->toString(); ?>
+                                </a>
+                            </td>
+                            <td>
+                                <a href="<?php echo $this->url(array("action" => "viewrota", "id_transporte" => $this->transporte->getId(), "id" => $registro->getId())); ?>">
+                                    <?php echo $txt_tarifa; ?>
+                                </a>
+                            </td>
+                            <td>
+                                <div class="text-center">
+                                <a href="<?php echo $this->url(array("action" => "viewrota", "id_transporte" => $this->transporte->getId(), "id" => $registro->getId())); ?>">
+                                    <?php echo Escola_Util::number_format($registro->km); ?>
+                                </a></div>
+                            </td>
+                            <td>
+                                <div class="text-center">
+                                    <a href="<?php echo $this->url(array("action" => "viewrota", "id_transporte" => $this->transporte->getId(), "id" => $registro->getId())); ?>">
+                                        <?php echo $registro->tempo_total; ?>
+                                    </a>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="text-center">
+                                    <a href="<?php echo $this->url(array("action" => "viewrota", "id_transporte" => $this->transporte->getId(), "id" => $registro->getId())); ?>">
+                                        <?php echo Escola_Util::number_format($registro->km_velocidade_media); ?>
+                                    </a>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="btn-group">	
+                                    <a href="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(),
+                                                                         "action" => "viewrota",
+                                                                         "id_transporte" => $this->transporte->getId(), "id" => $registro->getId())); ?>" class="btn" title="Visualizar">
+                                        <i class="icon-search"></i>
+                                    </a>
+                                    <a href="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(),
+                                                                         "action" => "editarrota",
+                                                                         "id_transporte" => $this->transporte->getId(), "id" => $registro->getId())); ?>" class="btn" title="Editar">
+                                        <i class="icon-cog"></i>
+                                    </a>
+                                    <a href="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(),
+                                                                         "action" => "excluirrota",
+                                                                         "id_transporte" => $this->transporte->getId(), "id" => $registro->getId())); ?>" class="btn link_excluir" title="Excluir">
+                                        <i class="icon-trash"></i>
+                                    </a>
+                                    <a href="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(),
+                                                                         "action" => "rotaviagem",
+                                                                         "id_transporte" => $this->transporte->getId(), "id" => $registro->getId())); ?>" class="btn" title="Rota Viagem">
+                                        <i class="icon-random"></i>
+                                    </a>
+                                    <a href="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(),
+                                                                         "action" => "rotaparada",
+                                                                         "id_transporte" => $this->transporte->getId(), "id" => $registro->getId())); ?>" class="btn" title="Rota Parada">
+                                        <i class="icon-truck"></i>
+                                    </a>
+                                    <a href="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(),
+                                                                         "action" => "bdo",
+                                                                         "id_transporte" => $this->transporte->getId(), "id" => $registro->getId())); ?>" class="btn" title="Borderô Diário do Ônibus">
+                                        <i class="icon-building"></i>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+            <?php } ?>
+                    </tbody>
+            <?php } ?>
+                </table>
+<?php if ($this->registros && count($this->registros)) {
+ echo $this->paginationControl($this->registros, "sliding", "minha_paginacao_control.phtml");
+}
+?>
+            </form>
+        </div>
+    </div>
+</div>

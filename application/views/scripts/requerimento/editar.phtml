@@ -1,0 +1,71 @@
+<div class="operacao operacao-pessoa" style="display: none;">
+    <?php
+    include('editar_pessoa.phtml');
+    ?>
+</div>
+
+<div class="operacao operacao-requerimento" style="display: none;">
+    <?php
+    include('editar_requerimento.phtml');
+    ?>
+</div>
+
+<div class="operacao operacao-visualizacao" style="display: none;">
+    <?php
+    include('editar_visualizacao.phtml');
+    ?>
+</div>
+
+<script>
+    const registro = <?= json_encode($this->registro->toArray()) ?>;
+
+    let operacao = "";
+    const dados = {};
+
+    if (registro) {
+        if (registro.pessoa) {
+            dados.pessoa = registro.pessoa;
+        }
+
+        if (registro.itens) {
+            dados.servicos = registro.itens;
+        }
+
+    }
+
+    function cancelar() {
+        if (!operacao) {
+            setOperacao("pessoa");
+            return;
+        }
+        const acao = operacao + "Cancelar();";
+        eval(acao);
+    }
+
+    async function salvarForm() {
+        if (!operacao) {
+            $.mensagemAlerta({
+                mensagem: "Problema ao tentar salvar o registro."
+            });
+            return;
+        }
+        const acao = "dados." + operacao + " = salvarForm" + ucFirst(operacao) + "();";
+        eval(acao);
+
+        await dados[operacao];
+    }
+
+    function setOperacao(op, dados) {
+
+        $(".btn-topo").hide();
+
+        operacao = op;
+        $(".operacao").hide();
+        $(".operacao-" + operacao).show();
+        eval(operacao + "_init(dados);");
+    }
+
+    $(document).ready(function() {
+        setOperacao("pessoa");
+    });
+</script>

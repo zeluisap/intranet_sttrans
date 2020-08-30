@@ -1,0 +1,90 @@
+<div class="conteudo_controller">
+    <div class="row-fluid">
+        <div class="span12">
+            <table class="table table-striped table-bordered">
+                <thead>
+                    <tr>
+                        <th>Data / Hora Importação</th>
+                        <th>Convênio</th>
+                        <th>Arquivo</th>
+                        <th>Tamanho</th>
+                        <th>Ítens</th>
+                        <th width="20px">Operações</th>
+                    </tr>
+                </thead>
+        <?php if ($this->registros && count($this->registros)) { ?>
+                <tbody>
+        <?php 
+            foreach ($this->registros as $registro) { 
+                $convenio = $arquivo = $tamanho = $items = "--";
+                $ar = $registro->pegaArquivo();
+                if ($ar) {
+                    $arr = array();
+                    $arr[] = $ar->toString();
+                    $arr[] = $ar->nome_fisico;
+                    $arquivo = implode(" - ", $arr);
+                    $tamanho = Escola_Util::mostrarTamanho($ar->tamanho);
+                }
+                if ($registro->convenio) {
+                    $convenio = $registro->convenio;
+                    if ($convenio) {
+                        $tb = new TbBancoConvenio();
+                        $bc = $tb->pegaPorConvenio($convenio);
+                        if ($bc) {
+                            $convenio = $bc->toString();
+                        }
+                    }
+                }
+                $items = $registro->pegaQtdItems();
+        ?>
+                    <tr>
+                        <td>
+                            <a href="<?php echo $this->url(array("action" => "view", "id" => $registro->getId())); ?>">
+                                <?php echo Escola_Util::formatData($registro->data_importacao); ?> - <?php echo $registro->hora_importacao; ?>
+                            </a>
+                        </td>
+                        <td>
+                            <a href="<?php echo $this->url(array("action" => "view", "id" => $registro->getId())); ?>">
+                            <?php echo $convenio; ?>
+                            </a>
+                        </td>
+                        <td>
+                            <a href="<?php echo $this->url(array("action" => "view", "id" => $registro->getId())); ?>">
+                                <?php echo $arquivo; ?>
+                            </a>
+                        </td>
+                        <td>
+                            <a href="<?php echo $this->url(array("action" => "view", "id" => $registro->getId())); ?>">
+                                <?php echo $tamanho; ?>
+                            </a>
+                        </td>
+                        <td>
+                            <a href="<?php echo $this->url(array("action" => "view", "id" => $registro->getId())); ?>">
+                                <?php echo $items; ?>
+                            </a>
+                        </td>
+                        <td>
+                            <div class="btn-group">	
+                                <a href="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(),
+                                                                     "action" => "view",
+                                                                     "id" => $registro->getId())); ?>" class="btn" title="Visualizar">
+                                    <i class="icon-search"></i>
+                                </a>
+                                <a href="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(),
+                                                                     "action" => "excluir",
+                                                                     "id" => $registro->getId())); ?>" class="btn link_excluir">
+                                    <i class="icon-trash"></i>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+        <?php } ?>
+                </tbody>
+        <?php } ?>
+            </table>
+<?php if ($this->registros && count($this->registros)) { ?>
+<?php echo $this->paginationControl($this->registros, "sliding", "minha_paginacao_control.phtml"); ?>
+<?php } ?>
+        </div>
+    </div>
+</div>

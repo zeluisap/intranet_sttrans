@@ -1,0 +1,63 @@
+<div class="conteudo_controller">
+    <div class="row-fluid">
+        <div class="span12">
+            <form action="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(), "action" => "salvarprevisaovalor")); ?>" method="post" id="formulario" class="formulario form-horizontal">
+                <input type="hidden" name="id_vinculo" id="id_vinculo" value="<?php echo $this->vinculo->getId(); ?>" />
+                <div class="well well-small">
+                    <dl class="dl-horizontal">
+                        <dt>Vínculo:</dt>
+                        <dd><?php echo $this->vinculo->toString(); ?></dd>
+                    </dl>
+                </div>
+                <div class="well">
+                    <fieldset>
+                        <legend>Adicionar Previsão - <?php echo ($this->pt->bolsista())?"Quantidade de Bolsistas":"Valor"; ?></legend>
+                        <dl class="dl-horizontal">
+                            <dt>Tipo de Previsão:</dt>
+                            <dd><?php echo $this->pt->toString(); ?></dd>
+                        </dl>
+<?php if ($this->bt) { ?>
+                        <dl class="dl-horizontal">
+                            <dt>Tipo de Despesa:</dt>
+                            <dd><?php echo $this->bt->toString(); ?></dd>
+                        </dl>
+<?php } ?>
+                        <dl class="dl-horizontal">
+                            <dt>Ano:</dt>
+                            <dd><?php echo $this->ano; ?></dd>
+                        </dl>
+<?php 
+$tb = new TbPrevisao();
+foreach ($this->meses as $mes => $nome_mes) { 
+    $dados = array("id_vinculo" => $this->vinculo->getId(),
+                   "id_previsao_tipo" => $this->pt->getId(),
+                   "ano" => $this->ano,
+                   "mes" => $mes);
+    if ($this->bt) {
+        $dados["id_bolsa_tipo"] = $this->bt->getId();
+    }
+    $previsao = false;
+    $valor = "0";
+    $previsaos = $tb->listar($dados);
+    if ($previsaos) {
+        $previsao = $previsaos->current();
+        if ($this->pt->bolsista()) {
+            $valor = $previsao->pega_valor()->valor;
+        } else {
+            $valor = $previsao->pega_valor()->toString();
+        }
+    }
+?>
+                        <div class="control-group">
+                            <label for="ano" class="control-label"><?php echo $nome_mes; ?>:</label>
+                            <div class="controls">
+                                <input type="text" name="valor[<?php echo $mes; ?>]" id="valor" value="<?php echo $valor; ?>" class="span2 <?php echo ($this->pt->bolsista())?"":"moeda"; ?> field" />
+                            </div>
+                        </div>
+<?php } ?>
+                    </fieldset>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

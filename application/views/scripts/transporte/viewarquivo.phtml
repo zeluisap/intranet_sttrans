@@ -1,0 +1,54 @@
+<div class="conteudo_controller">
+    <div class="row-fluid">
+        <div class="span12">
+            <div class="well">
+                <?php echo $this->arquivo->miniatura(array("width" => 90, "align" => "right", "link" => true)); ?>
+                <div class="page-header">
+                    <h4>Transporte - Arquivo</h4>
+                </div>
+                <dl class="dl-horizontal">
+                    <dt>Código:</dt>
+                    <dd><?php echo $this->registro->getId(); ?></dd>
+                </dl>
+                <dl class="dl-horizontal">
+                    <dt>Transporte:</dt>
+                    <dd><?php echo $this->registro->pegaObjeto()->toString(); ?></dd>
+                </dl>
+                <dl class="dl-horizontal">
+                    <dt>Criação:</dt>
+                    <dd><?php echo Escola_Util::formatData($this->documento->data_criacao); ?> <?php echo $this->documento->hora_criacao; ?></dd>
+                </dl>
+        <?php $dt = $this->documento->findParentRow("TbDocumentoTipo"); ?>
+                <dl class="dl-horizontal">
+                    <dt>Tipo:</dt>
+                    <dd><?php echo $dt->findParentRow("TbDocumentoTipoTarget")->toString(); ?></dd>
+                </dl>
+                <dl class="dl-horizontal">
+                    <dt>Tipo do Documento:</dt>
+                    <dd><?php echo $dt->toString(); ?></dd>
+                </dl>
+        <?php
+        $numero = $this->documento->mostrarNumero();
+        if ($numero) {
+        ?>
+                <dl class="dl-horizontal">
+                    <dt>Número:</dt>
+                    <dd><?php echo $this->documento->mostrarNumero(); ?></dd>
+                </dl>
+        <?php } ?>
+        <?php if ($this->documento_resumo) { ?>
+                <dl class="dl-horizontal">
+                    <dt>Descrição:</dt>
+                    <dd><?php echo $this->documento->resumo; ?></dd>
+                </dl>
+        <?php } ?>
+        <?php if ($this->documento->localizacao_fisica) { ?>
+                <dl class="dl-horizontal">
+                    <dt>Localização Física:</dt>
+                    <dd><?php echo $this->documento->localizacao_fisica; ?></dd>
+                </dl>
+        <?php } ?>
+            </div>
+        </div>
+    </div>
+</div>

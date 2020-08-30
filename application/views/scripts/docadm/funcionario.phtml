@@ -1,0 +1,134 @@
+<div class="conteudo_controller">
+    <div class="row-fluid">
+        <div class="span12">
+            <form action="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(), "action" => "index")); ?>" method="post" id="formulario" class="formulario form-horizontal" enctype="multipart/form-data">
+                <input type="hidden" name="jan_pagina" id="jan_pagina" />
+                <input type="hidden" name="operacao" id="operacao" />
+                <input type="hidden" name="id_servidor" id="id_servidor" />
+                
+<div id="janela_cpf" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3 id="myModalLabel">Localizar Servidor</h3>
+    </div>
+    <div class="modal-body">
+        <div class="well well-small">
+            <fieldset>
+                <div class="control-group field_setor">
+                    <label for="jan_cpf" class="control-label">C.P.F.:</label>
+                    <div class="controls">
+    <?php
+    $ctrl = new Escola_Form_Element_Cpf("jan_cpf");
+    $ctrl->setValue("");
+    echo $ctrl->render($this);
+    ?>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label for="filtro_nome" class="control-label">Nome:</label>
+                    <div class="controls">
+                        <input type="text" name="filtro_nome" id="filtro_nome" value="" size="60" class="span5" />
+                    </div>
+                </div>
+            </fieldset>
+        </div>
+        <table class="table table-striped table-bordered" id="tabela_lista">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nome</th>
+                    <th>Matrícula</th>
+                    <th>Cargo</th>
+                    <th>Lotação Principal</th>
+                </tr>
+            </thead>
+            <tbody class="corpo_lista">
+            </tbody>
+        </table>
+    </div>
+    <div class="modal-footer">
+        <button class="btn" data-dismiss="modal" aria-hidden="true">Fechar</button>
+        <input type="button" value="Limpar Filtro" id="jan_filtro_limpar" class="btn" />
+        <input type="submit" value="Procurar" class="btn btn-primary" />
+    </div>
+</div>
+                
+                <div class="well well-small">
+                    <dl class="dl-horizontal">
+                        <dt>Documento:</dt>
+                        <dd><?php echo $this->documento->toString(); ?></dd>
+                    </dl>
+                </div>
+                <table class="table table-striped table-bordered">
+                    <thead>
+                        <tr>
+                            <th>C.P.F.</th>
+                            <th>Nome</th>
+                            <th>Matrícula</th>
+                            <th>Cargo</th>
+                            <th>Setor Principal</th>
+                            <th colspan="5">Operações</th>
+                        </tr>
+                    </thead>
+            <?php if ($this->registros && count($this->registros)) { ?>
+                    <tbody>
+            <?php
+                foreach ($this->registros as $registro) {
+                    $setor = "";
+                    $pf = $registro->findParentRow("TbPessoaFisica");
+                    $lotacao = $registro->pegaLotacaoPrincipal();
+                    if ($lotacao) {
+                        $setor = $lotacao->findParentRow("TbSetor")->toString();
+                    }
+            ?>
+                        <tr>
+                            <td>
+                                <a href="<?php echo $this->url(array("action" => "viewfuncionario", "id_funcionario" => $registro->getId(), "id" => $this->documento->getId())); ?>">
+                                    <?php echo $this->formatCpf($pf->cpf); ?>
+                                </a>
+                            </td>
+                            <td>
+                                <a href="<?php echo $this->url(array("action" => "viewfuncionario", "id_funcionario" => $registro->getId(), "id" => $this->documento->getId())); ?>">
+                                <?php echo $pf->nome; ?>
+                                </a>
+                            </td>
+                            <td>
+                                <a href="<?php echo $this->url(array("action" => "viewfuncionario", "id_funcionario" => $registro->getId(), "id" => $this->documento->getId())); ?>">
+                                <?php echo $registro->matricula; ?>
+                                </a>
+                            </td>
+                            <td>
+                                <a href="<?php echo $this->url(array("action" => "viewfuncionario", "id_funcionario" => $registro->getId(), "id" => $this->documento->getId())); ?>">
+                                <?php echo $registro->findParentRow("TbCargo")->toString(); ?>
+                                </a>
+                            </td>
+                            <td>
+                                <a href="<?php echo $this->url(array("action" => "viewfuncionario", "id_funcionario" => $registro->getId(), "id" => $this->documento->getId())); ?>">
+                                <?php echo $setor; ?>
+                                </a>
+                            </td>
+                            <td width="20px">
+                                <div class="btn-group">
+                                    <a href="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(),
+                                                                         "action" => "viewfuncionario",
+                                                                         "id" => $this->documento->getId(),
+                                                                         "id_funcionario" => $registro->getId())); ?>" class="btn" title="Visualizar">
+                                        <i class="icon-search"></i>
+                                    </a>
+                                    <a href="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(),
+                                                                         "action" => "excluirfuncionario",
+                                                                         "id" => $this->documento->getId(),
+                                                                         "id_funcionario" => $registro->getId())); ?>" class="btn link_excluir" title="Excluir">
+                                        <i class="icon-trash"></i>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+            <?php } ?>
+                    </tbody>
+            <?php } ?>
+                </table>
+            </form>
+        </div>
+    </div>
+</div>

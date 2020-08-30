@@ -1,0 +1,38 @@
+div#main_user {
+	width: 98%;
+	margin: 7px auto;
+}
+div#main_user .centro {
+	width: 6%;
+	height: 400px;
+}
+div#main_user .esquerda, div#main_user .centro, div#main_user .direita {
+	float: left;
+}
+div#main_user .esquerda, div#main_user .direita {
+	width: 46.6%;
+}
+
+div#main_user .lista {
+	width: 100%;
+	margin: 7px 0;
+	height: 400px;
+}
+.left {
+	clear:none;
+	float: left;
+	margin-right: 10px;
+}
+.setas {
+	width: 50px;
+	margin: 20px auto;	
+	text-align: center;
+}
+.setas .botao {
+	float: none;
+	width: 30px;
+	margin-top: 40px;
+}
+div#main_user label {
+	margin-left: 5px;
+}

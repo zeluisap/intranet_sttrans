@@ -1,0 +1,104 @@
+<div class="conteudo_controller">
+    <div class="row-fluid">
+           <section id="unseen">
+            <table class="table table-bordered table-striped table-condensed cf">
+                <thead>
+                    <tr class="cf">
+                        <th>Ordem</th>
+                        <th>Tipo</th>
+                        <th>Posição</th>
+                        <th>Descrição</th>
+                        <th>URL</th>
+                        <th>Ícone</th>
+                        <th>Superior</th>
+                        <th width="20px">Operações</th>
+                    </tr>
+                </thead>
+        <?php if ($this->registros && count($this->registros)) { ?>
+                <tbody>
+        <?php 
+            foreach ($this->registros as $registro) { 
+        ?>
+                    <tr>
+                        <td data-title="Ordem">
+                            <a href="<?php echo $this->url(array("action" => "view", "id" => $registro->getId())); ?>">
+                                <?php echo $registro->ordem; ?>
+                            </a>
+                        </td>
+                        <td data-title="Tipo">
+                            <a href="<?php echo $this->url(array("action" => "view", "id" => $registro->getId())); ?>">
+                                <?php echo $registro->findParentRow("TbMenuTipo")->toString(); ?>
+                            </a>
+                        </td>
+                        <td data-title="Posição">
+                            <a href="<?php echo $this->url(array("action" => "view", "id" => $registro->getId())); ?>">
+                                <?php echo $registro->findParentRow("TbMenuPosicao")->toString(); ?>
+                            </a>
+                        </td>
+                        <td data-title="Descrição">
+                            <a href="<?php echo $this->url(array("action" => "view", "id" => $registro->getId())); ?>">
+                            <?php echo $registro->descricao; ?>
+                            </a>
+                        </td>
+                        <td data-title="URL">
+                            <a href="<?php echo $this->url(array("action" => "view", "id" => $registro->getId())); ?>">
+                            <?php echo $registro->mostrarUrl(); ?>
+                            </a>
+                        </td>
+                        <td data-title="Ícone">
+                            <a href="<?php echo $this->url(array("action" => "view", "id" => $registro->getId())); ?>">
+                            <?php echo $registro->mostrarIcone(); ?>
+                            </a>
+                        </td>
+                        <td data-title="Superior">
+                            <a href="<?php echo $this->url(array("action" => "view", "id" => $registro->getId())); ?>">
+                            <?php echo $registro->mostrarSuperior(); ?>
+                            </a>
+                        </td>
+                        <td data-title="Operações">
+                            <div class="btn-group">
+                                <a href="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(),
+                                                                     "action" => "view",
+                                                                     "id" => $registro->getId())); ?>" class="btn" title="Visualizar">
+                                    <i class="icon-search"></i>
+                                </a>
+                                <a href="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(),
+                                                                     "action" => "editar",
+                                                                     "id" => $registro->getId())); ?>" class="btn" title="Editar">
+                                    <i class="icon-cog"></i>
+                                </a>
+                                <a href="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(),
+                                                                     "action" => "excluir",
+                                                                     "id" => $registro->getId())); ?>" class="btn link_excluir" title="Excluir">
+                                    <i class="icon-trash"></i>
+                                </a>
+        <?php if ($registro->ordem > 1) { ?>
+                                <a href="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(),
+                                                                     "action" => "subir",
+                                                                     "id" => $registro->id_menu)); ?>" class="btn" title="Subir">
+                                    <i class="icon-arrow-up"></i>
+                                </a>
+        <?php } ?>
+        <?php if ($registro->ordem < TbMenu::pegaUltimaOrdem()) { ?>
+                                <a href="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(),
+                                                                     "action" => "descer",
+                                                                     "id" => $registro->id_menu)); ?>" class="btn" title="Descer">
+                                    <i class="icon-arrow-down"></i>
+                                </a>
+        <?php } ?>
+                            </div>
+                        </td>
+                    </tr>
+        <?php } ?>
+                </tbody>
+        <?php } ?>
+            </table>
+        </section>
+
+                <?php
+if ($this->registros) { 
+	echo $this->paginationControl($this->registros, "sliding", "minha_paginacao_control.phtml");
+}
+?>
+    </div>
+</div>

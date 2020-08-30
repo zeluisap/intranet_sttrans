@@ -1,0 +1,103 @@
+<?php 
+$txt_tipo = $txt_numero = $txt_beneficiario = $txt_status = $txt_data_validade = $txt_justificativa = $txt_resposta = "";
+if (isset($this->credencial)) {
+    $registro = $this->credencial;
+    $ct = $registro->findParentRow("TbCredencialTipo");
+    if ($ct) {
+        $txt_tipo = $ct->toString();
+    }
+    $numero = $registro->mostrarNumero();
+    if (!empty($numero)) {
+        $txt_numero = $numero;
+    }
+    $pf = $registro->pegaBeneficiario();
+    if ($pf) {
+        $txt_beneficiario = $pf->toString();
+    }
+    $cs = $registro->findParentRow("TbCredencialStatus");
+    if ($cs) {
+        $txt_status = $cs->toString();
+    }
+}
+if ($this->justificativa) {
+    $txt_justificativa = $this->justificativa;
+}
+if ($this->data_validade) {
+    $txt_data_validade = $this->data_validade;
+}
+if (!$txt_data_validade) {
+    $data_validade = new Zend_Date();
+    $data_validade->add(1, Zend_Date::YEAR);
+    $txt_data_validade = $data_validade->toString("dd/MM/yyyy");    
+}
+if ($this->resposta) {
+    $txt_resposta = $this->resposta;
+}
+?>
+<script type="text/javascript">
+    $(document).ready(function() {
+        $("#resposta").change(function() {
+            $(".linha_data_validade, .linha_justificativa").hide();
+            if (!$(this).val().length) {
+                return false;
+            }
+            if ($(this).val() == "D") {
+                $(".linha_data_validade").show();
+            } else if ($(this).val() == "I") {
+                $(".linha_justificativa").show();
+            }
+        }).change();
+        $("#resposta").focus();
+    });
+</script>
+<div class="conteudo_controller">
+    <div class="row-fluid">
+        <div class="span12">
+            <form action="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(), "action" => $this->getRequest()->getActionName())); ?>" method="post" id="formulario" class="formulario form-horizontal">
+                <div class="well">
+                    <fieldset>
+                        <legend>DEFERIR / INDEFERIR: </legend>
+                        <dl class="dl-horizontal">
+                            <dt>Tipo:</dt>
+                            <dd><?php echo $txt_tipo; ?></dd>
+                        </dl>
+                        <dl class="dl-horizontal">
+                            <dt>Número:</dt>
+                            <dd><?php echo $txt_numero; ?></dd>
+                        </dl>
+                        <dl class="dl-horizontal">
+                            <dt>Beneficiário:</dt>
+                            <dd><?php echo $txt_beneficiario; ?></dd>
+                        </dl>
+                        <dl class="dl-horizontal">
+                            <dt>Status:</dt>
+                            <dd><?php echo $txt_status; ?></dd>
+                        </dl>
+                        <div class="control-group">
+                            <label for="resposta" class="control-label">Resposta:</label>
+                            <div class="controls">
+                                <select name="resposta" id="resposta" class="span4">
+                                    <option value="" <?php echo (!$txt_resposta)?"selected":""; ?>>==> SELECIONE <==</option>
+                                    <option value="D" <?php echo ($txt_resposta == "D")?"selected":""; ?>>DEFERIR</option>
+                                    <option value="I" <?php echo ($txt_resposta == "I")?"selected":""; ?>>INDEFERIR</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="control-group linha_data_validade" style="display:none">
+                            <label for="resposta_data_validade" class="control-label">Data de Validade:</label>
+                            <div class="controls">
+                                <input type="text" name="data_validade" id="data_validade" value="<?php echo $txt_data_validade; ?>" class="span2 data" />
+                            </div>
+                        </div>
+                        <div class="control-group linha_justificativa" style="display:none">
+                            <label for="justificativa" class="control-label">Justificativa:</label>
+                            <div class="controls">
+                                <textarea name="justificativa" id="justificativa" rows="5" class="span6"><?php echo $txt_justificativa; ?></textarea>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

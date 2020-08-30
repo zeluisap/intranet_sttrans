@@ -1,0 +1,80 @@
+<div class="conteudo_controller">
+    <div class="row-fluid">
+        <div class="span12">
+                <div class="well well-small">
+                    <dl class="dl-horizontal">
+                        <dt>Setor:</dt>
+                        <dd><?php echo $this->setor->toString(); ?></dd>
+                    </dl>
+                </div>
+                <div class="well">
+                    <div class="page-header">
+                        <h4>Dados Pessoais</h4>
+                    </div>
+                    <dl class="dl-horizontal">
+                        <dt>C.P.F.:</dt>
+                        <dd><?php echo $this->formatCpf($this->pf->cpf); ?></dd>
+                    </dl>
+                    <dl class="dl-horizontal">
+                        <dt>Nome:</dt>
+                        <dd><?php echo $this->pf->nome; ?></dd>
+                    </dl>
+                    <dl class="dl-horizontal">
+                        <dt>E-Mail:</dt>
+                        <dd><?php echo $this->pf->pega_pessoa()->email; ?></dd>
+                    </dl>
+                    <dl class="dl-horizontal">
+                        <dt>Data de Nascimento:</dt>
+                        <dd><?php echo $this->pf->mostrarDataNascimento(); ?></dd>
+                    </dl>
+                    <dl class="dl-horizontal">
+                        <dt>Identidade - Número:</dt>
+                        <dd><?php echo $this->pf->identidade_numero; ?></dd>
+                    </dl>
+                    <dl class="dl-horizontal">
+                        <dt>Identidade - Órgão Expedidor:</dt>
+                        <dd><?php echo $this->pf->identidade_orgao_expedidor; ?></dd>
+                    </dl>
+                    <dl class="dl-horizontal">
+                        <dt>Identidade - UF:</dt>
+                        <dd><?php echo $this->pf->pegaIdentidadeUf()->toString(); ?></dd>
+                    </dl>
+                </div>
+                <div class="well">
+                    <div class="page-header">
+                        <h4>Dados do Funcionário</h4>
+                    </div>
+                    <dl class="dl-horizontal">
+                        <dt>Matrícula:</dt>
+                        <dd><?php echo $this->funcionario->matricula; ?></dd>
+                    </dl>
+                    <dl class="dl-horizontal">
+                        <dt>Cargo:</dt>
+                        <dd><?php echo $this->funcionario->findParentRow("TbCargo")->toString(); ?></dd>
+                    </dl>
+                    <dl class="dl-horizontal">
+                        <dt>Data de Ingresso:</dt>
+                        <dd><?php echo $this->funcionario->mostrarDataIngresso(); ?></dd>
+                    </dl>
+            <?php if ($funcao = $this->registro->findParentRow("TbFuncionarioFuncao")) { ?>
+                    <dl class="dl-horizontal">
+                        <dt>Cargo Função:</dt>
+                        <dd><?php echo $funcao->toString(); ?></dd>
+                    </dl>
+            <?php } ?>
+                    <dl class="dl-horizontal">
+                        <dt>Chefe:</dt>
+                        <dd><?php echo $this->registro->mostrarChefe(); ?></dd>
+                    </dl>
+                    <dl class="dl-horizontal">
+                        <dt>Tipo de Lotação:</dt>
+                        <dd><?php echo $this->registro->findParentRow("TbLotacaoTipo")->toString(); ?></dd>
+                    </dl>
+                    <dl class="dl-horizontal">
+                        <dt>Status:</dt>
+                        <dd><?php echo $this->funcionario->findParentRow("TbFuncionarioSituacao")->toString(); ?></dd>
+                    </dl>
+                </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,96 @@
+<div class="conteudo_controller">
+    <div class="row-fluid">
+        <div class="span12">
+<form action="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(), "action" => "bolsatipo")); ?>" method="post" id="formulario" class="formulario form-horizontal" enctype="multipart/form-data">
+    <div class="well well-small">
+        <dl class="dl-horizontal">
+            <dt>Vínculo:</dt>
+            <dd><?php echo $this->vinculo->toString(); ?></dd>
+        </dl>
+    </div>
+	<table class="table table-striped table-bordered">
+		<thead>
+			<tr>
+                            <th>Tipo</th>
+				<th>Chave</th>
+				<th>Descrição</th>
+				<th>Valor</th>
+				<th width="20px">Operações</th>
+			</tr>
+		</thead>
+<?php if ($this->registros && count($this->registros)) { ?>
+		<tbody>
+<?php
+	foreach ($this->registros as $registro) {
+            $txt_previsao_tipo = "--";
+            $pt = $registro->findParentRow("TbPrevisaoTipo");
+            if ($pt) {
+                $txt_previsao_tipo = $pt->toString();
+            }
+?>
+			<tr>
+				<td>
+                    <a href="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(),
+															 "action" => "viewbolsatipo",
+                                                             "id_vinculo" => $this->vinculo->getId(),
+															 "id" => $registro->getId())); ?>" title="Visualizar">
+					<?php echo $txt_previsao_tipo; ?>
+                    </a>
+				</td>
+				<td>
+                    <a href="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(),
+															 "action" => "viewbolsatipo",
+                                                             "id_vinculo" => $this->vinculo->getId(),
+															 "id" => $registro->getId())); ?>" title="Visualizar">
+					<?php echo $registro->chave; ?>
+                    </a>
+				</td>
+				<td>
+                    <a href="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(),
+															 "action" => "viewbolsatipo",
+                                                             "id_vinculo" => $this->vinculo->getId(),
+															 "id" => $registro->getId())); ?>" title="Visualizar">
+					<?php echo $registro->descricao; ?>
+                    </a>
+				</td>
+				<td>
+                    <a href="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(),
+															 "action" => "viewbolsatipo",
+                                                             "id_vinculo" => $this->vinculo->getId(),
+															 "id" => $registro->getId())); ?>" title="Visualizar">
+					<?php echo $registro->mostrar_valor(); ?>
+                    </a>
+				</td>
+				
+				<td>
+                    <div class="btn-group">
+						<a href="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(),
+															 "action" => "viewbolsatipo",
+                                                            "id_vinculo" => $this->vinculo->getId(),
+															 "id" => $registro->getId())); ?>" class="btn" data-toggle="tooltip" title="Visualizar">
+							<i class="icon-zoom-in"></i>
+						</a>
+						<a href="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(),
+									 "action" => "editarbolsatipo",
+                                     "id_vinculo" => $this->vinculo->getId(),
+									 "id" => $registro->getId())); ?>" class="btn" title="Alterar">
+							<i class="icon-cog"></i>
+						</a>
+						<a href="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(),
+															 "action" => "excluirbolsatipo",
+                                                             "id_vinculo" => $this->vinculo->getId(),
+															 "id" => $registro->getId())); ?>" class="btn link_excluir" title="Excluir">
+							<i class="icon-trash"></i>
+						</a>
+                    </div>
+				</td>
+			</tr>
+<?php } ?>
+		</tbody>
+<?php } ?>
+	</table>
+</form>
+<?php echo $this->paginationControl($this->registros, "sliding", "minha_paginacao_control.phtml"); ?>
+        </div>
+    </div>
+</div>

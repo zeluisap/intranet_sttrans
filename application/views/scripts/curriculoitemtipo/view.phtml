@@ -1,0 +1,18 @@
+<form action="<?php echo $this->url(array("action" => "index")); ?>" method="post" id="formulario" class="formulario">
+	<input type="hidden" name="id" id="id" value="<?php echo $this->registro->getId(); ?>" />
+	<fieldset>
+		<legend>CADASTRO DE ÍTEM DE CURRÍCULO: </legend>
+		<div>
+			<label for="descricao">Código:</label>
+			<span class="read-only"><?php echo $this->registro->getId(); ?></span>
+		</div>
+		<div>
+			<label for="descricao">Chave:</label>
+			<span class="read-only"><?php echo $this->registro->chave; ?></span>
+		</div>
+		<div>
+			<label for="descricao">Descrição:</label>
+			<span class="read-only"><?php echo $this->registro->descricao; ?></span>
+		</div>
+	</fieldset>
+</form>

@@ -1,0 +1,86 @@
+<div class="conteudo_controller">
+    <div class="row-fluid">
+        <div class="span12">
+            <form action="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(), "action" => "editar")); ?>" method="post" id="formulario" class="formulario form-horizontal">
+                <input type="hidden" name="id" id="id" value="<?php echo $this->registro->getId(); ?>" />
+                <div class="well well-small">
+                    <fieldset id="grupo_transporte">
+                        <legend>CADASTRO DE TRANSPORTES: </legend>
+                <?php if ($this->registro->getId()) { ?>
+                        <dl class="dl-horizontal">
+                            <dt>ID:</dt>
+                            <dd><?php echo $this->registro->getId(); ?></dd>
+                        </dl>
+                <?php } 
+$ctrl = new Escola_Form_Element_Select_Table("id_transporte_grupo");
+$ctrl->setPkName("id_transporte_grupo");
+$ctrl->setModel("TbTransporteGrupo");
+$ctrl->setValue($this->transporte->id_transporte_grupo);
+$ctrl->setLabel("Grupo de Transporte: ");
+echo $ctrl->render($this);
+if (!$this->transporte->getId()) {
+    $ctrl = new Escola_Form_Element_Select_Table_Pessoa("id_pessoa");
+    $ctrl->setLabel("Proprietário:");
+    if ($this->registro instanceof Taxi) {
+        $ctrl->setValue($this->registro->id_pessoa);
+    } 
+    echo $ctrl->render($this);
+}
+?>
+                        <div class="control-group">
+                            <label for="codigo" class="control-label">Código:</label>
+                            <div class="controls">
+                                <input type="text" name="codigo" id="codigo" value="<?php echo $this->transporte->codigo; ?>" class="span2" />
+                            </div>
+                        </div>                        
+                    </fieldset>
+                </div>
+                <div class="well well-small hide" id="form_concessao">
+                    <fieldset>
+                        <legend>CONCESSÃO</legend>
+<?php
+$ctrl = new Escola_Form_Element_Select_Table("id_concessao_tipo");
+$ctrl->setPkName("id_concessao_tipo");
+$ctrl->setModel("TbConcessaoTipo");
+$ctrl->setValue($this->concessao->id_concessao_tipo);
+$ctrl->setLabel("Tipo de Concessão: ");
+echo $ctrl->render($this);
+?>
+                        <div class="control-group">
+                            <label for="concessao_data" class="control-label">Data da Concessão:</label>
+                            <div class="controls">
+                                <input type="text" name="concessao_data" id="concessao_data" class="span2 data" value="<?php echo Escola_Util::formatData($this->concessao->concessao_data); ?>" />
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label for="numero" class="control-label">Número:</label>
+                            <div class="controls">
+                                <input type="text" name="numero" id="numero" class="span2" value="<?php echo $this->concessao->numero; ?>" />
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label for="decreto" class="control-label">Decreto:</label>
+                            <div class="controls">
+                                <input type="text" name="decreto" id="decreto" class="span3" value="<?php echo $this->concessao->decreto; ?>" />
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label for="processo_numero" class="control-label">Número / Ano do Processo:</label>
+                            <div class="controls">
+                                <input type="text" name="processo_numero" id="processo_numero" class="span2" value="<?php echo $this->concessao->processo_numero; ?>" /> / <input type="text" name="processo_ano" id="processo_ano" class="span1" value="<?php echo $this->concessao->processo_ano; ?>" />
+                            </div>
+                        </div>
+<?php
+$ctrl = new Escola_Form_Element_Select_Table("id_concessao_validade");
+$ctrl->setPkName("id_concessao_validade");
+$ctrl->setModel("TbConcessaoValidade");
+$ctrl->setValue($this->concessao->id_concessao_validade);
+$ctrl->setLabel("Validade da Concessão: ");
+echo $ctrl->render($this);
+?>
+                    </fieldset>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

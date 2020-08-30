@@ -1,0 +1,18 @@
+<form action="<?php echo $this->url(array("action" => "editar")); ?>" method="post" id="formulario" class="formulario">
+	<input type="hidden" name="id" id="id" value="<?php echo $this->registro->getId(); ?>" />
+	<fieldset>
+		<legend>CADASTRO DE TIPO DE UNIDADE: </legend>
+<?php if ($this->registro->getId()) { ?>
+		<div>
+			<label>Código:</label>
+			<span class="read-only"><?php echo $this->registro->getId(); ?></span>
+		</div>
+<?php } ?>
+		<div>
+			<label for="chave">Chave:</label><input type="text" name="chave" id="chave" size="10" maxlength="10" value="<?php echo $this->registro->chave; ?>" />
+		</div>
+		<div>
+			<label for="descricao">Descrição:</label><input type="text" name="descricao" id="descricao" size="50" maxlength="50" value="<?php echo $this->registro->descricao; ?>" />
+		</div>
+	</fieldset>
+</form>

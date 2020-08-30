@@ -1,0 +1,134 @@
+<div class="conteudo_controller">
+    <div class="row-fluid">
+        <div class="span12">
+            <form action="<?php echo $this->url(array("controller" => "setor", "action" => "addfuncionario")); ?>" method="post" id="formulario" class="formulario form-horizontal">
+                <input type="hidden" name="id_setor" id="id_setor" value="<?php echo $this->setor->getId(); ?>" />
+            <?php if ($this->funcionario->getId()) { ?>
+                <input type="hidden" name="id_funcionario" id="id_funcionario" value="<?php echo $this->funcionario->getId(); ?>" />
+            <?php } ?>
+            <?php if ($this->pf->getId()) { ?>
+                <input type="hidden" name="id_pessoa_fisica" id="id_pessoa_fisica" value="<?php echo $this->pf->getId(); ?>" />
+            <?php } ?>
+            <?php if ($this->pf->pega_pessoa()->getId()) { ?>
+                <input type="hidden" name="id_pessoa" id="id_pessoa" value="<?php echo $this->pf->pega_pessoa()->getId(); ?>" />
+            <?php } ?>
+            <?php if ($this->lotacao->getId()) { ?>
+                <input type="hidden" name="id_lotacao" id="id_lotacao" value="<?php echo $this->lotacao->getId(); ?>" />
+            <?php } ?>
+                <input type="hidden" name="cpf" id="cpf" value="<?php echo $this->pf->cpf; ?>" />
+                <div class="well well-small">
+                    <dl class="dl-horizontal">
+                        <dt>Setor:</dt>
+                        <dd><?php echo $this->setor->toString(); ?></dd>
+                    </dl>
+                </div>
+                <div class="well">
+                    <fieldset>
+                        <legend>DADOS PESSOAIS: </legend>
+                        <dl class="dl-horizontal">
+                            <dt>C.P.F.:</dt>
+                            <dd><?php echo $this->formatCpf($this->pf->cpf); ?></dd>
+                        </dl>
+                        <div class="control-group">
+                            <label for="Nome" class="control-label">Nome:</label>
+                            <div class="controls">
+                                <input type="text" name="nome" id="nome" maxlength="50" value="<?php echo $this->pf->nome; ?>" class="span5" />
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label for="email" class="control-label">E-Mail:</label>
+                            <div class="controls">
+                                <input type="text" name="email" id="email" maxlength="60" value="<?php echo $this->pf->pega_pessoa()->email; ?>" class="span5" />
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label for="data_nascimento" class="control-label">Data de Nascimento:</label>
+                            <div class="controls">
+                                <input type="text" name="data_nascimento" id="data_nascimento" size="10" value="<?php echo $this->pf->mostrarDataNascimento(); ?>" class="data span2" />
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label for="identidade_numero" class="control-label">Identidade - Número:</label>
+                            <div class="controls">
+                                <input type="text" name="identidade_numero" id="identidade_numero" maxlength="30" value="<?php echo $this->pf->identidade_numero; ?>" class="span3" />
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label for="identidade_orgao_expedidor" class="control-label">Identidade - Órgão Expedidor:</label>
+                            <div class="controls">
+                                <input type="text" name="identidade_orgao_expedidor" id="identidade_orgao_expedidor" maxlength="20" value="<?php echo $this->pf->identidade_orgao_expedidor; ?>" class="span2" />
+                            </div>
+                        </div>
+                <?php
+                    $ctrl = new Escola_Form_Element_Select_Table("identidade_id_uf");
+                    $ctrl->setPkName("id_uf");
+                    $ctrl->setModel("TbUf");
+                    $ctrl->setValue($this->pf->identidade_id_uf);
+                    $ctrl->setLabel("Identidade - UF: ");
+                    echo $ctrl->render($this);
+                ?>
+                    </fieldset>
+                </div>
+                <div class="well">
+                    <fieldset>
+                        <legend>DADOS DO FUNCIONÁRIO:</legend>
+                <?php if ($this->lotacao_atual && ($this->lotacao_atual->id_setor != $this->setor->getId())) { ?>
+                        <dl class="dl-horizontal">
+                            <dt>Lotação Atual:</dt>
+                            <dd><?php echo $this->lotacao_atual->findParentRow("TbSetor")->toString(); ?></dd>
+                        </dl>
+                <?php } ?>
+                        <div class="control-group">
+                            <label for="matricula" class="control-label">Matrícula:</label>
+                            <div class="controls">
+                                <input type="text" name="matricula" id="matricula" maxlength="20" value="<?php echo $this->funcionario->matricula; ?>" class="span2" />
+                            </div>
+                        </div>
+                <?php
+                    $ctrl = new Escola_Form_Element_Select_Table_Crud_Cargo("id_cargo");
+                    $ctrl->setPkName("id_cargo");
+                    $ctrl->setModel("TbCargo");
+                    $ctrl->setValue($this->funcionario->id_cargo);
+                    $ctrl->setLabel("Cargo: ");
+                    echo $ctrl->render($this);
+                ?>
+                <?php
+                    $ctrl = new Escola_Form_Element_Select_Table("id_funcionario_tipo");
+                    $ctrl->setPkName("id_funcionario_tipo");
+                    $ctrl->setModel("TbFuncionarioTipo");
+                    $ctrl->setValue($this->funcionario->id_funcionario_tipo);
+                    $ctrl->setLabel("Tipo de Vínculo: ");
+                    echo $ctrl->render($this);
+                ?>
+                        <div class="control-group">
+                            <label for="data_ingresso" class="control-label">Data de Ingresso:</label>
+                            <div class="controls">
+                                <input type="text" name="data_ingresso" id="data_ingresso" value="<?php echo $this->funcionario->mostrarDataIngresso(); ?>" class="data span2" />
+                            </div>
+                        </div>
+                <?php
+                $tb = new TbFuncionarioFuncao();
+                if (count($tb->fetchAll())) {
+                    $ctrl = new Escola_Form_Element_Select_Table("id_funcionario_funcao");
+                    $ctrl->setPkName("id_funcionario_funcao");
+                    $ctrl->setModel("TbFuncionarioFuncao");
+                    $ctrl->setValue($this->lotacao->id_funcionario_funcao);
+                    $ctrl->setLabel("Cargo Função: ");
+                    echo $ctrl->render($this);
+                }
+                ?>
+                        <div class="control-group">
+                            <label for="chefe" class="control-label">Chefe:</label>
+                            <div class="controls">
+                                <select name="chefe" id="chefe">
+                                    <option value="S" <?php echo ($this->lotacao->chefe())?"selected":""; ?>>SIM</option>
+                                    <option value="N" <?php echo (!$this->lotacao->chefe())?"selected":""; ?>>NÃO</option>
+                                </select>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

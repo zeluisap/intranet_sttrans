@@ -1,0 +1,48 @@
+<div class="conteudo_controller">
+    <div class="row-fluid">
+        <div class="span12">
+            <form action="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(), "action" => "addprevisaovalor")); ?>" method="post" id="formulario" class="formulario form-horizontal">
+                <input type="hidden" name="id_vinculo" id="id_vinculo" value="<?php echo $this->vinculo->getId(); ?>" />
+                <div class="well well-small">
+                    <dl class="dl-horizontal">
+                        <dt>Vínculo:</dt>
+                        <dd><?php echo $this->vinculo->toString(); ?></dd>
+                    </dl>
+                </div>
+                <div class="well">
+                    <fieldset>
+                        <legend>Adicionar Previsão</legend>
+<?php
+    $ctrl = new Escola_Form_Element_Select_Table("id_previsao_tipo");
+    $ctrl->setPkName("id_previsao_tipo");
+    $ctrl->setModel("TbPrevisaoTipo");
+    $ctrl->setValue($this->id_previsao_tipo);
+    $ctrl->setLabel("Tipo de Previsão: ");
+    $ctrl->setAttrib("class", "field");
+    echo $ctrl->render($this);
+    if ($this->bts) {
+?>
+                        <div class="control-group linha_id_bolsa_tipo">
+                            <label for="id_tipo_bolsa" class="control-label">Tipo de Despesa:</label>
+                            <div class="controls">
+                                <select name="id_bolsa_tipo" id="id_bolsa_tipo" class="field span5">
+                                    <option value="" <?php echo (!$this->id_bolsa_tipo)?"selected":""; ?>>==> SELECIONE <==</option>
+<?php /* foreach ($this->bts as $bt) { ?>
+                                    <option value="<?php echo $bt->getId(); ?>" <?php echo ($bt->getId() == $this->id_bolsa_tipo)?"selected":""; ?>><?php echo $bt->toString(); ?> - <?php echo $bt->mostrar_valor(); ?></option>
+<?php } */ ?>
+                                </select>
+                            </div>
+                        </div>
+<?php } ?>
+                        <div class="control-group">
+                            <label for="ano" class="control-label">Ano:</label>
+                            <div class="controls">
+                                <input type="text" name="ano" id="ano" value="<?php echo $this->ano; ?>" class="span1 field" />
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

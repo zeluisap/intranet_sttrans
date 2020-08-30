@@ -1,0 +1,43 @@
+<div class="conteudo_controller">
+    <div class="row-fluid">
+        <div class="span12">
+            <div class="well">
+                <dl class="dl-horizontal">
+                    <dt>Módulo:</dt>
+                    <dd><?php echo $this->modulo->toString(); ?></dd>
+                </dl>
+            </div>
+            <form action="<?php echo $this->url(); ?>" method="post" id="formulario">
+                <input type="hidden" name="id_modulo" id="id_modulo" value="<?php echo $this->modulo->getId(); ?>" />
+                <table class="table table-striped table-bordered">
+                    <tr>
+                        <th width="20px"><input type="checkbox" name="ck" id="ck" class="ck-marca-todos" rel="lista_pacote" /></th>
+                        <th width="20px"></th>
+                        <th>Pacote</th>
+                    </tr>
+                    <?php
+                    foreach ($this->pacotes as $pacote) {
+                        $checked = "";
+                        if ($pacote->possuiModulo($this->modulo)) {
+                            $checked = "checked";
+                        }
+                        ?>
+                        <tr>
+                            <td><input type="checkbox" name="lista_pacote[]" id="lista_pacote" class="lista_pacote" value="<?php echo $pacote->getId(); ?>" <?php echo $checked; ?> /></td>
+                            <td>
+                                <a href="#" class="link_modulo" id="<?php echo $pacote->getId(); ?>">
+                                    <?php echo $pacote->mostrarIcone(); ?>
+                                </a>
+                            </td>
+                            <td>
+                                <a href="#" class="link_modulo" id="<?php echo $pacote->getId(); ?>">
+                                    <?php echo $pacote->toString(); ?>
+                                </a>
+                            </td>
+                        </tr>
+                    <?php } ?>
+                </table>
+            </form>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,6 @@
+{
+    "require": {
+        "guzzlehttp/guzzle": "^7.0",
+        "byjg/xmlutil": "^1.0"
+    }
+}

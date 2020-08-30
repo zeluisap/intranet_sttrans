@@ -1,0 +1,89 @@
+<div class="conteudo_controller">
+    <div class="row-fluid">
+        <div class="span12">
+            <div class="well">
+                <div class="page-header">
+                    <h4>Informações do Bolsista</h4>
+                </div>
+                <dl class="dl-horizontal">
+                    <dt>Vínculo:</dt>
+                    <dd><?php echo $this->vinculo->toString(); ?></dd>
+                </dl>
+                <dl class="dl-horizontal">
+                    <dt>ID:</dt>
+                    <dd><?php echo $this->registro->getId(); ?></dd>
+                </dl>
+<?php
+$bolsa_tipo = $this->registro->findParentRow("TbBolsaTipo");
+if ($bolsa_tipo) {
+?>
+                <dl class="dl-horizontal">
+                    <dt>Tipo de Bolsa:</dt>
+                    <dd><?php echo $bolsa_tipo->toString(); ?></dd>
+                </dl>
+<?php } ?>
+                <dl class="dl-horizontal">
+                    <dt>C.P.F.:</dt>
+                    <dd><?php echo Escola_Util::formatCpf($this->pf->cpf); ?></dd>
+                </dl>
+                <dl class="dl-horizontal">
+                    <dt>Nome:</dt>
+                    <dd><?php echo $this->pf->nome; ?></dd>
+                </dl>
+                <dl class="dl-horizontal">
+                    <dt>E-Mail:</dt>
+                    <dd><?php echo $this->pessoa->email; ?></dd>
+                </dl>
+                <dl class="dl-horizontal">
+                    <dt>Estado Civil:</dt>
+                    <dd><?php $ec = $this->pf->findParentRow("TbEstadoCivil"); echo ($ec)?$ec->toString():""; ?></dd>
+                </dl>
+                <dl class="dl-horizontal">
+                    <dt>Telefone(s):</dt>
+                    <dd><?php echo $this->pessoa->mostrarTelefones(); ?></dd>
+                </dl>
+                <dl class="dl-horizontal">
+                    <dt>Informações Bancárias:</dt>
+                    <dd><?php echo $this->ib->toString(); ?></dd>
+                </dl>
+                <dl class="dl-horizontal">
+                    <dt>Situação:</dt>
+                    <dd><?php echo $this->registro->findParentRow("TbBolsistaStatus")->toString(); ?></dd>
+                </dl>
+            </div>
+<?php if ($this->ocorrencias) { ?>
+            <table class="table table-striped table-bordered">
+                <thead>
+                    <tr>
+                        <th colspan="4">Ocorrências</th>
+                    </tr>
+                    <tr>
+                        <th>Data</th>
+                        <th>Usuário</th>
+                        <th>Descrição</th>
+                        <th>Pagamento</th>
+                    </tr>
+                </thead>
+                <tbody>
+<?php 
+foreach ($this->ocorrencias as $ocor) {
+    $usuario = $ocor->findParentRow("TbUsuario");
+    $txt_pgto = "";
+    $pgto = $ocor->findParentRow("TbVinculoLoteItem");
+    if ($pgto) { 
+        $txt_pgto = $pgto->toString();
+    }
+?>
+                    <tr>
+                        <td><?php echo Escola_Util::formatData($ocor->data); ?></td>
+                        <td><?php echo $usuario->toString(); ?></td>
+                        <td><?php echo $ocor->descricao; ?></td>
+                        <td><?php echo $txt_pgto; ?></td>
+                    </tr>
+<?php } ?>
+                </tbody>
+            </table>
+<?php } ?>
+        </div>
+    </div>
+</div>

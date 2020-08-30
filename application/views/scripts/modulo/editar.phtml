@@ -1,0 +1,95 @@
+<div class="conteudo_controller">
+	<div class="row-fluid">
+		<div class="span12">
+			<div class="well">
+				<form action="<?php echo $this->url(array("controller" => "modulo", "action" => "editar")); ?>" method="post" id="formulario" class="formulario form-horizontal">
+					<input type="hidden" name="id" id="id" value="<?php echo $this->mod->id_modulo; ?>" />
+					<fieldset>
+						<legend>MÓDULO: </legend>
+				<?php if ($this->mod->id_modulo) { ?>
+						<div class="control-group">
+							<label for="descricao" class="control-label">Código:</label>
+							<div class="controls">
+								<span class="read-only"><?php echo $this->mod->id_modulo; ?></span>
+							</div>
+						</div>
+				<?php } ?>
+						<div class="control-group">
+							<label for="descricao" class="control-label">Descrição.:</label>
+							<div class="controls">
+								<input type="text" name="descricao" id="descricao" maxlength="60" value="<?php echo $this->mod->descricao; ?>" class="span5" />
+							</div>
+						</div>
+						<div class="control-group">
+							<label for="controller" class="control-label">Controller:</label>
+							<div class="controls">
+								<input type="text" name="controller" id="controller" maxlength="60" value="<?php echo $this->mod->controller; ?>" class="span5" />
+							</div>
+						</div>
+						<div class="control-group">
+							<label for="action" class="control-label">Action:</label>
+							<div class="controls">
+								<input type="text" name="action" id="action" maxlength="60" value="<?php echo $this->mod->action; ?>" class="span3" /> (*) Em branco para Action Padrão.
+							</div>
+						</div>
+<?php
+	$ctrl = new Escola_Form_Element_Icone("icon");
+	$ctrl->setAttrib("id", "pacote_modulo");
+	$ctrl->setValue($this->mod->icon);
+	echo $ctrl->render($this);
+    $tb = new TbModulo();
+    $todos = $tb->listarTodos();
+    if ($todos) {
+?>
+                        <div class="control-group">
+                            <label for="id_modulo_superior" class="control-label">Módulo Superior:</label>
+                            <div class="controls">
+                                <select name="id_modulo_superior" id="id_modulo_superior">
+                                    <option value="" <?php echo (!$this->mod->id_modulo_superior)?"selected":""; ?>>==> SELECIONE <==</option>
+<?php foreach ($todos as $mod) { ?>
+                                    <option value="<?php echo $mod->getId(); ?>" <?php echo ($mod->getId() == $this->mod->id_modulo_superior)?"selected":""; ?>><?php echo $mod->toString(); ?></option>
+<?php } ?>
+                                </select>
+                            </div>
+                        </div>
+<?php } ?>
+						<div class="control-group">
+                                                    <label for="resumo" class="control-label">Status:</label>
+                                                    <div class="controls">
+                                                        <select name="status" id="status">
+                                                            <option value="A" <?php echo ($this->mod->ativo())?"selected":""; ?>>ATIVO</option>
+                                                            <option value="I" <?php echo ($this->mod->inativo())?"selected":""; ?>>INATIVO</option>                                                            
+                                                        </select>
+                                                    </div>
+						</div>
+<?php if ($this->mod->getId()) { ?>
+						<div class="control-group">
+							<label for="ordem" class="control-label">Ordem:</label>
+							<div class="controls">
+								<select name="ordem" id="ordem">
+					<?php for ($i = 1; $i <= Modulo::pegaProximaOrdem(); $i++) { ?>
+									<option value="<?php echo $i; ?>" <?php echo ($i == $this->mod->ordem)?"selected":""; ?>><?php echo $i; ?></option>
+					<?php } ?>
+								</select>
+							</div>
+						</div>
+<?php } else { 
+$tb = new TbPacote();
+$pacotes = $tb->listar();
+if ($pacotes && count($pacotes)) {
+?>
+                        <div class="control-group">
+                            <label class="control-label">Pacotes:</label>
+                            <div class="controls">
+<?php foreach ($pacotes as $pacote) { ?>
+                                <div><input type="checkbox" name="id_pacote[]" id="id_pacote_<?php echo $pacote->getId(); ?>" value="<?php echo $pacote->getId(); ?>" /><?php echo $pacote->toString(); ?>.</div>
+<?php } ?>
+                            </div>
+                        </div>
+<?php }} ?>
+					</fieldset>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>

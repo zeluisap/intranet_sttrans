@@ -1,0 +1,26 @@
+<div class="conteudo_controller">
+    <div class="row-fluid">
+        <div class="span12">
+            <form action="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(), "action" => $this->getRequest()->getActionName())); ?>" method="post" id="formulario" class="formulario form-horizontal">
+                <div class="well">
+                    <fieldset>
+                        <legend>VINCULO > ADICIONAR ENTRADA DE RECURSO: </legend>
+                        <dl class="dl-horizontal">
+                            <dt>Vínculo:</dt>
+                            <dd><?php echo $this->vinculo->toString(); ?></dd>
+                        </dl>
+                        <dl class="dl-horizontal">
+                            <dt>Conta Bancária:</dt>
+                            <dd><?php echo $this->info_bancaria->toString(); ?></dd>
+                        </dl>
+                        <dl class="dl-horizontal">
+                            <dt>Saldo Atual:</dt>
+                            <dd><?php echo Escola_Util::number_format($this->info_bancaria->pegaSaldo()); ?></dd>
+                        </dl>
+<?php echo $this->receita->render($this); ?>
+                    </fieldset>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
