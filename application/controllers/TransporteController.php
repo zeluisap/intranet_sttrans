@@ -2065,9 +2065,9 @@ class TransporteController extends Escola_Controller_Logado
                 throw new Exception("Falha ao Executar OPERAÇÃO, Tipo de Pessoa Não Encontrado!");
             }
 
-            if (!$tpt->proprietario()) {
-                throw new Exception("Falha ao Executar OPERAÇÃO, Pessoa Não é Permissionário!");
-            }
+            // if (!$tpt->proprietario()) {
+            //     throw new Exception("Falha ao Executar OPERAÇÃO, Pessoa Não é Permissionário!");
+            // }
 
             if ($tp->ativo()) {
                 throw new Exception("Falha ao Executar OPERAÇÃO, Pessoa Já Está Ativa!");
