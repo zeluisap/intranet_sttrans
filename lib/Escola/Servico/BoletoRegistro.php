@@ -297,6 +297,8 @@ class BoletoRegistro
 
         $nossoNumero = $boleto->pegaNossoNumero();
 
+        $nossoNumero = str_pad($nossoNumero, 20, "0", STR_PAD_LEFT);
+
         $pessoa = $boleto->pegaPessoa();
         if (!$pessoa) {
             throw new Escola_Exception("Pagador não identificado.");
