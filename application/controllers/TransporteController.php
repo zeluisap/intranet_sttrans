@@ -1012,7 +1012,7 @@ class TransporteController extends Escola_Controller_Logado
 
     public function emitirAction()
     {
-        ini_set("display_errors", false);
+        // ini_set("display_errors", false);
 
         try {
             $id = $this->_request->getParam("id");

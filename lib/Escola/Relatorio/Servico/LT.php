@@ -3,8 +3,9 @@ class Escola_Relatorio_Servico_LT extends Escola_Relatorio_Servico_CA
 {
     public function getFilhos()
     {
-        $filhos = parent::getFilhos();
-        return array_merge(["PJ"], $filhos);
+        // $filhos = parent::getFilhos();
+        // return array_merge(["PJ"], $filhos);
+        return ["PJ"];
     }
 
     public function getFilename()

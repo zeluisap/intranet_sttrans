@@ -213,6 +213,15 @@ class Escola_Relatorio_Servico extends Escola_Relatorio
 
     public function getTransporte()
     {
+        if (!isset($this->transporte)) {
+            return null;
+        }
+
+        if (!$this->transporte) {
+            return null;
+        }
+
+        return $this->transporte;
     }
 
     public function getRegistro()

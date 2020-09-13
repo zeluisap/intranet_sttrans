@@ -7,25 +7,28 @@ class Escola_Relatorio_Servico_LT_PJ extends Escola_Relatorio_Servico_LT
     }
 
     public function header()
-    { }
+    {
+    }
 
     public function footer()
-    { }
+    {
+    }
 
     public function enabled()
     {
-        $enabled = parent::enabled();
-        if (!$enabled) {
+        if (!parent::enabled()) {
             return false;
         }
 
-        return (isset($this->tp_pessoa) && $this->tp_pessoa->pj());
+        return true;
+
+        // return (isset($this->tp_pessoa) && $this->tp_pessoa->pj());
     }
 
-    public function getFilename()
-    {
-        return "licenca_pj";
-    }
+    // public function getFilename()
+    // {
+    //     return "licenca_pj";
+    // }
 
     public function getLicenca()
     {
@@ -117,7 +120,7 @@ class Escola_Relatorio_Servico_LT_PJ extends Escola_Relatorio_Servico_LT
 
     private function getNomeProprietario()
     {
-        $txt = $this->tp_pessoa_pj->toString();
+        $txt = $this->tp_pessoa->toString();
 
         if (!$this->veiculo) {
             return $txt;

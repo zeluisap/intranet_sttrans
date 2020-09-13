@@ -47,7 +47,7 @@ class Escola_Relatorio_Servico_CA_MOT extends Escola_Relatorio_Servico_CA
         }
 
         if (!$this->pf) {
-            return ["Nenhum Pessoa Física vinculado ao serviço!"];
+            return ["Nenhuma Pessoa Física vinculada ao serviço!"];
         }
 
         return null;
@@ -125,15 +125,25 @@ class Escola_Relatorio_Servico_CA_MOT extends Escola_Relatorio_Servico_CA
         return parent::getMatricula();
     }
 
+    public function getPessoaFisica()
+    {
+        return $this->pf;
+    }
+
     public function toPDF()
     {
 
         $txt_imagem = $txt_transporte = $txt_tipo = "";
-        $txt_matricula = $txt_rg = $txt_cpf = $txt_cnh = $txt_registro = $txt_nome = $txt_tipo_pessoa = "";
+        $txt_matricula = $txt_rg = $txt_cpf = $txt_cnh = $txt_registro = $txt_nome = $txt_tipo_pessoa = "--";
         $txt_servico_codigo = $txt_servico_ano = "";
         $txt_servico_data_inicio = $txt_servico_data_validade = "";
 
-        $pf_foto = $this->pf->getFoto();
+        $pf = $this->getPessoaFisica();
+        if (!$pf) {
+            throw new Escola_Exception("Falha ao localizar pessoa!");
+        }
+
+        $pf_foto = $pf->getFoto();
         if ($pf_foto) {
             $wi = $pf_foto->getWideImage();
             $txt_imagem = $wi->asString('png');
@@ -151,17 +161,17 @@ class Escola_Relatorio_Servico_CA_MOT extends Escola_Relatorio_Servico_CA
 
         $txt_matricula = $this->getMatricula();
 
-        $txt = $this->pf->mostrar_identidade();
+        $txt = $pf->mostrar_identidade();
         if ($txt) {
             $txt_rg = $txt;
         }
 
-        $txt = $this->pf->mostrar_documento();
+        $txt = $pf->mostrar_documento();
         if ($txt) {
             $txt_cpf = $txt;
         }
 
-        $pm = $this->pf->pegaPessoaMotorista();
+        $pm = $pf->pegaPessoaMotorista();
         if ($pm) {
             $txt = $pm->cnh_numero;
             if ($txt) {
@@ -173,7 +183,7 @@ class Escola_Relatorio_Servico_CA_MOT extends Escola_Relatorio_Servico_CA
             }
         }
 
-        $txt_nome = $this->pf->mostrar_nome();
+        $txt_nome = $pf->mostrar_nome();
 
         $txt_servico_codigo = $this->getCarteiraCodigo();
         $txt_servico_ano = $this->getCarteiraAno();
