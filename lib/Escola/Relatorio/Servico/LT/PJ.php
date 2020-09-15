@@ -113,8 +113,8 @@ class Escola_Relatorio_Servico_LT_PJ extends Escola_Relatorio_Servico_LT
         $this->MultiCell(20, 20, $txt_validade, 0, 'C');
 
         $this->lastPage();
-        // $this->show();
-        $this->download();
+        $this->show();
+        // $this->download();
         die();
     }
 

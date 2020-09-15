@@ -22,9 +22,9 @@ class Escola_Relatorio_Servico_CA_CP extends Escola_Relatorio_Servico_CA_MOT
             return false;
         }
 
-        // if (!$this->transporte_grupo->moto_taxi()) {
-        //     return false;
-        // }
+        if ($this->transporte_grupo->moto_taxi()) {
+            return false;
+        }
 
         if (!$this->tp) {
             return false;
@@ -84,13 +84,13 @@ class Escola_Relatorio_Servico_CA_CP extends Escola_Relatorio_Servico_CA_MOT
 
     public function getFilename()
     {
-        return "carteira_de_permissionario";
+        return "carteira_autorizatario";
     }
 
     public function getTipo()
     {
 
-        return "PERMISSIONÁRIO";
+        return "AUTORIZATÁRIO";
     }
 
     public function getMatricula()

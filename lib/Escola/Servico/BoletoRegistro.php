@@ -40,11 +40,10 @@ class BoletoRegistro
 
     public static function registrarBoleto($boleto = null)
     {
+
         try {
             $obj = new BoletoRegistro();
             $response = $obj->registrar($boleto);
-
-            return $response;
 
             $codigoRetornoPrograma = Escola_Util::valorOuNulo($response, "codigoRetornoPrograma");
             if (!$codigoRetornoPrograma) {
@@ -52,6 +51,10 @@ class BoletoRegistro
             }
 
             if ($codigoRetornoPrograma > 0) {
+                if ($codigoRetornoPrograma == 92) { //BOLETO JÁ REGISTRADO
+                    return $response;
+                }
+
                 $textoMensagemErro = Escola_Util::valorOuNulo($response, "textoMensagemErro");
                 if (!$textoMensagemErro) {
                     throw new Escola_Exception("Não foi possível gerar o boleto.");

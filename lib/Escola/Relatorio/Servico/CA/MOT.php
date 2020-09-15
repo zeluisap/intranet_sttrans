@@ -16,15 +16,16 @@ class Escola_Relatorio_Servico_CA_MOT extends Escola_Relatorio_Servico_CA
             return false;
         }
 
-        if (!$this->registro->motorista()) {
+
+        if (!$this->transporte_grupo->moto_taxi()) {
             return false;
         }
 
-        if (!$this->motorista) {
+        if (!$this->tp->proprietario()) {
             return false;
         }
 
-        if (!$this->pf) {
+        if (!$this->tp_pessoa_pf) {
             return false;
         }
 
@@ -38,15 +39,11 @@ class Escola_Relatorio_Servico_CA_MOT extends Escola_Relatorio_Servico_CA
             return ["Solicitação de Serviço não Definida!"];
         }
 
-        if (!$this->registro->motorista()) {
-            return ["Serviço não equivalente com os dados!"];
+        if (!$this->transporte_grupo->moto_taxi()) {
+            return ["Grupo de transporte inválido para esse serviço!"];
         }
 
-        if (!$this->motorista) {
-            return ["Nenhum motorista vinculado ao serviço!"];
-        }
-
-        if (!$this->pf) {
+        if (!$this->tp_pessoa_pf) {
             return ["Nenhuma Pessoa Física vinculada ao serviço!"];
         }
 
@@ -106,7 +103,7 @@ class Escola_Relatorio_Servico_CA_MOT extends Escola_Relatorio_Servico_CA
 
     public function getTipo()
     {
-        return "AUXILIAR";
+        return "PERMISSIONÁRIO";
     }
 
     public function getMatricula()
@@ -127,7 +124,7 @@ class Escola_Relatorio_Servico_CA_MOT extends Escola_Relatorio_Servico_CA
 
     public function getPessoaFisica()
     {
-        return $this->pf;
+        return $this->tp_pessoa_pf;
     }
 
     public function toPDF()
