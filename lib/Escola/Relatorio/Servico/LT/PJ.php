@@ -38,9 +38,6 @@ class Escola_Relatorio_Servico_LT_PJ extends Escola_Relatorio_Servico_LT
     public function toPDF()
     {
 
-        $txt_licenca_numero = $this->getCarteiraCodigo();
-        $txt_licenca_ano = $this->getCarteiraAno();
-
         if (!(isset($this->transporte_grupo) && $this->transporte_grupo)) {
             throw new Escola_Exception("Falha! Grupo de transporte não localizado!");
         }
@@ -50,6 +47,7 @@ class Escola_Relatorio_Servico_LT_PJ extends Escola_Relatorio_Servico_LT
         if (!(isset($this->veiculo) && $this->veiculo)) {
             throw new Escola_Exception("Falha! Veículo não localizado!");
         }
+
         $veiculo = $this->veiculo;
 
         $txt_placa = $veiculo->placa;
@@ -64,6 +62,8 @@ class Escola_Relatorio_Servico_LT_PJ extends Escola_Relatorio_Servico_LT
         $txt_emissao = date('d/m/Y');
         $txt_validade = Escola_Util::formatData($this->getDataValidade());
 
+        $nome_numero_ano = $this->getTituloLicenca();
+
         $font_name = "Helvetica";
 
         $this->AddPage();
@@ -73,11 +73,15 @@ class Escola_Relatorio_Servico_LT_PJ extends Escola_Relatorio_Servico_LT
 
         $this->setCellHeightRatio(0.8);
 
-        $this->setXY(115, 39);
-        $this->MultiCell(20, 20, $txt_licenca_numero, 0, 'R');
+        // $this->setXY(115, 39);
+        // $this->MultiCell(20, 20, $txt_licenca_numero, 0, 'R');
 
-        $this->setXY(134.5, 39);
-        $this->MultiCell(20, 20, $txt_licenca_ano, 0, 'L');
+        // $this->setXY(134.5, 39);
+        // $this->MultiCell(20, 20, $txt_licenca_ano, 0, 'L');
+
+        $this->setFont($font_name, "B", 10);
+        $this->setXY(57, 37);
+        $this->MultiCell(90, 10, $nome_numero_ano, 0, 'C', 0, 0, '', '', true, 0, false, true, 10, 'M');
 
         $this->setFont($font_name, "B", 8.5);
         $this->setXY(72, 49);
@@ -113,8 +117,8 @@ class Escola_Relatorio_Servico_LT_PJ extends Escola_Relatorio_Servico_LT
         $this->MultiCell(20, 20, $txt_validade, 0, 'C');
 
         $this->lastPage();
-        $this->show();
-        // $this->download();
+        // $this->show();
+        $this->download();
         die();
     }
 

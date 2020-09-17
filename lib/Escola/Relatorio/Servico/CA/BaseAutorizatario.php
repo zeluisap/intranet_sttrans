@@ -1,9 +1,11 @@
 <?php
 
 /**
- * carteira de motorista auxiliar
+ * carteira base de autorizatário
+ * o autorizatário está disponível para todos os serviços, menos moto-taxi
+ * também não está disponível para auxiliares e motorista avulso (que terão suas próprias implementações)
  */
-class Escola_Relatorio_Servico_CA_MOT extends Escola_Relatorio_Servico_CA
+class Escola_Relatorio_Servico_CA_BaseAutorizatario extends Escola_Relatorio_Servico_CA
 {
     public function getFilhos()
     {
@@ -16,64 +18,31 @@ class Escola_Relatorio_Servico_CA_MOT extends Escola_Relatorio_Servico_CA
             return false;
         }
 
-
-        if (!$this->transporte_grupo->moto_taxi()) {
+        if ($this->registro->motorista()) {
             return false;
         }
 
-        if (!$this->tp->proprietario()) {
+        if ($this->transporte_grupo && $this->transporte_grupo->moto_taxi()) {
             return false;
         }
 
-        if (!$this->tp_pessoa_pf) {
+        if (!($this->tp && $this->tp->proprietario())) {
             return false;
         }
 
         return true;
     }
 
-    public function validarEmitir()
-    {
-
-        if (!(isset($this->registro) && $this->registro)) {
-            return ["Solicitação de Serviço não Definida!"];
-        }
-
-        if (!$this->transporte_grupo->moto_taxi()) {
-            return ["Grupo de transporte inválido para esse serviço!"];
-        }
-
-        if (!$this->tp_pessoa_pf) {
-            return ["Nenhuma Pessoa Física vinculada ao serviço!"];
-        }
-
-        return null;
-    }
-
     public function set_registro($registro)
     {
         parent::set_registro($registro);
 
-        if (!$registro->motorista()) {
+        if (!$this->enabled()) {
             return;
         }
 
-        $motorista = $this->registro->pegaReferencia();
-        $this->setMotorista($motorista);
-    }
-
-    public function setMotorista($motorista)
-    {
-        if (!$motorista) {
-            $this->transporte_grupo = null;
-            $this->motorista = null;
-            $this->pf = null;
-            return;
-        }
-
-        $this->transporte_grupo = $motorista->getTransporteGrupo();
-        $this->motorista = $motorista;
-        $this->pf = $motorista->pegaPessoaFisica();
+        $tp = $this->registro->pegaReferencia();
+        $this->setPessoa($tp, "tp");
     }
 
     public function getCarteiraCodigo()
@@ -93,7 +62,7 @@ class Escola_Relatorio_Servico_CA_MOT extends Escola_Relatorio_Servico_CA
 
     public function getFilename()
     {
-        return "carteira_motorista";
+        return "carteira_autorizatario";
     }
 
     public function getNomenclaturaLicenca()
@@ -103,28 +72,37 @@ class Escola_Relatorio_Servico_CA_MOT extends Escola_Relatorio_Servico_CA
 
     public function getTipo()
     {
-        return "PERMISSIONÁRIO";
+        return "AUTORIZATÁRIO";
     }
 
     public function getMatricula()
     {
 
-        if (!$this->motorista) {
-            return "";
+        if (!$this->transporte) {
+            return "--";
         }
 
-        $mat = $this->motorista->matricula;
-
-        if ($mat) {
-            return $mat;
+        $codigo = $this->transporte->codigo;
+        if (!$codigo) {
+            return "--";
         }
 
-        return parent::getMatricula();
+        return $codigo;
     }
 
     public function getPessoaFisica()
     {
         return $this->tp_pessoa_pf;
+    }
+
+    public function getPessoaMotorista()
+    {
+        $pf =  $this->getPessoaFisica();
+        if (!$pf) {
+            throw new Escola_Exception("Falha ao emitir documento, pessoa física não localizada.");
+        }
+
+        return $pf->pegaPessoaMotorista();
     }
 
     public function toPDF()
@@ -168,7 +146,7 @@ class Escola_Relatorio_Servico_CA_MOT extends Escola_Relatorio_Servico_CA
             $txt_cpf = $txt;
         }
 
-        $pm = $pf->pegaPessoaMotorista();
+        $pm = $this->getPessoaMotorista();
         if ($pm) {
             $txt = $pm->cnh_numero;
             if ($txt) {
@@ -199,7 +177,7 @@ class Escola_Relatorio_Servico_CA_MOT extends Escola_Relatorio_Servico_CA
             $this->Image('@' . $txt_imagem, 55.5, 31, 26.5, 33.5, 'PNG');
         }
 
-        $this->setXY(85, 33);
+        $this->setXY(85, 32.5);
         $this->MultiCell(60, 10, $txt_transporte, 0, 'C', 0, 0, '', '', true, 0, false, true, 10, 'M');
 
         $this->setFont($font_name, "B", 7);
@@ -209,10 +187,10 @@ class Escola_Relatorio_Servico_CA_MOT extends Escola_Relatorio_Servico_CA
         $this->setXY(125, 45);
         $this->MultiCell(24, 20, $txt_matricula, 0, 'C');
 
-        $this->setXY(85, 53);
+        $this->setXY(85, 52.5);
         $this->MultiCell(30, 20, $txt_rg, 0, 'C');
 
-        $this->setXY(118, 53);
+        $this->setXY(118, 52.5);
         $this->MultiCell(30, 20, $txt_cpf, 0, 'C');
 
         $this->setXY(85, 60);

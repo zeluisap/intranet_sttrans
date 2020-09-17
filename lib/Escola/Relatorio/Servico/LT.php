@@ -5,7 +5,7 @@ class Escola_Relatorio_Servico_LT extends Escola_Relatorio_Servico_CA
     {
         // $filhos = parent::getFilhos();
         // return array_merge(["PJ"], $filhos);
-        return ["PJ"];
+        return ["Escola_Relatorio_Servico_LT_PJ"];
     }
 
     public function getFilename()
@@ -16,6 +16,20 @@ class Escola_Relatorio_Servico_LT extends Escola_Relatorio_Servico_CA
     public function getLicenca()
     {
         return $this->registro;
+    }
+
+    public function getNomeLicenca()
+    {
+        return "AUTORIZACAO DE TRÁFEGO";
+    }
+
+    public function getTituloLicenca()
+    {
+        $txt_licenca_numero = $this->getCarteiraCodigo();
+        $txt_licenca_ano = $this->getCarteiraAno();
+        $txt_nome_licenca = $this->getNomeLicenca();
+
+        return $txt_nome_licenca . " No: " . $txt_licenca_numero . " / " . $txt_licenca_ano;
     }
 
     public function setTransporte($transporte)

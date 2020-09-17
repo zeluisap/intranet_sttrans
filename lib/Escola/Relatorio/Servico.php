@@ -31,7 +31,8 @@ class Escola_Relatorio_Servico extends Escola_Relatorio
 
         $rec_filhos = [];
         foreach ($filhos as $filho) {
-            $class_name = get_class($this) . "_" . $filho;
+            // $class_name = get_class($this) . "_" . $filho;
+            $class_name = $filho;
             if (!Zend_Loader_Autoloader::autoload($class_name)) {
                 continue;
             }
@@ -170,45 +171,54 @@ class Escola_Relatorio_Servico extends Escola_Relatorio
     public function setPessoa($objeto, $prefixo = "proprietario")
     {
 
-        $obj = $objeto;
+        try {
+            $obj = $objeto;
 
-        if (!$obj) {
-            $this->$prefixo = null;
-            return;
+            if (!$obj) {
+                $this->$prefixo = null;
+                return;
+            }
+
+            $this->$prefixo = $obj;
+
+            try {
+                $this->transporte = $obj->getTransporte();
+            } catch (Exception $ex) {
+                $this->transporte = null;
+            }
+
+            $pessoa = $obj->getPessoa();
+
+            $nome_pessoa = $prefixo . "_pessoa";
+            $nome_pessoa_pf = $prefixo . "_pessoa_pf";
+            $nome_pessoa_pj = $prefixo . "_pessoa_pj";
+
+            if (!$pessoa) {
+                $this->$nome_pessoa = null;
+                $this->$nome_pessoa_pf = null;
+                $this->$nome_pessoa_pj = null;
+                return;
+            }
+
+            $ref = $pessoa->pegaPessoaFilho();
+            if (!$ref) {
+                $this->$nome_pessoa = null;
+                $this->$nome_pessoa_pf = null;
+                $this->$nome_pessoa_pj = null;
+                return;
+            }
+
+            if ($pessoa->pf()) {
+                $this->$nome_pessoa_pf = $ref;
+                $this->$nome_pessoa_pj = null;
+            } elseif ($pessoa->pj()) {
+                $this->$nome_pessoa_pf = null;
+                $this->$nome_pessoa_pj = $ref;
+            }
+
+            $this->$nome_pessoa = $pessoa;
+        } catch (Exception $ex) {
         }
-
-        $this->$prefixo = $obj;
-
-        $pessoa = $obj->findParentRow("TbPessoa");
-
-        $nome_pessoa = $prefixo . "_pessoa";
-        $nome_pessoa_pf = $prefixo . "_pessoa_pf";
-        $nome_pessoa_pj = $prefixo . "_pessoa_pj";
-
-        if (!$pessoa) {
-            $this->$nome_pessoa = null;
-            $this->$nome_pessoa_pf = null;
-            $this->$nome_pessoa_pj = null;
-            return;
-        }
-
-        $ref = $pessoa->pegaPessoaFilho();
-        if (!$ref) {
-            $this->$nome_pessoa = null;
-            $this->$nome_pessoa_pf = null;
-            $this->$nome_pessoa_pj = null;
-            return;
-        }
-
-        if ($pessoa->pf()) {
-            $this->$nome_pessoa_pf = $ref;
-            $this->$nome_pessoa_pj = null;
-        } elseif ($pessoa->pj()) {
-            $this->$nome_pessoa_pf = null;
-            $this->$nome_pessoa_pj = $ref;
-        }
-
-        $this->$nome_pessoa = $pessoa;
     }
 
     public function getTransporte()

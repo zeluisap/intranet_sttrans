@@ -1025,6 +1025,7 @@ class TransporteController extends Escola_Controller_Logado
             if (!$ss) {
                 throw new Escola_Exception("Falha ao Executar OPERAÇÃO, SERVIÇO Não Localizado!");
             }
+
             if (!$ss->pago()) {
                 throw new Escola_Exception("Falha ao Executar OPERAÇÃO, SOLICITAÇÃO de SERVIÇO Não Paga!");
             }
