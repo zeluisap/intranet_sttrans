@@ -35,6 +35,63 @@ class Escola_Relatorio_Servico_LT_PJ extends Escola_Relatorio_Servico_LT
         return $this->registro;
     }
 
+    public function getNomeTransporte()
+    {
+        $txt = [
+            $this->transporte_grupo->descricao
+        ];
+
+        $t = $this->getTransporte();
+        if (!$t) {
+            $txt[] = $t->codigo;
+            return implode("\n", $txt);
+        }
+
+        $tp = $t->pegaProprietario();
+        if (!$tp) {
+            $txt[] = $t->codigo;
+            return implode("\n", $txt);
+        }
+
+        $pessoa = $tp->getPessoa();
+        if (!$pessoa) {
+            $txt[] = $t->codigo;
+            return implode("\n", $txt);
+        }
+
+        $pessoa_veiculo = $this->getProprietarioVeiculo();
+        if (!$pessoa_veiculo) {
+            $txt[] = $t->codigo;
+            return implode("\n", $txt);
+        }
+
+        $p_id = $pessoa->getId();
+        $v_id = $pessoa_veiculo->getId();
+
+        if ($p_id == $v_id) {
+            $txt[] = $t->codigo;
+            return implode("\n", $txt);
+        }
+
+        $txt[] = $t->codigo . " - " . $pessoa_veiculo->toString();
+
+        return implode("\n", $txt);
+    }
+
+    public function getProprietarioVeiculo()
+    {
+        if (!$this->veiculo) {
+            return null;
+        }
+
+        $prop_veiculo = $this->veiculo->getProprietario();
+        if (!$prop_veiculo) {
+            return null;
+        }
+
+        return $prop_veiculo;
+    }
+
     public function toPDF()
     {
 
@@ -42,7 +99,7 @@ class Escola_Relatorio_Servico_LT_PJ extends Escola_Relatorio_Servico_LT
             throw new Escola_Exception("Falha! Grupo de transporte não localizado!");
         }
 
-        $txt_transporte = $this->transporte_grupo->descricao;
+        $txt_transporte = $this->getNomeTransporte();
 
         if (!(isset($this->veiculo) && $this->veiculo)) {
             throw new Escola_Exception("Falha! Veículo não localizado!");
@@ -80,40 +137,40 @@ class Escola_Relatorio_Servico_LT_PJ extends Escola_Relatorio_Servico_LT
         // $this->MultiCell(20, 20, $txt_licenca_ano, 0, 'L');
 
         $this->setFont($font_name, "B", 10);
-        $this->setXY(57, 37);
+        $this->setXY(57, 34);
         $this->MultiCell(90, 10, $nome_numero_ano, 0, 'C', 0, 0, '', '', true, 0, false, true, 10, 'M');
 
         $this->setFont($font_name, "B", 8.5);
-        $this->setXY(72, 49);
-        $this->MultiCell(60, 10, $txt_transporte, 0, 'C', 0, 0, '', '', true, 0, false, true, 10, 'M');
+        $this->setXY(57, 46);
+        $this->MultiCell(90, 13, $txt_transporte, 0, 'C', 0, 0, '', '', true, 0, false, true, 13, 'M');
 
-        $this->setXY(59, 65);
+        $this->setXY(59, 63);
         $this->MultiCell(25, 20, $txt_placa, 0, 'C');
 
-        $this->setXY(84.5, 61.5);
-        $this->MultiCell(30, 5, strtoupper($txt_marca_modelo), 1, 'C', 0, 0, '', '', true, 0, false, true, 10, 'M');
+        $this->setXY(82, 59.5);
+        $this->MultiCell(40, 5, strtoupper($txt_marca_modelo), 0, 'C', 0, 0, '', '', true, 0, false, true, 10, 'M');
 
-        $this->setXY(117, 65);
+        $this->setXY(117, 63);
         $this->MultiCell(30, 20, $txt_cor, 0, 'C');
 
-        $this->setXY(55, 78);
+        $this->setXY(55, 76);
         $this->MultiCell(30, 20, $txt_ano_fab, 0, 'C');
 
-        $this->setXY(84, 78);
+        $this->setXY(84, 76);
         $this->MultiCell(35, 20, $txt_chassi, 0, 'C');
 
-        $this->setXY(118, 75);
+        $this->setXY(118, 73);
         $this->MultiCell(30, 6, $txt_tipo_especie, 0, 'C', 0, 0, '', '', true, 0, false, true, 8, 'M');
 
         $this->setCellHeightRatio(1.2);
-        $this->setXY(62, 90);
-        $this->MultiCell(80, 20, $txt_nome_proprietario, 0, 'C');
+        $this->setXY(62, 83.5);
+        $this->MultiCell(80, 13, $txt_nome_proprietario, 1, 'C', false, 1, '', '', true, 0, false, true, 13, 'M');
 
         $this->setCellHeightRatio(0.8);
-        $this->setXY(77, 104.5);
+        $this->setXY(77, 106);
         $this->MultiCell(20, 20, $txt_emissao, 0, 'C');
 
-        $this->setXY(105, 104.5);
+        $this->setXY(105, 106);
         $this->MultiCell(20, 20, $txt_validade, 0, 'C');
 
         $this->lastPage();
@@ -126,11 +183,7 @@ class Escola_Relatorio_Servico_LT_PJ extends Escola_Relatorio_Servico_LT
     {
         $txt = $this->tp_pessoa->toString();
 
-        if (!$this->veiculo) {
-            return $txt;
-        }
-
-        $prop_veiculo = $this->veiculo->getProprietario();
+        $prop_veiculo = $this->getProprietarioVeiculo();
         if (!$prop_veiculo) {
             return $txt;
         }
