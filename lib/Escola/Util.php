@@ -1051,4 +1051,17 @@ class Escola_Util
 
         return $cpf_cnpj;
     }
+
+    public static function tamanhoMenorOuCorta($txt, $tamanho)
+    {
+        if (!$tamanho) {
+            return $txt;
+        }
+
+        if (strlen($txt) <= $tamanho) {
+            return $txt;
+        }
+
+        return substr($txt, 0, $tamanho);
+    }
 }
