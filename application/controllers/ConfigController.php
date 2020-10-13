@@ -1,8 +1,10 @@
 <?php
 
-class ConfigController extends Escola_Controller_Logado {
+class ConfigController extends Escola_Controller_Logado
+{
 
-    public function indexAction() {
+    public function indexAction()
+    {
         $tb = new TbSistema();
         $registro = $tb->pegaSistema();
         $pf = false;
@@ -28,10 +30,8 @@ class ConfigController extends Escola_Controller_Logado {
                         if (!$errors) {
                             $pf->save();
                             $pessoa = $pf->findParentRow("TbPessoa");
-                            var_dump($pessoa);
                             if ($tmp_arquivo) {
                                 $arquivo = $pessoa->getFoto();
-                                var_dump($arquivo); die();
                                 if (!$arquivo) {
                                     $tb = new TbArquivo();
                                     $arquivo = $tb->createRow();
@@ -73,5 +73,4 @@ class ConfigController extends Escola_Controller_Logado {
         $button->addScript("Salvar", "salvarFormulario('formulario')", "icon-save");
         $button->addAction("Cancelar", "intranet", "index", "icon-remove-circle");
     }
-
 }

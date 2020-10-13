@@ -80,7 +80,7 @@ class Escola_Relatorio_Requerimento extends Escola_Relatorio
         $this->css();
 ?>
         <div class="centro subtitulo">Ao Ilmo. Senhor Superintendente de Transporte e Trânsito de Santana - STTRANS</div>
-        <div class="centro titulo">REQUERIMENTO: <?= $txt_requerimento_numero ?></div>
+        <div class="centro titulo">PROCESSO: <?= $txt_requerimento_numero ?></div>
         <table border="1">
             <tr>
                 <td colspan="3">
@@ -259,22 +259,14 @@ class Escola_Relatorio_Requerimento extends Escola_Relatorio
                         </tr>
                     </table>
                 </td>
-                <td width="70%">
-                    <div></div>
-                    <table>
-                        <tr>
-                            <td class="centro">____________________________________________</td>
-                        </tr>
-                        <tr>
-                            <td class="centro"><?= $txt_nome ?></td>
-                        </tr>
-                    </table>
-                </td>
+
             </tr>
         </table>
 
         <table>
             <tr>
+
+
                 <td width="40%">
                     <div></div>
                     <table>
@@ -286,7 +278,24 @@ class Escola_Relatorio_Requerimento extends Escola_Relatorio
                         </tr>
                     </table>
                 </td>
-                <td width="60%" class="direita">
+                <td width="60%">
+                    <div></div>
+                    <table>
+                        <tr>
+                            <td class="centro">____________________________________________</td>
+                        </tr>
+                        <tr>
+                            <td class="centro"><?= $txt_nome ?></td>
+                        </tr>
+                    </table>
+                </td>
+
+            </tr>
+        </table>
+
+        <table>
+            <tr>
+                <td width="100%" class="direita">
                     <div></div>
                     <?= $txt_cidade_uf ?>, <?= $txt_data_dia ?> de <?= $txt_data_mes ?> de <?= $txt_data_ano ?>.
                 </td>
