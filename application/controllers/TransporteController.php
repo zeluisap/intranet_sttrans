@@ -1012,7 +1012,7 @@ class TransporteController extends Escola_Controller_Logado
 
     public function emitirAction()
     {
-        ini_set("display_errors", false);
+        // ini_set("display_errors", false);
 
         try {
             $id = $this->_request->getParam("id");
@@ -1025,6 +1025,7 @@ class TransporteController extends Escola_Controller_Logado
             if (!$ss) {
                 throw new Escola_Exception("Falha ao Executar OPERAÇÃO, SERVIÇO Não Localizado!");
             }
+
             if (!$ss->pago()) {
                 throw new Escola_Exception("Falha ao Executar OPERAÇÃO, SOLICITAÇÃO de SERVIÇO Não Paga!");
             }
@@ -2065,15 +2066,50 @@ class TransporteController extends Escola_Controller_Logado
                 throw new Exception("Falha ao Executar OPERAÇÃO, Tipo de Pessoa Não Encontrado!");
             }
 
-            if (!$tpt->proprietario()) {
-                throw new Exception("Falha ao Executar OPERAÇÃO, Pessoa Não é Permissionário!");
-            }
+            // if (!$tpt->proprietario()) {
+            //     throw new Exception("Falha ao Executar OPERAÇÃO, Pessoa Não é Permissionário!");
+            // }
 
             if ($tp->ativo()) {
                 throw new Exception("Falha ao Executar OPERAÇÃO, Pessoa Já Está Ativa!");
             }
 
             $tp->ativar();
+
+            $this->_flashMessage("OPERAÇÃO EFETUADA COM SUCESSO!", "Messages");
+        } catch (Exception $ex) {
+            $this->_flashMessage($ex->getMessage());
+        }
+        $this->_redirect($this->_request->getControllerName() . "/pessoa");
+    }
+
+    public function desativarAction()
+    {
+        try {
+            $id = $this->_request->getParam("id");
+            if (!$id) {
+                throw new Exception("Falha ao Executar OPERAÇÃO, Pessoa Não Localizada!");
+            }
+
+            $tp = TbTransportePessoa::pegaPorId($id);
+            if (!$tp) {
+                throw new Exception("Falha ao Executar OPERAÇÃO, Pessoa Não Localizada!");
+            }
+
+            $tpt = $tp->findParentRow("TbTransportePessoaTipo");
+            if (!$tpt) {
+                throw new Exception("Falha ao Executar OPERAÇÃO, Tipo de Pessoa Não Encontrado!");
+            }
+
+            // if (!$tpt->proprietario()) {
+            //     throw new Exception("Falha ao Executar OPERAÇÃO, Pessoa Não é Permissionário!");
+            // }
+
+            if (!$tp->ativo()) {
+                throw new Exception("Falha ao Executar OPERAÇÃO, Pessoa Já Está Inativa!");
+            }
+
+            $tp->desativar();
 
             $this->_flashMessage("OPERAÇÃO EFETUADA COM SUCESSO!", "Messages");
         } catch (Exception $ex) {

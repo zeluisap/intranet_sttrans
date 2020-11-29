@@ -186,7 +186,17 @@ class Boleto extends Escola_Entidade
 
     public function registrar()
     {
-        return BoletoRegistro::registrarBoleto($this);
+
+        if ($this->registrado) {
+            return true;
+        }
+
+        $response = BoletoRegistro::registrarBoleto($this);
+
+        $this->registrado = true;
+        $this->save();
+
+        return $response;
     }
 
     public function getBancoConvenio()

@@ -91,6 +91,11 @@ class Motorista extends Escola_Entidade
         return $pm;
     }
 
+    public function getPessoaFisica()
+    {
+        return $this->pegaPessoaFisica();
+    }
+
     public function pegaPessoaFisica()
     {
         $pm = $this->getPessoaMotorista();

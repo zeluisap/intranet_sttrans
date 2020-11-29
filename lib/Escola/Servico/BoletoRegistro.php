@@ -40,11 +40,10 @@ class BoletoRegistro
 
     public static function registrarBoleto($boleto = null)
     {
+
         try {
             $obj = new BoletoRegistro();
             $response = $obj->registrar($boleto);
-
-            return $response;
 
             $codigoRetornoPrograma = Escola_Util::valorOuNulo($response, "codigoRetornoPrograma");
             if (!$codigoRetornoPrograma) {
@@ -52,6 +51,10 @@ class BoletoRegistro
             }
 
             if ($codigoRetornoPrograma > 0) {
+                if ($codigoRetornoPrograma == 92) { //BOLETO JÁ REGISTRADO
+                    return $response;
+                }
+
                 $textoMensagemErro = Escola_Util::valorOuNulo($response, "textoMensagemErro");
                 if (!$textoMensagemErro) {
                     throw new Escola_Exception("Não foi possível gerar o boleto.");
@@ -69,7 +72,7 @@ class BoletoRegistro
 
     public function registrarTodosBoletos()
     {
-        $boleto = TbBoleto::pegaPorId(6684);
+        $boleto = TbBoleto::pegaPorId(6743);
         return $this->registrarBoleto($boleto);
     }
 
@@ -104,6 +107,8 @@ class BoletoRegistro
         }
 
         $dados = $this->extrair($boleto);
+        // var_dump($dados);
+        // die();
 
         $fields = [];
         foreach ($dados as $chave => $valor) {
@@ -297,6 +302,8 @@ class BoletoRegistro
 
         $nossoNumero = $boleto->pegaNossoNumero();
 
+        $nossoNumero = str_pad($nossoNumero, 20, "0", STR_PAD_LEFT);
+
         $pessoa = $boleto->pegaPessoa();
         if (!$pessoa) {
             throw new Escola_Exception("Pagador não identificado.");
@@ -326,7 +333,8 @@ class BoletoRegistro
         $numeroCepPagador = Escola_Util::valorOuNulo($endereco, "cep");
 
         $nomeMunicipioPagador = Escola_Util::valorOuNulo($endereco, "bairro->municipio->descricao");
-        $nomeBairroPagador = Escola_Util::valorOuNulo($endereco, "bairro->descricao");
+        $nomeBairroPagador = Escola_Util::tamanhoMenorOuCorta(Escola_Util::valorOuNulo($endereco, "bairro->descricao"), 20);
+
         $siglaUfPagador = Escola_Util::valorOuNulo($endereco, "bairro->municipio->uf->sigla");
 
         $boleto_id = $boleto->getId();

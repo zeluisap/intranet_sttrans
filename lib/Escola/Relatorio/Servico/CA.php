@@ -5,12 +5,16 @@ class Escola_Relatorio_Servico_CA extends Escola_Relatorio_Servico
     public function getFilhos()
     {
         return [
-            "MOT", "CP", "MO", "AUT"
+            "Escola_Relatorio_Servico_CA_BaseMotorista",
+            "Escola_Relatorio_Servico_CA_BaseTransporteMotorista",
+            "Escola_Relatorio_Servico_CA_BasePermissionario",
+            "Escola_Relatorio_Servico_CA_BaseAutorizatario"
         ];
     }
 
     public function header()
-    { }
+    {
+    }
 
     // public function footer()
     // { }
@@ -94,36 +98,36 @@ class Escola_Relatorio_Servico_CA extends Escola_Relatorio_Servico
         }
     }
 
-    public function validarEmitir()
-    {
-        $erros = parent::validarEmitir();
+    // public function validarEmitir()
+    // {
+    //     $erros = parent::validarEmitir();
 
-        if (!(isset($this->registro) && $this->registro)) {
-            return ["Solicitação de Serviço não Definida!"];
-        }
+    //     if (!(isset($this->registro) && $this->registro)) {
+    //         return ["Solicitação de Serviço não Definida!"];
+    //     }
 
-        if (!(isset($this->transporte) && $this->transporte)) {
-            return ["Transporte não Definido!"];
-        }
+    //     if (!(isset($this->transporte) && $this->transporte)) {
+    //         // return ["Transporte não Definido!"];
+    //     }
 
-        if (!(isset($this->proprietario_pessoa) && $this->proprietario_pessoa)) {
-            return ["Proprietário não Definido!"];
-        }
+    //     if (!(isset($this->proprietario_pessoa) && $this->proprietario_pessoa)) {
+    //         return ["Proprietário não Definido!"];
+    //     }
 
-        if (!(isset($this->tp) && $this->tp)) {
-            // return ["Pessoa Vinculada não Definida!"];
-        }
+    //     if (!(isset($this->tp) && $this->tp)) {
+    //         // return ["Pessoa Vinculada não Definida!"];
+    //     }
 
-        if (!(isset($this->transporte_veiculo) && $this->transporte_veiculo)) {
-            return ["Nenhum Veículo Detectado!"];
-        }
+    //     if (!(isset($this->transporte_veiculo) && $this->transporte_veiculo)) {
+    //         return ["Nenhum Veículo Detectado!"];
+    //     }
 
-        if (!count($erros)) {
-            return null;
-        }
+    //     if (!count($erros)) {
+    //         return null;
+    //     }
 
-        return $erros;
-    }
+    //     return $erros;
+    // }
 
     public function getMarcaModelo()
     {
@@ -424,32 +428,32 @@ class Escola_Relatorio_Servico_CA extends Escola_Relatorio_Servico
         $this->setFont($font_name, "B", 7);
         $this->setXY(121, 100);
         $this->html(function () use ($txt_veiculo_especie) {
-            ?>
+?>
             <table style="width: 100px;text-align:center;" border="1">
                 <tr>
                     <td><?= $txt_veiculo_especie ?></td>
                 </tr>
             </table>
         <?php
-                });
+        });
 
-                // $this->MultiCell(30, 7, $txt_veiculo_especie, 0, 'C', 0, 0, '', '', true, 0, false, true, 7, 'M');
+        // $this->MultiCell(30, 7, $txt_veiculo_especie, 0, 'C', 0, 0, '', '', true, 0, false, true, 7, 'M');
 
-                $this->setFont($font_name, "B", 9);
-                $this->setXY(56, 110);
-                $this->MultiCell(90, 20, $txt_veiculo_proprietario, 0, 'C');
+        $this->setFont($font_name, "B", 9);
+        $this->setXY(56, 110);
+        $this->MultiCell(90, 20, $txt_veiculo_proprietario, 0, 'C');
 
-                $this->setXY(74, 117.5);
-                $this->MultiCell(20, 20, Escola_Util::formatData($txt_servico_data_inicio), 0, 'C');
+        $this->setXY(74, 117.5);
+        $this->MultiCell(20, 20, Escola_Util::formatData($txt_servico_data_inicio), 0, 'C');
 
-                $this->setXY(106, 117.5);
-                $this->MultiCell(20, 20, Escola_Util::formatData($txt_servico_data_validade), 0, 'C');
+        $this->setXY(106, 117.5);
+        $this->MultiCell(20, 20, Escola_Util::formatData($txt_servico_data_validade), 0, 'C');
 
-                $this->setFont($font_name, "B", 5.5);
-                $this->setXY(54, 122);
+        $this->setFont($font_name, "B", 5.5);
+        $this->setXY(54, 122);
 
-                $this->html(function () use ($txt_transporte) {
-                    ?>
+        $this->html(function () use ($txt_transporte) {
+        ?>
             <table style="width: 340px; text-align:justify;">
                 <tr>
                     <td>O portador encontra-se cadastrado na STTRANS, para o serviço de <?= $txt_transporte ?>.</td>

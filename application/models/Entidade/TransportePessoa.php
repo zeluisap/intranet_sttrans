@@ -301,18 +301,20 @@ class TransportePessoa extends Escola_Entidade
 
     public function mostrarStatus()
     {
-        if ($this->ativo()) {
-            if ($this->motorista()) {
-                $motorista = $this->pegaMotorista();
-                if ($motorista) {
-                    return $motorista->mostrarStatus();
-                }
-            }
-        }
+        // if ($this->ativo()) {
+        //     if ($this->motorista()) {
+        //         $motorista = $this->pegaMotorista();
+        //         if ($motorista) {
+        //             return $motorista->mostrarStatus();
+        //         }
+        //     }
+        // }
+
         $status = $this->findParentRow("TbTransportePessoaStatus");
         if ($status) {
             return $status->toString();
         }
+
         return "";
     }
 
