@@ -1,24 +1,36 @@
 <?php
-class TbFuncionario extends Escola_Tabela {
+class TbFuncionario extends Escola_Tabela
+{
 	protected $_name = "funcionario";
 	protected $_rowClass = "Funcionario";
 	protected $_dependentTables = array("TbLotacao", "TbFuncionarioOcorrencia", "TbChamado", "TbChamadoOcorrencia", "TbRequerimentoJariResposta");
-	protected $_referenceMap = array("FuncionarioSituacao" => array("columns" => array("id_funcionario_situacao"),
-															 "refTableClass" => "TbFuncionarioSituacao",
-															 "refColumns" => array("id_funcionario_situacao")),
-									 "FuncionarioTipo" => array("columns" => array("id_funcionario_tipo"),
-															 "refTableClass" => "TbFuncionarioTipo",
-															 "refColumns" => array("id_funcionario_tipo")),
-									 "Cargo" => array("columns" => array("id_cargo"),
-															 "refTableClass" => "TbCargo",
-															 "refColumns" => array("id_cargo")),
-									 "PessoaFisica" => array("columns" => array("id_pessoa_fisica"),
-															 "refTableClass" => "TbPessoaFisica",
-															 "refColumns" => array("id_pessoa_fisica")));    
-	
-        public function getSql($dados = array()) {
+	protected $_referenceMap = array(
+		"FuncionarioSituacao" => array(
+			"columns" => array("id_funcionario_situacao"),
+			"refTableClass" => "TbFuncionarioSituacao",
+			"refColumns" => array("id_funcionario_situacao")
+		),
+		"FuncionarioTipo" => array(
+			"columns" => array("id_funcionario_tipo"),
+			"refTableClass" => "TbFuncionarioTipo",
+			"refColumns" => array("id_funcionario_tipo")
+		),
+		"Cargo" => array(
+			"columns" => array("id_cargo"),
+			"refTableClass" => "TbCargo",
+			"refColumns" => array("id_cargo")
+		),
+		"PessoaFisica" => array(
+			"columns" => array("id_pessoa_fisica"),
+			"refTableClass" => "TbPessoaFisica",
+			"refColumns" => array("id_pessoa_fisica")
+		)
+	);
+
+	public function getSql($dados = array())
+	{
 		$sql = $this->select();
-                $sql->from(array("u" => "funcionario"));
+		$sql->from(array("u" => "funcionario"));
 		$sql->join(array("p" => "pessoa_fisica"), "u.id_pessoa_fisica = p.id_pessoa_fisica", array());
 		$sql->join(array("c" => "cargo"), "u.id_cargo = c.id_cargo", array());
 		$sql->join(array("fs" => "funcionario_situacao"), "u.id_funcionario_situacao = fs.id_funcionario_situacao", array());
@@ -54,10 +66,11 @@ class TbFuncionario extends Escola_Tabela {
 		}
 		$sql->order("p.nome");
 		$sql->order("u.matricula desc");
-                return $sql;
-        }
-	
-	public function getPorPessoaFisica($pf) {
+		return $sql;
+	}
+
+	public function getPorPessoaFisica($pf)
+	{
 		if ($pf && $pf->getId()) {
 			$tb = new TbFuncionarioSituacao();
 			$fs = $tb->getPorChave("A");
@@ -68,12 +81,14 @@ class TbFuncionario extends Escola_Tabela {
 		}
 		return false;
 	}
-	
-	public function getPorUsuario($usuario) {
+
+	public function getPorUsuario($usuario)
+	{
 		return $this->getPorPessoaFisica($usuario->pega_pessoa_fisica());
 	}
-	
-	public function pegaAniversariantes($date = false) {
+
+	public function pegaAniversariantes($date = false)
+	{
 		if ($date) {
 			$inicio = new Zend_Date($date);
 		} else {
@@ -85,6 +100,7 @@ class TbFuncionario extends Escola_Tabela {
 		$fim = new Zend_Date($inicio->get("YYYY-MM-dd"));
 		//$fim->add(6, Zend_Date::DAY);
 		$fim->add(3, Zend_Date::DAY);
+
 		$db = Zend_Registry::get("db");
 		$sql = $db->select();
 		$tb_fs = new TbFuncionarioSituacao();
@@ -100,7 +116,9 @@ class TbFuncionario extends Escola_Tabela {
 			//$sql->orWhere("(day(p.data_nascimento) = '" . $inicio->get("dd") . "' and month(p.data_nascimento) = '" . $inicio->get("MM") . "')");
 			$inicio->add(1, Zend_Date::DAY);
 		}
-		$sql->where(implode(" or ", $where));
+		if (count($where)) {
+			$sql->where(implode(" or ", $where));
+		}
 		$sql->order("month(p.data_nascimento)");
 		$sql->order("day(p.data_nascimento)");
 		$sql->order("p.nome");
@@ -115,24 +133,27 @@ class TbFuncionario extends Escola_Tabela {
 		}
 		return false;
 	}
-	
-	public function getPorMatricula($matricula) {
+
+	public function getPorMatricula($matricula)
+	{
 		$rg = $this->fetchAll(" matricula = '{$matricula}' ");
 		if ($rg && count($rg)) {
 			return $rg->current();
 		}
 		return false;
 	}
-	
-	public function pegaLogado() {
+
+	public function pegaLogado()
+	{
 		$usuario = TbUsuario::pegaLogado();
 		if ($usuario) {
 			return $this->getPorUsuario($usuario);
 		}
 		return false;
 	}
-	
-	public function importar_arquivo($filename, $controller = false) {
+
+	public function importar_arquivo($filename, $controller = false)
+	{
 		$linhas = Escola_Util::carregaArquivoDados($filename);
 		if ($linhas && count($linhas)) {
 			$db = Zend_Registry::get("db");
@@ -170,13 +191,15 @@ class TbFuncionario extends Escola_Tabela {
 									$municipio = $rg->current();
 								} else {
 									$municipio = $tb_mun->createRow();
-									$municipio->setFromArray(array("descricao" => $dados["municipio_nascimento"],
-																			   "id_uf" => $uf->getId()));
+									$municipio->setFromArray(array(
+										"descricao" => $dados["municipio_nascimento"],
+										"id_uf" => $uf->getId()
+									));
 									$municipio->save();
 								}
 								$dados["nascimento_id_municipio"] = $municipio->getId();
 							} else {
-								throw new Exception("FALHA AO EXECUTAR OPERAÇÃO, UF DE NASCIMENTO - " . $dados["nascimento_uf"] . " NÃO ENCONTRADO. MATRÍCULA: ". $dados["matricula"]);
+								throw new Exception("FALHA AO EXECUTAR OPERAÇÃO, UF DE NASCIMENTO - " . $dados["nascimento_uf"] . " NÃO ENCONTRADO. MATRÍCULA: " . $dados["matricula"]);
 							}
 						}
 						$pf->setFromArray($dados);
@@ -189,8 +212,10 @@ class TbFuncionario extends Escola_Tabela {
 							$ct = $tb_ct->getPorChave("T");
 							if ($ct) {
 								$cargo = $tb_cargo->createRow();
-								$cargo->setFromArray(array("descricao" => $dados["cargo"],
-																	   "id_cargo_tipo" => $ct->getId()));
+								$cargo->setFromArray(array(
+									"descricao" => $dados["cargo"],
+									"id_cargo_tipo" => $ct->getId()
+								));
 								$cargo->save();
 							}
 						}
@@ -231,20 +256,24 @@ class TbFuncionario extends Escola_Tabela {
 									$setor_nivel = $tb_setor_nivel->getPorChave("S");
 									if ($setor_nivel) {
 										$setor = $tb_setor->createRow();
-										$setor->setFromArray(array("codigo" => $flag[0],
-																			   "sigla" => trim($flag[1]),
-																			   "descricao" => $dados["setor_descricao"],
-																			   "id_setor_nivel" => $setor_nivel->getId()));
+										$setor->setFromArray(array(
+											"codigo" => $flag[0],
+											"sigla" => trim($flag[1]),
+											"descricao" => $dados["setor_descricao"],
+											"id_setor_nivel" => $setor_nivel->getId()
+										));
 										$setor->save();
 									}
 								}
 								$dados["id_setor"] = $setor->getId();
-		
+
 								$tb_lotacao = new TbLotacao();
 								$lotacao = $tb_lotacao->createRow();
-								$lotacao->setFromArray(array("id_funcionario" => $id,
-																		 "id_setor" => $setor->getId(),
-																		 "id_lotacao_tipo" => $lt->getId()));
+								$lotacao->setFromArray(array(
+									"id_funcionario" => $id,
+									"id_setor" => $setor->getId(),
+									"id_lotacao_tipo" => $lt->getId()
+								));
 								$lotacao->save();
 							}
 						}
@@ -257,8 +286,6 @@ class TbFuncionario extends Escola_Tabela {
 					$controller->_flashMessage($e->getMessage());
 				}
 			}
-		
 		}
-		
 	}
 }

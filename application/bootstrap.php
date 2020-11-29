@@ -28,6 +28,8 @@ class Bootstrap
         Zend_Registry::set("config", $config);
 
         date_default_timezone_set($config->date_default_timezone);
+        $locale = new Zend_Locale("pt");
+        Zend_Registry::set("Zend_Locale", $locale);
 
         //database
         $config_db = $config->db;
@@ -64,7 +66,8 @@ class Bootstrap
                 $host = $config->dbfirebird->params->host . ':' . $config->dbfirebird->params->dbname;
                 $dbibase = ibase_connect($host, $config->dbfirebird->params->username, $config->dbfirebird->params->password);
                 Zend_Registry::set("dbibase", $dbibase);
-            } catch (Exception $e) { }
+            } catch (Exception $e) {
+            }
         }
         $authDetails = array(
             'username' => $config->mail->username,
