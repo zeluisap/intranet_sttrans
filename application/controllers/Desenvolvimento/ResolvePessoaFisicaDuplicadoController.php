@@ -161,11 +161,15 @@ class Desenvolvimento_ResolvePessoaFisicaDuplicadoController extends Escola_Cont
                     Escola_DbUtil::query("delete from pessoa where id_pessoa = :id_pessoa_antigo", [
                         "id_pessoa_antigo" => $pf_excluir->id_pessoa
                     ]);
-
-                    Escola_Util::log(" - PRONTO!");
                 }
 
-                Escola_Util::log();
+                // excluindo pessoa
+                Escola_DbUtil::query("update pessoa set cpf_cnpj = :cpf_cnpj where id_pessoa = :id_pessoa", [
+                    "cpf" => $pf_permanece->cpf,
+                    "id_pessoa" => $pf_permanece->id_pessoa
+                ]);
+
+                Escola_Util::log(" - PRONTO!");
             }
         } catch (Exception $ex) {
             Escola_Util::trataErro($ex, false);
