@@ -165,7 +165,7 @@ class Desenvolvimento_ResolvePessoaFisicaDuplicadoController extends Escola_Cont
 
                 // excluindo pessoa
                 Escola_DbUtil::query("update pessoa set cpf_cnpj = :cpf_cnpj where id_pessoa = :id_pessoa", [
-                    "cpf" => $pf_permanece->cpf,
+                    "cpf_cnpj" => $pf_permanece->cpf,
                     "id_pessoa" => $pf_permanece->id_pessoa
                 ]);
 
