@@ -28,11 +28,13 @@ class Boleto extends Escola_Entidade
     {
         $msgs = array();
         if (!Escola_Util::validaData($this->data_criacao)) {
-            $msgs[] = "CAMPO DATA DE CRIAÇÃO OBRIGATÓRIO!";
+            $msgs[] = "CAMPO DATA DE CRIAÇÃO É INVÁLIDO!";
         }
+
         if (!Escola_Util::validaData($this->data_vencimento)) {
-            $msgs[] = "CAMPO DATA DE VENCIMENTO OBRIGATÓRIO!";
+            $msgs[] = "CAMPO DATA DE VENCIMENTO É INVÁLIDO!";
         }
+
         if (!trim($this->id_pessoa)) {
             $msgs[] = "CAMPO PESSOA OBRIGATÓRIO!";
         }

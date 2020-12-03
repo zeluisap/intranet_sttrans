@@ -148,7 +148,7 @@ class Escola_Util
 
     public static function validaData($data)
     {
-        $filter = new Zend_Validate_Date();
+        $filter = new Zend_Validate_Date("yyyy-MM-dd");
         return $filter->isValid($data);
     }
 
