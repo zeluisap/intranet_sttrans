@@ -1,0 +1,46 @@
+<div class="conteudo_controller">
+    <div class="row-fluid">
+        <div class="span12">
+            <form action="<?php echo $this->url(array("controller" => $this->getRequest()->getControllerName(), "action" => "editar")); ?>" method="post" id="formulario" class="formulario form-horizontal">
+                <input type="hidden" name="id" id="id" value="<?php echo $this->registro->getId(); ?>" />
+                <div class="well">
+                    <fieldset>
+                        <legend>CADASTRO DE DESCONTOS, JUROS E MULTAS: </legend>
+
+                        <dl class="dl-horizontal">
+                            <dt>ID:</dt>
+                            <dd><?php echo $this->registro->getId(); ?></dd>
+                        </dl>
+
+                        <dl class="dl-horizontal">
+                            <dt>Tipo:</dt>
+                            <dd><?php echo $this->registro->tipo; ?></dd>
+                        </dl>
+
+                        <dl class="dl-horizontal">
+                            <dt>Nome da classe:</dt>
+                            <dd><?php echo $this->registro->nome_classe; ?></dd>
+                        </dl>
+
+                        <div class="control-group">
+                            <label for="descricao" class="control-label">Descrição:</label>
+                            <div class="controls">
+                                <input type="text" name="descricao" id="descricao" value="<?php echo $this->registro->descricao; ?>" class="span5" />
+                            </div>
+                        </div>
+
+                        <div class="control-group">
+                            <label for="ativo" class="control-label">Ativo?</label>
+                            <div class="controls">
+                                <select name="ativo" id="ativovvvvv">
+                                    <option value="S" <?php echo ($this->registro->ativo) ? "selected" : ""; ?>>SIM</option>
+                                    <option value="N" <?php echo (!$this->registro->ativo) ? "selected" : ""; ?>>NÃO</option>
+                                </select>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

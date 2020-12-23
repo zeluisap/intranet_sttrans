@@ -388,6 +388,13 @@ class ServicoSolicitacao extends Escola_Entidade
         return true;
     }
 
+    public function aposVencimento()
+    {
+        $hoje = new Zend_Date();
+        $vencimento = new Zend_Date($this->data_vencimento);
+        return $hoje->isLater($vencimento);
+    }
+
     public function foraPrazo()
     {
         $hoje = new Zend_Date(date("Y-m-d"));

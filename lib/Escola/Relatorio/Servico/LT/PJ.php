@@ -73,7 +73,7 @@ class Escola_Relatorio_Servico_LT_PJ extends Escola_Relatorio_Servico_LT
             return implode("\n", $txt);
         }
 
-        $txt[] = $t->codigo . " - " . $pessoa_veiculo->toString();
+        $txt[] = $t->codigo . " - " . $pessoa->toString();
 
         return implode("\n", $txt);
     }

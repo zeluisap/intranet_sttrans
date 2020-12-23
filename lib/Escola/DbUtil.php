@@ -234,4 +234,29 @@ class Escola_DbUtil
             select * from {$tabela} where {$pk} = ?
         ", [$id], $db);
     }
+
+    public static function inTransaction($func)
+    {
+        $db = Zend_Registry::get("db");
+
+        $in = $db->getConnection()->inTransaction();
+
+        if (!$in) {
+            $db->beginTransaction();
+        }
+
+        try {
+
+            $func();
+
+            if (!$in) {
+                $db->commit();
+            }
+        } catch (Exception $ex) {
+            if (!$in) {
+                $db->rollBack();
+            }
+            throw $ex;
+        }
+    }
 }
