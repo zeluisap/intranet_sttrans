@@ -141,7 +141,7 @@ class Escola_Relatorio_Servico_LT_PJ extends Escola_Relatorio_Servico_LT
         $this->MultiCell(90, 10, $nome_numero_ano, 0, 'C', 0, 0, '', '', true, 0, false, true, 10, 'M');
 
         $this->setFont($font_name, "B", 8.2);
-        $this->setXY(57, 17);
+        $this->setXY(57, 18.2);
         $this->MultiCell(90, 13, $txt_transporte, 0, 'C', 0, 0, '', '', true, 0, false, true, 13, 'M');
 
         $this->setXY(59, 30);
