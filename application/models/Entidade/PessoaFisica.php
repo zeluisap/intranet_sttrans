@@ -128,7 +128,7 @@ class PessoaFisica extends Escola_Entidade
             } else {
                 $date = new Zend_Date($this->data_nascimento);
                 $val = new Zend_Validate_Date();
-                if (!$val->isValid($date->get("yyyy-MM-dd"))) {
+                if (!$val->isValid($date->get("dd/MM/yyyy"))) {
                     $msgs[] = "CAMPO DATA DE NASCIMENTO INVÁLIDO!";
                 }
             }
