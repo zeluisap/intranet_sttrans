@@ -873,21 +873,32 @@ class ServicoSolicitacao extends Escola_Entidade
     public function pega_valor_pagar()
     {
         $obj_total = $this->pega_valor();
-        if ($obj_total) {
-            $valor_total = $obj_total->valor;
-            $desconto = $this->pegaDesconto();
-            if ($desconto) {
-                $valor_desconto = $desconto->valor;
-                if ($valor_desconto) {
-                    if ($valor_total > $valor_desconto) {
-                        return ($valor_total - $valor_desconto);
-                    }
-                    return 0;
-                }
-            }
-            return $valor_total;
+        if (!$obj_total) {
+            return 0;
         }
-        return 0;
+
+        $valor_total = $obj_total->valor;
+        $desconto = $this->pegaDesconto();
+
+        if ($desconto) {
+            $valor_desconto = $desconto->valor;
+            if ($valor_desconto) {
+                if ($valor_total > $valor_desconto) {
+                    return ($valor_total - $valor_desconto);
+                }
+                return 0;
+            }
+        }
+
+        $desconjuros = TbDesconjuros::calcular($this);
+        if ($desconjuros && count($desconjuros)) {
+            foreach ($desconjuros as $desconjuro) {
+                $vlr = Escola_Util::valorOuCoalesce($desconjuro, "valor", 0);
+                $valor_total += $vlr;
+            }
+        }
+
+        return $valor_total;
     }
 
     public function cancelar_pagamento()

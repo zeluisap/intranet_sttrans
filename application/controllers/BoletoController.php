@@ -1,6 +1,7 @@
 <?php
 
 use Escola\Servico\BoletoRegistro;
+use GuzzleHttp\Exception\ServerException;
 
 class BoletoController extends Escola_Controller_Logado
 {
@@ -17,6 +18,10 @@ class BoletoController extends Escola_Controller_Logado
     {
         try {
             $this->view->result = BoletoRegistro::registrarTodos();
+        } catch (ServerException $ex) {
+            $this->view->result = [
+                "erro" => $ex->getResponse()->getBody()->getContents()
+            ];
         } catch (Exception $ex) {
             $this->view->result = [
                 "erro" => $ex->getMessage()

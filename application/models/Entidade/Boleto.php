@@ -69,14 +69,15 @@ class Boleto extends Escola_Entidade
     public function pegaValor()
     {
         $items = $this->pegaItems();
-        if ($items && count($items)) {
-            $valor = 0;
-            foreach ($items as $item) {
-                $valor += $item->valor;
-            }
-            return $valor;
+        if (!($items && count($items))) {
+            return 0;
         }
-        return 0;
+
+        $valor = 0;
+        foreach ($items as $item) {
+            $valor += $item->valor;
+        }
+        return $valor;
     }
 
     public function confirmar_pagamento($dados = array())

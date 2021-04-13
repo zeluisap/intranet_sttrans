@@ -1,148 +1,156 @@
 <?php
-class RelatorioController extends Escola_Controller_Logado {
-	
-	public function admAction() {
-		$this->view->relatorio = false;
-		$this->view->method = false;
-		$session = Escola_Session::getInstance();
-		$dados = $session->atualizaFiltros(array("id_relatorio", "tipo"));
-		$this->view->dados = $dados;
-		if ($this->_request->isPost()) {
-                    $dados = $this->_request->getPost();
-                    try {
-                        if (!isset($dados["operacao"]) || ($dados["operacao"] != "imprimir")) {
-                            throw new Exception("Falha ao Gerar Relatï¿½rio, Dados Invï¿½lidos!");
-                        }
-                        if (!isset($dados["id_relatorio"]) || !$dados["id_relatorio"]) {
-                            throw new Exception("Falha ao Gerar Relatï¿½rio, Nenhum Relatï¿½rio Selecionado!");
-                        } 
+class RelatorioController extends Escola_Controller_Logado
+{
 
-                        $relatorio = TbRelatorio::getInstance($dados["id_relatorio"]);
-                        var_dump($relatorio); die();
-                        if ($relatorio) {
-                            throw new Exception("Falha ao Gerar Relatï¿½rio, Nenhum Relatï¿½rio Selecionado!");
-                        }
+    public function admAction()
+    {
+        $this->view->relatorio = false;
+        $this->view->method = false;
+        $session = Escola_Session::getInstance();
+        $dados = $session->atualizaFiltros(array("id_relatorio", "tipo"));
+        $this->view->dados = $dados;
+        if ($this->_request->isPost()) {
+            $dados = $this->_request->getPost();
+            try {
+                if (!isset($dados["operacao"]) || ($dados["operacao"] != "imprimir")) {
+                    throw new Exception("Falha ao Gerar Relatï¿½rio, Dados Invï¿½lidos!");
+                }
+                if (!isset($dados["id_relatorio"]) || !$dados["id_relatorio"]) {
+                    throw new Exception("Falha ao Gerar Relatï¿½rio, Nenhum Relatï¿½rio Selecionado!");
+                }
 
-                        $this->view->relatorio = $relatorio;
-                        $method = "to" . $dados["tipo"];
-                        if (!method_exists($relatorio, $method)) {
-                            throw new Exception("Falha ao Gerar Relatï¿½rio, Formato Invï¿½lido!");
-                        } 
+                $relatorio = TbRelatorio::getInstance($dados["id_relatorio"]);
+                var_dump($relatorio);
+                die();
+                if ($relatorio) {
+                    throw new Exception("Falha ao Gerar Relatï¿½rio, Nenhum Relatï¿½rio Selecionado!");
+                }
 
-                        $this->view->method = $method;
+                $this->view->relatorio = $relatorio;
+                $method = "to" . $dados["tipo"];
+                if (!method_exists($relatorio, $method)) {
+                    throw new Exception("Falha ao Gerar Relatï¿½rio, Formato Invï¿½lido!");
+                }
 
-                        if (($dados["tipo"] == "XLS") || ($dados["tipo"] == "PDF")) {
-                            $relatorio->$method();
-                        }
-                    } catch (Exception $ex) {
-                        $this->view->actionErrors[] = $ex->getMessage();
-                    }
-		}
-		$tb = new TbRelatorioTipo();
-		$rt = $tb->getPorChave("Adm");
-		if ($rt) {
-			$tb = new TbRelatorio();
-			$relatorios = $tb->listar(array("filtro_id_relatorio_tipo" => $rt->getId()));
-			if ($relatorios && count($relatorios)) {
-				$this->view->relatorios = $relatorios;
-				$button = Escola_Button::getInstance();
-				$button->setTitulo("RELATï¿½RIOS");
-				$button->addScript("Imprimir", "salvarFormulario('formulario')", "icon-print");
-				$button->addFromArray(array("titulo" => "Voltar",
-																"controller" => "intranet",
-																"action" => "index",
-																"img" => "icon-reply",
-																"params" => array("id" => 0)));
-			} else {
-				$this->_flashMessage("FALHA AO EXECUTAR OPERAï¿½ï¿½O, NENHUM RELATï¿½RIO DISPONï¿½VEL!");
-				$this->_redirect("index");
-			}
-		} else {
-			$this->_flashMessage("FALHA AO EXECUTAR OPERAï¿½ï¿½O, DADOS INCONSISTENTES!");
-			$this->_redirect("index");
-		}
-	}
-    
-	public function caraterAction() {
-            $this->view->relatorio = false;
-            $this->view->method = false;
-            
-            $session = Escola_Session::getInstance();
-            $dados = $session->atualizaFiltros(array("id_transporte_grupo", "tipo", "agrupado"));
-            if (!isset($dados["agrupado"]) || !$dados["agrupado"]) {
-                $dados["agrupado"] = "S";
+                $this->view->method = $method;
+
+                if (($dados["tipo"] == "XLS") || ($dados["tipo"] == "PDF")) {
+                    $relatorio->$method();
+                }
+            } catch (Exception $ex) {
+                $this->view->actionErrors[] = $ex->getMessage();
             }
-            $this->view->dados = $dados;
-            if ($this->_request->isPost()) {
-                $dados = $this->_request->getPost();
+        }
+        $tb = new TbRelatorioTipo();
+        $rt = $tb->getPorChave("Adm");
+        if ($rt) {
+            $tb = new TbRelatorio();
+            $relatorios = $tb->listar(array("filtro_id_relatorio_tipo" => $rt->getId()));
+            if ($relatorios && count($relatorios)) {
+                $this->view->relatorios = $relatorios;
+                $button = Escola_Button::getInstance();
+                $button->setTitulo("RELATï¿½RIOS");
+                $button->addScript("Imprimir", "salvarFormulario('formulario')", "icon-print");
+                $button->addFromArray(array(
+                    "titulo" => "Voltar",
+                    "controller" => "intranet",
+                    "action" => "index",
+                    "img" => "icon-reply",
+                    "params" => array("id" => 0)
+                ));
+            } else {
+                $this->_flashMessage("FALHA AO EXECUTAR OPERAï¿½ï¿½O, NENHUM RELATï¿½RIO DISPONï¿½VEL!");
+                $this->_redirect("index");
+            }
+        } else {
+            $this->_flashMessage("FALHA AO EXECUTAR OPERAï¿½ï¿½O, DADOS INCONSISTENTES!");
+            $this->_redirect("index");
+        }
+    }
 
-                try {
-                    if (!(isset($dados["operacao"]) && ($dados["operacao"] == "imprimir"))) {
-                        throw new Exception("Falha! Dados do RelatÃ³rio InvÃ¡lido!");
-                    }
+    public function caraterAction()
+    {
+        $this->view->relatorio = false;
+        $this->view->method = false;
 
-                    $agrupado = ($dados["agrupado"] == "S");
+        $session = Escola_Session::getInstance();
+        $dados = $session->atualizaFiltros(array("id_transporte_grupo", "tipo", "agrupado"));
+        if (!isset($dados["agrupado"]) || !$dados["agrupado"]) {
+            $dados["agrupado"] = "S";
+        }
+        $this->view->dados = $dados;
+        if ($this->_request->isPost()) {
+            $dados = $this->_request->getPost();
 
-                    if ($agrupado) {
-                        $relatorio_nome = "CaraterGrupo";
-                    } else {
-                        $relatorio_nome = "Carater";
-                    }
+            try {
+                if (!(isset($dados["operacao"]) && ($dados["operacao"] == "imprimir"))) {
+                    throw new Exception("Falha! Dados do RelatÃ³rio InvÃ¡lido!");
+                }
 
-                    $tb = new TbRelatorio();
-                    $relatorio = $tb->getPorChave($relatorio_nome);
+                $agrupado = ($dados["agrupado"] == "S");
 
-                    if (!$relatorio) {
-                        throw new Exception("Falha ao Gerar Relatório!");
-                    }
+                if ($agrupado) {
+                    $relatorio_nome = "CaraterGrupo";
+                } else {
+                    $relatorio_nome = "Carater";
+                }
 
-                    $this->view->relatorio = $relatorio;
-                    $rel = TbRelatorio::getInstance($relatorio->getId());
-                    if (!$rel) {
-                        throw new Exception("Falha ao Gerar Relatório!");
-                    }
+                $tb = new TbRelatorio();
+                $relatorio = $tb->getPorChave($relatorio_nome);
 
-                    $rel->set_dados($dados);
-                    $errors = $rel->validarEmitir();
-                    if ($errors) {
-                        $this->view->actionErrors = $errors;
-                        throw new Exception("");
-                    }
+                if (!$relatorio) {
+                    throw new Exception("Falha ao Gerar Relatório!");
+                }
 
-                    $this->view->errors = $errors;
+                $this->view->relatorio = $relatorio;
+                $rel = TbRelatorio::getInstance($relatorio->getId());
+                if (!$rel) {
+                    throw new Exception("Falha ao Gerar Relatório!");
+                }
 
-                    $this->view->rel = $rel;
-                    $method = "to" . $dados["tipo"];
-                    if (!method_exists($rel, $method)) {
-                        throw new Exception("Falha ao Gerar Relatório! Formato Inválido!");
-                    }
+                $rel->set_dados($dados);
+                $errors = $rel->validarEmitir();
+                if ($errors) {
+                    $this->view->actionErrors = $errors;
+                    throw new Exception("");
+                }
 
-                    if (($dados["tipo"] == "XLS") || ($dados["tipo"] == "PDF")) {
-                        $rel->$method();
-                    } else {
-                        $this->view->method = $method;
-                    }
+                $this->view->errors = $errors;
 
-                } catch (Exception $ex) {
-                    $message = $ex->getMessage();
-                    if ($message) {
-                        $this->view->actionErrors[] = $ex->getMessage();
-                    }
+                $this->view->rel = $rel;
+                $method = "to" . $dados["tipo"];
+                if (!method_exists($rel, $method)) {
+                    throw new Exception("Falha ao Gerar Relatório! Formato Inválido!");
+                }
+
+                if (($dados["tipo"] == "XLS") || ($dados["tipo"] == "PDF")) {
+                    $rel->$method();
+                } else {
+                    $this->view->method = $method;
+                }
+            } catch (Exception $ex) {
+                $message = $ex->getMessage();
+                if ($message) {
+                    $this->view->actionErrors[] = $ex->getMessage();
                 }
             }
-            $button = Escola_Button::getInstance();
-            $button->setTitulo("RELATï¿½RIOS");
-            $button->addScript("Imprimir", "salvarFormulario('formulario')", "icon-print");
-            $button->addFromArray(array("titulo" => "Voltar",
-                                                    "controller" => "intranet",
-                                                    "action" => "index",
-                                                    "img" => "icon-reply",
-                                                    "params" => array("id" => 0)));
-	}
-    
-	public function placasretidasAction() {
-		$this->view->relatorio = false;
-		$this->view->method = false;
+        }
+        $button = Escola_Button::getInstance();
+        $button->setTitulo("RELATï¿½RIOS");
+        $button->addScript("Imprimir", "salvarFormulario('formulario')", "icon-print");
+        $button->addFromArray(array(
+            "titulo" => "Voltar",
+            "controller" => "intranet",
+            "action" => "index",
+            "img" => "icon-reply",
+            "params" => array("id" => 0)
+        ));
+    }
+
+    public function placasretidasAction()
+    {
+        $this->view->relatorio = false;
+        $this->view->method = false;
         $tb = new TbRelatorio();
         $relatorio = $tb->getPorChave("Placas");
         if ($relatorio) {
@@ -181,20 +189,23 @@ class RelatorioController extends Escola_Controller_Logado {
             $button = Escola_Button::getInstance();
             $button->setTitulo("RELATï¿½RIOS");
             $button->addScript("Imprimir", "salvarFormulario('formulario')", "icon-print");
-            $button->addFromArray(array("titulo" => "Voltar",
-                                                    "controller" => "intranet",
-                                                    "action" => "index",
-                                                    "img" => "icon-reply",
-                                                    "params" => array("id" => 0)));
+            $button->addFromArray(array(
+                "titulo" => "Voltar",
+                "controller" => "intranet",
+                "action" => "index",
+                "img" => "icon-reply",
+                "params" => array("id" => 0)
+            ));
         } else {
             $this->_flashMessage("FALHA AO EXECUTAR OPERAï¿½ï¿½O, DADOS INCONSISTENTES!");
             $this->_redirect("intranet/index");
         }
-	}
-    
-	public function agenteAction() {
-		$this->view->relatorio = false;
-		$this->view->method = false;
+    }
+
+    public function agenteAction()
+    {
+        $this->view->relatorio = false;
+        $this->view->method = false;
         $tb = new TbRelatorio();
         $relatorio = $tb->getPorChave("Agente");
         if ($relatorio) {
@@ -233,83 +244,88 @@ class RelatorioController extends Escola_Controller_Logado {
             $button = Escola_Button::getInstance();
             $button->setTitulo("RELATï¿½RIOS");
             $button->addScript("Imprimir", "salvarFormulario('formulario')", "icon-print");
-            $button->addFromArray(array("titulo" => "Voltar",
-                                                    "controller" => "intranet",
-                                                    "action" => "index",
-                                                    "img" => "icon-reply",
-                                                    "params" => array("id" => 0)));
+            $button->addFromArray(array(
+                "titulo" => "Voltar",
+                "controller" => "intranet",
+                "action" => "index",
+                "img" => "icon-reply",
+                "params" => array("id" => 0)
+            ));
         } else {
             $this->_flashMessage("FALHA AO EXECUTAR OPERAï¿½ï¿½O, DADOS INCONSISTENTES!");
             $this->_redirect("intranet/index");
         }
-	}
-    
-	public function motoristaAction() {
-            try {
-                $this->view->relatorio = false;
-                $this->view->method = false;
-                $tb = new TbRelatorio();
-                $relatorio = $tb->getPorChave("Motorista");
-                if (!$relatorio) {
-                    throw new Exception("FALHA AO EXECUTAR OPERAï¿½ï¿½O, DADOS INCONSISTENTES!");
-                }
-                
-                $this->view->relatorio = $relatorio;
-                $session = Escola_Session::getInstance();
-                $dados = $session->atualizaFiltros(array("id_transporte_grupo", "tipo", "ordem"));
-                if (!$dados["ordem"]) {
-                    $dados["ordem"] = "nome";
-                }
-                $this->view->dados = $dados;
-                if ($this->_request->isPost()) {
-                    try {
-                        $dados = $this->_request->getPost();
-                        if (!isset($dados["operacao"]) || ($dados["operacao"] != "imprimir")) {
-                            throw new Exception("Falha ao Gerar Relatï¿½rio, Dados Invï¿½lidos!");
-                        }
-                        
-                        $rel = TbRelatorio::getInstance($relatorio->getId());
-                        if (!$rel) {
-                            throw new Exception("Falha ao Gerar Relatï¿½rio, Nenhum Relatï¿½rio Disponï¿½vel!");
-                        }
-                        
-                        $rel->set_dados($dados);
-                        $errors = $rel->validarEmitir();
-                        $this->view->errors = $errors;
-                        if ($errors) {
-                            throw new Exception("<ul><li>" . implode("</li><li>", $errors) . "</li></ul>");
-                        }
-                        
-                        $this->view->rel = $rel;
-                        $method = "to" . $dados["tipo"];
-                        if (!method_exists($rel, $method)) {
-                            throw new Exception("FALHA AO GERAR RELATï¿½RIO, FORMATO INVï¿½LIDO!");
-                        }
+    }
 
-                        $this->view->method = $method;
-                        if (($dados["tipo"] == "XLS") || ($dados["tipo"] == "PDF")) {
-                            $rel->$method();
-                        }
-                        
-                    } catch (Exception $ex) {
-                        $this->view->actionErrors[] = $ex->getMessage();
-                    }
-                }
-                $button = Escola_Button::getInstance();
-                $button->setTitulo("RELATï¿½RIOS");
-                $button->addScript("Imprimir", "salvarFormulario('formulario')", "icon-print");
-                $button->addFromArray(array("titulo" => "Voltar",
-                                                        "controller" => "intranet",
-                                                        "action" => "index",
-                                                        "img" => "icon-reply",
-                                                        "params" => array("id" => 0)));
-            } catch (Exception $ex) {
-                $this->_flashMessage($ex->getMessage());
-                $this->_redirect("intranet/index");
+    public function motoristaAction()
+    {
+        try {
+            $this->view->relatorio = false;
+            $this->view->method = false;
+            $tb = new TbRelatorio();
+            $relatorio = $tb->getPorChave("Motorista");
+            if (!$relatorio) {
+                throw new Exception("FALHA AO EXECUTAR OPERAï¿½ï¿½O, DADOS INCONSISTENTES!");
             }
-	}
-        
-    public function taxasAction(){
+
+            $this->view->relatorio = $relatorio;
+            $session = Escola_Session::getInstance();
+            $dados = $session->atualizaFiltros(array("id_transporte_grupo", "tipo", "ordem"));
+            if (!$dados["ordem"]) {
+                $dados["ordem"] = "nome";
+            }
+            $this->view->dados = $dados;
+            if ($this->_request->isPost()) {
+                try {
+                    $dados = $this->_request->getPost();
+                    if (!isset($dados["operacao"]) || ($dados["operacao"] != "imprimir")) {
+                        throw new Exception("Falha ao Gerar Relatï¿½rio, Dados Invï¿½lidos!");
+                    }
+
+                    $rel = TbRelatorio::getInstance($relatorio->getId());
+                    if (!$rel) {
+                        throw new Exception("Falha ao Gerar Relatï¿½rio, Nenhum Relatï¿½rio Disponï¿½vel!");
+                    }
+
+                    $rel->set_dados($dados);
+                    $errors = $rel->validarEmitir();
+                    $this->view->errors = $errors;
+                    if ($errors) {
+                        throw new Exception("<ul><li>" . implode("</li><li>", $errors) . "</li></ul>");
+                    }
+
+                    $this->view->rel = $rel;
+                    $method = "to" . $dados["tipo"];
+                    if (!method_exists($rel, $method)) {
+                        throw new Exception("FALHA AO GERAR RELATï¿½RIO, FORMATO INVï¿½LIDO!");
+                    }
+
+                    $this->view->method = $method;
+                    if (($dados["tipo"] == "XLS") || ($dados["tipo"] == "PDF")) {
+                        $rel->$method();
+                    }
+                } catch (Exception $ex) {
+                    $this->view->actionErrors[] = $ex->getMessage();
+                }
+            }
+            $button = Escola_Button::getInstance();
+            $button->setTitulo("RELATï¿½RIOS");
+            $button->addScript("Imprimir", "salvarFormulario('formulario')", "icon-print");
+            $button->addFromArray(array(
+                "titulo" => "Voltar",
+                "controller" => "intranet",
+                "action" => "index",
+                "img" => "icon-reply",
+                "params" => array("id" => 0)
+            ));
+        } catch (Exception $ex) {
+            $this->_flashMessage($ex->getMessage());
+            $this->_redirect("intranet/index");
+        }
+    }
+
+    public function taxasAction()
+    {
         $this->view->relatorio = false;
         $this->view->method = false;
         $tb = new TbRelatorio();
@@ -350,18 +366,21 @@ class RelatorioController extends Escola_Controller_Logado {
             $button = Escola_Button::getInstance();
             $button->setTitulo("RELATï¿½RIOS");
             $button->addScript("Imprimir", "salvarFormulario('formulario')", "icon-print");
-            $button->addFromArray(array("titulo" => "Voltar",
-                                                    "controller" => "intranet",
-                                                    "action" => "index",
-                                                    "img" => "icon-reply",
-                                                    "params" => array("id" => 0)));
+            $button->addFromArray(array(
+                "titulo" => "Voltar",
+                "controller" => "intranet",
+                "action" => "index",
+                "img" => "icon-reply",
+                "params" => array("id" => 0)
+            ));
         } else {
             $this->_flashMessage("FALHA AO EXECUTAR OPERAï¿½ï¿½O, DADOS INCONSISTENTES!");
             $this->_redirect("intranet/index");
         }
     }
-        
-    public function taxassacadoAction(){
+
+    public function taxassacadoAction()
+    {
         $this->view->relatorio = false;
         $this->view->method = false;
         $tb = new TbRelatorio();
@@ -402,18 +421,21 @@ class RelatorioController extends Escola_Controller_Logado {
             $button = Escola_Button::getInstance();
             $button->setTitulo("RELATï¿½RIOS");
             $button->addScript("Imprimir", "salvarFormulario('formulario')", "icon-print");
-            $button->addFromArray(array("titulo" => "Voltar",
-                                                    "controller" => "intranet",
-                                                    "action" => "index",
-                                                    "img" => "icon-reply",
-                                                    "params" => array("id" => 0)));
+            $button->addFromArray(array(
+                "titulo" => "Voltar",
+                "controller" => "intranet",
+                "action" => "index",
+                "img" => "icon-reply",
+                "params" => array("id" => 0)
+            ));
         } else {
             $this->_flashMessage("FALHA AO EXECUTAR OPERAï¿½ï¿½O, DADOS INCONSISTENTES!");
             $this->_redirect("intranet/index");
-        }    
+        }
     }
-    
-    public function taxasapagarAction(){
+
+    public function taxasapagarAction()
+    {
         $this->view->relatorio = false;
         $this->view->method = false;
         $tb = new TbRelatorio();
@@ -454,18 +476,21 @@ class RelatorioController extends Escola_Controller_Logado {
             $button = Escola_Button::getInstance();
             $button->setTitulo("RELATï¿½RIOS");
             $button->addScript("Imprimir", "salvarFormulario('formulario')", "icon-print");
-            $button->addFromArray(array("titulo" => "Voltar",
-                                                    "controller" => "intranet",
-                                                    "action" => "index",
-                                                    "img" => "icon-reply",
-                                                    "params" => array("id" => 0)));
+            $button->addFromArray(array(
+                "titulo" => "Voltar",
+                "controller" => "intranet",
+                "action" => "index",
+                "img" => "icon-reply",
+                "params" => array("id" => 0)
+            ));
         } else {
             $this->_flashMessage("FALHA AO EXECUTAR OPERAï¿½ï¿½O, DADOS INCONSISTENTES!");
             $this->_redirect("intranet/index");
-        }    
+        }
     }
-    
-    public function veiculosAction(){
+
+    public function veiculosAction()
+    {
         $this->view->relatorio = false;
         $this->view->method = false;
         $tb = new TbRelatorio();
@@ -506,14 +531,89 @@ class RelatorioController extends Escola_Controller_Logado {
             $button = Escola_Button::getInstance();
             $button->setTitulo("RELATï¿½RIOS");
             $button->addScript("Imprimir", "salvarFormulario('formulario')", "icon-print");
-            $button->addFromArray(array("titulo" => "Voltar",
-                                                    "controller" => "intranet",
-                                                    "action" => "index",
-                                                    "img" => "icon-reply",
-                                                    "params" => array("id" => 0)));
+            $button->addFromArray(array(
+                "titulo" => "Voltar",
+                "controller" => "intranet",
+                "action" => "index",
+                "img" => "icon-reply",
+                "params" => array("id" => 0)
+            ));
         } else {
             $this->_flashMessage("FALHA AO EXECUTAR OPERAï¿½ï¿½O, DADOS INCONSISTENTES!");
             $this->_redirect("intranet/index");
-        }    
+        }
+    }
+
+    public function debitosAction()
+    {
+        try {
+            $this->view->relatorio = false;
+            $this->view->method = false;
+            $tb = new TbRelatorio();
+            $relatorio = $tb->getPorChave("Debitos");
+            if (!$relatorio) {
+                throw new Escola_Exception("Relatório não disponível!");
+            }
+
+            $this->view->relatorio = $relatorio;
+
+            $session = Escola_Session::getInstance();
+            $dados = $session->atualizaFiltros(array("id_transporte_grupo", "data_inicio", "data_fim", "tipo", "nome_proprietario"));
+            $this->view->dados = $dados;
+
+            if ($this->_request->isPost()) {
+                try {
+                    $dados = $this->_request->getPost();
+
+                    if (!(isset($dados["operacao"]) && ($dados["operacao"] == "imprimir"))) {
+                        throw new Exception("Falha ao gerar relatório, operação não informada.");
+                    }
+
+                    $rel = TbRelatorio::getInstance($relatorio->getId());
+                    if (!$rel) {
+                        throw new Exception("Relatório não localizado.");
+                    }
+
+                    $rel->set_dados($dados);
+                    $errors = $rel->validarEmitir();
+                    if ($errors) {
+                        throw new Escola_Exception_List($errors);
+                    }
+
+                    $this->view->errors = $errors;
+                    $this->view->rel = $rel;
+
+                    $method = "to" . $dados["tipo"];
+                    if (!method_exists($rel, $method)) {
+                        throw new Exception("Formato inválido [{$method}]!");
+                    }
+
+                    if (($dados["tipo"] == "XLS") || ($dados["tipo"] == "PDF")) {
+                        $rel->$method();
+                        return;
+                    }
+
+                    $this->view->method = $method;
+                } catch (Escola_Exception_List $ex) {
+                    $this->view->actionErrors = $ex->getErrors();
+                } catch (Exception $ex) {
+                    $this->view->actionErrors[] = $ex->getMessage();
+                }
+            }
+
+            $button = Escola_Button::getInstance();
+            $button->setTitulo("RELATÓRIOS");
+            $button->addScript("Imprimir", "salvarFormulario('formulario')", "icon-print");
+            $button->addFromArray(array(
+                "titulo" => "Voltar",
+                "controller" => "intranet",
+                "action" => "index",
+                "img" => "icon-reply",
+                "params" => array("id" => 0)
+            ));
+        } catch (Exception $ex) {
+            $this->_flashMessage($ex->getMessage());
+            $this->_redirect("intranet/index");
+        }
     }
 }

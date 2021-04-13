@@ -65,14 +65,15 @@ class BoletoRegistro
 
             return $response;
         } catch (Exception $ex) {
-            throw $ex;
+            // echo "<pre>"; print_r($ex->getResponse()->getBody()->getContents()); die();
+            // throw $ex;
             throw new Escola_Exception("Falha ao tentar registrar o boleto, tente novamente.");
         }
     }
 
     public function registrarTodosBoletos()
     {
-        $boleto = TbBoleto::pegaPorId(6743);
+        $boleto = TbBoleto::pegaPorId(7053);
         return $this->registrarBoleto($boleto);
     }
 
@@ -107,8 +108,7 @@ class BoletoRegistro
         }
 
         $dados = $this->extrair($boleto);
-        // var_dump($dados);
-        // die();
+        // return  $dados;
 
         $fields = [];
         foreach ($dados as $chave => $valor) {
@@ -355,7 +355,7 @@ class BoletoRegistro
             "codigoTipoInscricaoPagador" => $codigoTipoInscricaoPagador,
             "numeroInscricaoPagador" => $numeroInscricaoPagador,
             "nomePagador" => $nomePagador,
-            "textoEnderecoPagador" => $textoEnderecoPagador,
+            // "textoEnderecoPagador" => $textoEnderecoPagador,
             "numeroCepPagador" => $numeroCepPagador,
             "nomeMunicipioPagador" => $nomeMunicipioPagador,
             "nomeBairroPagador" => $nomeBairroPagador,

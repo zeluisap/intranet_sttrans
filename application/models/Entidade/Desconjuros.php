@@ -53,14 +53,43 @@ class Desconjuros extends Escola_Entidade
 		return false;
 	}
 
-	private function validaNomeClasse()
+	private function getFullClassName()
 	{
-		$fullClassName = implode("_", [
+		if (!$this->nome_classe) {
+			return null;
+		}
+
+		return implode("_", [
 			"Escola",
 			"Desconjuros",
 			$this->nome_classe
 		]);
+	}
 
+	private function validaNomeClasse()
+	{
+		$fullClassName = $this->getFullClassName();
+		if (!$fullClassName) {
+			return null;
+		}
 		return class_exists($fullClassName);
+	}
+
+	public function getObjeto()
+	{
+		$fullClassName = $this->getFullClassName();
+		if (!$fullClassName) {
+			return null;
+		}
+		return new $fullClassName();
+	}
+
+	public function calcular($ss)
+	{
+		$objeto = $this->getObjeto();
+		if (!$objeto) {
+			return null;
+		}
+		return $objeto->calcular($ss);
 	}
 }

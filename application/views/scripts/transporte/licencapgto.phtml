@@ -2,6 +2,9 @@
 $valor_a_pagar = $this->stg->findParentRow("TbValor");
 $tb = new TbMoeda();
 $moeda = $tb->pega_padrao();
+
+$valor = $this->registro->pega_valor();
+$valor_a_pagar = $this->registro->pega_valor_pagar();
 ?>
 <div class="conteudo_controller">
     <div class="row-fluid">
@@ -15,53 +18,77 @@ $moeda = $tb->pega_padrao();
                             <dt>Transporte:</dt>
                             <dd><?php echo $this->transporte->toString(); ?></dd>
                         </dl>
-<?php if ($this->referencia) { ?>
-                        <dl class="dl-horizontal">
-                            <dt>Referência:</dt>
-                            <dd><?php echo $this->referencia->toString(); ?></dd>
-                        </dl>
-<?php } ?>
+                        <?php if ($this->referencia) { ?>
+                            <dl class="dl-horizontal">
+                                <dt>Referência:</dt>
+                                <dd><?php echo $this->referencia->toString(); ?></dd>
+                            </dl>
+                        <?php } ?>
                         <dl class="dl-horizontal">
                             <dt>Serviço:</dt>
                             <dd><?php echo $this->stg->findParentRow("TbServico")->toString(); ?></dd>
-                        </dl>                        
+                        </dl>
                         <dl class="dl-horizontal">
                             <dt>Referência:</dt>
                             <dd><?php echo $this->registro->mostrar_referencia(); ?></dd>
-                        </dl>                        
+                        </dl>
+
                         <dl class="dl-horizontal">
                             <dt>Valor:</dt>
-                            <dd><?php echo $valor_a_pagar->toString(); ?></dd>
-                        </dl>                        
+                            <dd><?php echo $valor->toString(); ?></dd>
+                        </dl>
+
+                        <?php
+                        $juros = Escola_Util::valorOuCoalesce($this->desconjuros, "juros", 0);
+                        ?>
+                        <dl class="dl-horizontal">
+                            <dt>Juros:</dt>
+                            <dd>R$ <?php echo Escola_Util::number_format($juros); ?></dd>
+                        </dl>
+
+                        <?php
+                        $multas = Escola_Util::valorOuCoalesce($this->desconjuros, "multa", 0);
+                        ?>
+                        <dl class="dl-horizontal">
+                            <dt>Multas:</dt>
+                            <dd>R$ <?php echo Escola_Util::number_format($multas); ?></dd>
+                        </dl>
+
+                        <dl class="dl-horizontal">
+                            <dt>Valor atualizado:</dt>
+                            <dd>R$ <?php echo Escola_Util::number_format($valor_a_pagar); ?></dd>
+                        </dl>
+
                         <div class="control-group">
                             <label for="data_pagamento" class="control-label">Data Pagamento:</label>
                             <div class="controls">
                                 <input type="text" name="data_pagamento" id="data_pagamento" class="span2 data" value="<?php echo date("d/m/Y"); ?>" />
                             </div>
                         </div>
-<?php
-$ctrl = new Escola_Form_Element_Valor("valor_pago");
-$ctrl->setLabel("Valor Pago:");
-$ctrl->setValue($valor_a_pagar->valor);
-if ($moeda) {
-    $ctrl->set_moeda($moeda);
-}
-echo $ctrl->render($this);
-$ctrl = new Escola_Form_Element_Valor("valor_juros");
-$ctrl->setLabel("Juros:");
-$ctrl->setValue(0);
-if ($moeda) {
-    $ctrl->set_moeda($moeda);
-}
-echo $ctrl->render($this);
-$ctrl = new Escola_Form_Element_Valor("valor_desconto");
-$ctrl->setLabel("Desconto:");
-$ctrl->setValue(0);
-if ($moeda) {
-    $ctrl->set_moeda($moeda);
-}
-echo $ctrl->render($this);
-?>
+
+                        <?php
+                        // $ctrl = new Escola_Form_Element_Valor("valor_pago");
+                        // $ctrl->setLabel("Valor Pago:");
+                        // $ctrl->setValue($valor_a_pagar->valor);
+                        // if ($moeda) {
+                        //     $ctrl->set_moeda($moeda);
+                        // }
+                        // echo $ctrl->render($this);
+                        // $ctrl = new Escola_Form_Element_Valor("valor_juros");
+                        // $ctrl->setLabel("Juros:");
+                        // $ctrl->setValue(0);
+                        // if ($moeda) {
+                        //     $ctrl->set_moeda($moeda);
+                        // }
+                        // echo $ctrl->render($this);
+                        $ctrl = new Escola_Form_Element_Valor("valor_desconto");
+                        $ctrl->setLabel("Desconto:");
+                        $ctrl->setValue(0);
+                        if ($moeda) {
+                            $ctrl->set_moeda($moeda);
+                        }
+                        echo $ctrl->render($this);
+                        ?>
                     </fieldset>
                 </div>
             </form>

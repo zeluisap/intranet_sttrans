@@ -4,122 +4,153 @@ $stg = $this->registro->findParentRow("TbServicoTransporteGrupo");
 <div class="conteudo_controller">
     <div class="row-fluid">
         <div class="span12">
-            <div class="well">
-                <div class="page-header">
-                    <h4>Visualização de Transporte > Serviço</h4>
+            <div class="span7">
+                <div class="well">
+                    <div class="page-header">
+                        <h4>Visualização de Transporte > Serviço</h4>
+                    </div>
+                    <dl class="dl-horizontal">
+                        <dt>Id:</dt>
+                        <dd><?php echo $this->registro->getId(); ?></dd>
+                    </dl>
+                    <dl class="dl-horizontal">
+                        <dt>Transporte:</dt>
+                        <dd><?php echo $this->transporte->toString(); ?></dd>
+                    </dl>
+                    <?php if ($this->referencia) { ?>
+                        <dl class="dl-horizontal">
+                            <dt>Referência:</dt>
+                            <dd><?php echo $this->referencia->toString(); ?></dd>
+                        </dl>
+                    <?php } ?>
+                    <dl class="dl-horizontal">
+                        <dt>Serviço:</dt>
+                        <dd><?php echo $stg->findParentRow("TbServico")->toString(); ?></dd>
+                    </dl>
+                    <dl class="dl-horizontal">
+                        <dt>Referência:</dt>
+                        <dd><?php echo $this->registro->mostrar_referencia(); ?></dd>
+                    </dl>
+                    <dl class="dl-horizontal">
+                        <dt>Data Solicitação:</dt>
+                        <dd><?php echo Escola_Util::formatData($this->registro->data_solicitacao); ?></dd>
+                    </dl>
+                    <dl class="dl-horizontal">
+                        <dt>Vencimento:</dt>
+                        <dd><?php echo Escola_Util::formatData($this->registro->data_vencimento); ?></dd>
+                    </dl>
+                    <dl class="dl-horizontal">
+                        <dt>Valor:</dt>
+                        <dd><?php echo $stg->pega_valor()->toString(); ?></dd>
+                    </dl>
+
+                    <dl class="dl-horizontal">
+                        <dt>Valor a pagar Atualizado:</dt>
+                        <dd>R$ <?php echo Escola_Util::number_format($this->registro->pega_valor_pagar()); ?></dd>
+                    </dl>
+
+                    <dl class="dl-horizontal">
+                        <dt>Início:</dt>
+                        <dd><?php echo Escola_Util::formatData($this->registro->data_inicio); ?></dd>
+                    </dl>
+
+                    <dl class="dl-horizontal">
+                        <dt>Validade:</dt>
+                        <dd><?php echo Escola_Util::formatData($this->registro->data_validade); ?></dd>
+                    </dl>
+
+                    <dl class="dl-horizontal">
+                        <dt>Status:</dt>
+                        <dd><?php echo $this->registro->mostrarStatusHTML(); ?></dd>
+                    </dl>
                 </div>
-                <dl class="dl-horizontal">
-                    <dt>Id:</dt>
-                    <dd><?php echo $this->registro->getId(); ?></dd>
-                </dl>
-                <dl class="dl-horizontal">
-                    <dt>Transporte:</dt>
-                    <dd><?php echo $this->transporte->toString(); ?></dd>
-                </dl>
-<?php if ($this->referencia) { ?>
-                <dl class="dl-horizontal">
-                    <dt>Referência:</dt>
-                    <dd><?php echo $this->referencia->toString(); ?></dd>
-                </dl>
-<?php } ?>
-                <dl class="dl-horizontal">
-                    <dt>Serviço:</dt>
-                    <dd><?php echo $stg->findParentRow("TbServico")->toString(); ?></dd>
-                </dl>
-                <dl class="dl-horizontal">
-                    <dt>Referência:</dt>
-                    <dd><?php echo $this->registro->mostrar_referencia(); ?></dd>
-                </dl>
-                <dl class="dl-horizontal">
-                    <dt>Data Solicitação:</dt>
-                    <dd><?php echo Escola_Util::formatData($this->registro->data_solicitacao); ?></dd>
-                </dl>
-                <dl class="dl-horizontal">
-                    <dt>Vencimento:</dt>
-                    <dd><?php echo Escola_Util::formatData($this->registro->data_vencimento); ?></dd>
-                </dl>
-                <dl class="dl-horizontal">
-                    <dt>Valor:</dt>
-                    <dd><?php echo $stg->pega_valor()->toString(); ?></dd>
-                </dl>
-                <dl class="dl-horizontal">
-                    <dt>Início:</dt>
-                    <dd><?php echo Escola_Util::formatData($this->registro->data_inicio); ?></dd>
-                </dl>
-                <dl class="dl-horizontal">
-                    <dt>Validade:</dt>
-                    <dd><?php echo Escola_Util::formatData($this->registro->data_validade); ?></dd>
-                </dl>
-                <dl class="dl-horizontal">
-                    <dt>Status:</dt>
-                    <dd><?php echo $this->registro->mostrarStatusHTML(); ?></dd>
-                </dl>
             </div>
-<?php
-$pag = $this->pagamento;
-if ($pag) {
-?>
-            <div class="well">
-                <div class="page-header">
-                    <h4>Pagamento</h4>
+
+            <?php if ($this->desconjuros) { ?>
+                <div class="span5">
+                    <div class="well">
+                        <div class="page-header">
+                            <h4>Descontos, juros e multas</h4>
+                        </div>
+                        <?php foreach ($this->desconjuros as $desconjuro) { ?>
+                            <div class="span6">
+                                <strong><?php echo Escola_Util::valorOuNulo($desconjuro, "descricao"); ?>:</strong>
+                            </div>
+                            <div>R$ <?php echo Escola_Util::number_format(Escola_Util::valorOuNulo($desconjuro, "valor")); ?></div>
+                        <?php } ?>
+                    </div>
                 </div>
-                <dl class="dl-horizontal">
-                    <dt>Data do Pagamento:</dt>
-                    <dd><?php echo Escola_Util::formatData($this->pagamento->data_pagamento); ?></dd>
-                </dl>
-                <dl class="dl-horizontal">
-                    <dt>Valor Pago:</dt>
-                    <dd><?php echo $this->pagamento->pega_valor_pago()->toString(); ?></dd>
-                </dl>
-                <dl class="dl-horizontal">
-                    <dt>Juros:</dt>
-                    <dd><?php echo $this->pagamento->pega_valor_juros()->toString(); ?></dd>
-                </dl>
-                <dl class="dl-horizontal">
-                    <dt>Desconto:</dt>
-                    <dd><?php echo $this->pagamento->pega_valor_desconto()->toString(); ?></dd>
-                </dl>
-            </div>
-<?php } ?>
-<?php if ($this->ocorrencias) { ?>
-            <table class="table table-bordered">
-                <thead>
-                    <tr>
-                        <th colspan="4">Ocorrências</th>
-                    </tr>
-                    <tr>
-                        <th>Tipo</th>
-                        <th>Data / Hora</th>
-                        <th>Usuário</th>
-                        <th>Observações</th>
-                    </tr>
-                </thead>
-                <tbody>
-<?php foreach ($this->ocorrencias as $ocorr) { 
-    $txt_tipo = $txt_data_hora = $txt_usuario = $txt_obs = "--";
-    $ssot = $ocorr->pegaServicoSolicitacaoOcorrenciaTipo();
-    if ($ssot) {
-        $txt_tipo = $ssot->toString();
-    }
-    $txt_data_hora = Escola_Util::formatData($ocorr->ocorrencia_data) . " " . $ocorr->ocorrencia_hora;
-    $usuario = $ocorr->pegaUsuario();
-    if ($usuario) {
-        $txt_usuario = $usuario->toString();
-    }
-    if ($ocorr->observacao) {
-        $txt_obs = $ocorr->observacao;
-    }
-?>
-                    <tr>
-                        <td><?php echo $txt_tipo; ?></td>
-                        <td><div class="text-center"><?php echo $txt_data_hora; ?></div></td>
-                        <td><?php echo $txt_usuario; ?></td>
-                        <td><?php echo $txt_obs; ?></td>
-                    </tr>
-<?php } ?>
-                </tbody>
-            </table>
-<?php } ?>
+            <?php } ?>
+
+            <?php
+            $pag = $this->pagamento;
+            if ($pag) {
+            ?>
+                <div class="span5">
+                    <div class="well">
+                        <div class="page-header">
+                            <h4>Pagamento</h4>
+                        </div>
+                        <dl class="dl-horizontal">
+                            <dt>Data do Pagamento:</dt>
+                            <dd><?php echo Escola_Util::formatData($this->pagamento->data_pagamento); ?></dd>
+                        </dl>
+                        <dl class="dl-horizontal">
+                            <dt>Valor Pago:</dt>
+                            <dd><?php echo $this->pagamento->pega_valor_pago()->toString(); ?></dd>
+                        </dl>
+                        <dl class="dl-horizontal">
+                            <dt>Juros:</dt>
+                            <dd><?php echo $this->pagamento->pega_valor_juros()->toString(); ?></dd>
+                        </dl>
+                        <dl class="dl-horizontal">
+                            <dt>Desconto:</dt>
+                            <dd><?php echo $this->pagamento->pega_valor_desconto()->toString(); ?></dd>
+                        </dl>
+                    </div>
+                </div>
+            <?php } ?>
+            <?php if ($this->ocorrencias) { ?>
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th colspan="4">Ocorrências</th>
+                        </tr>
+                        <tr>
+                            <th>Tipo</th>
+                            <th>Data / Hora</th>
+                            <th>Usuário</th>
+                            <th>Observações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($this->ocorrencias as $ocorr) {
+                            $txt_tipo = $txt_data_hora = $txt_usuario = $txt_obs = "--";
+                            $ssot = $ocorr->pegaServicoSolicitacaoOcorrenciaTipo();
+                            if ($ssot) {
+                                $txt_tipo = $ssot->toString();
+                            }
+                            $txt_data_hora = Escola_Util::formatData($ocorr->ocorrencia_data) . " " . $ocorr->ocorrencia_hora;
+                            $usuario = $ocorr->pegaUsuario();
+                            if ($usuario) {
+                                $txt_usuario = $usuario->toString();
+                            }
+                            if ($ocorr->observacao) {
+                                $txt_obs = $ocorr->observacao;
+                            }
+                        ?>
+                            <tr>
+                                <td><?php echo $txt_tipo; ?></td>
+                                <td>
+                                    <div class="text-center"><?php echo $txt_data_hora; ?></div>
+                                </td>
+                                <td><?php echo $txt_usuario; ?></td>
+                                <td><?php echo $txt_obs; ?></td>
+                            </tr>
+                        <?php } ?>
+                    </tbody>
+                </table>
+            <?php } ?>
         </div>
     </div>
 </div>

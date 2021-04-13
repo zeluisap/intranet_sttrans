@@ -269,7 +269,8 @@ class Escola_Util
     public static function number_format($valor)
     {
         $valor = round($valor, 2);
-        $curr = Zend_Locale_Format::toNumber($valor, array("number_format" => "#,##0.00"));
+        // $curr = Zend_Locale_Format::toNumber($valor, array("number_format" => "#,##0.00"));
+        $curr = number_format($valor, 2, ",", ".");
         return $curr;
     }
 

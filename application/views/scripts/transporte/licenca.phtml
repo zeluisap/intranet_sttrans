@@ -36,12 +36,10 @@
                     <label for="filtro_mes_referencia" class="control-label">Mês Referência:</label>
                     <div class="controls">
                         <select name="filtro_mes_referencia" id="filtro_mes_referencia" class="filtro">
-                            <option value="" <?php echo (!$this->dados["filtro_mes_referencia"]) ? "selected" : ""; ?>>==> SELECIONE <==</option>
-                            <?php
-                            foreach (Escola_Util::pegaMeses() as $mes => $desc_mes) {
-                                ?>
-                                <option value="<?php echo $mes; ?>" <?php echo ($mes == $this->dados["filtro_mes_referencia"]) ? "selected" : ""; ?>><?php echo $desc_mes; ?></option>
-                            <?php } ?>
+                            <option value="" <?php echo (!$this->dados["filtro_mes_referencia"]) ? "selected" : ""; ?>>==> SELECIONE <==</option> <?php
+                                                                                                                                                    foreach (Escola_Util::pegaMeses() as $mes => $desc_mes) {
+                                                                                                                                                    ?> <option value="<?php echo $mes; ?>" <?php echo ($mes == $this->dados["filtro_mes_referencia"]) ? "selected" : ""; ?>><?php echo $desc_mes; ?></option>
+                        <?php } ?>
                         </select>
                     </div>
                 </div>
@@ -104,7 +102,7 @@
                                     $s = $stg->findParentRow("TbServico");
                                     $ssp = $registro->pegaPagamento();
                                     $ref = $registro->pegaReferencia();
-                                    ?>
+                                ?>
                                     <tr>
                                         <td>
                                             <?php if ($registro->aguardando_pagamento()) { ?>
@@ -167,77 +165,95 @@
                                             </a>
                                         </td>
                                         <td>
-                                            <div class="btn-group">	
+                                            <div class="btn-group">
                                                 <a href="<?php
-                                                echo $this->url(array("controller" => $this->getRequest()->getControllerName(),
-                                                    "action" => "viewlicenca",
-                                                    "id_transporte" => $this->transporte->getId(), "id" => $registro->getId()));
-                                                ?>" class="btn" title="Visualizar">
+                                                            echo $this->url(array(
+                                                                "controller" => $this->getRequest()->getControllerName(),
+                                                                "action" => "viewlicenca",
+                                                                "id_transporte" => $this->transporte->getId(), "id" => $registro->getId()
+                                                            ));
+                                                            ?>" class="btn" title="Visualizar">
                                                     <i class="icon-search"></i>
                                                 </a>
                                                 <a href="<?php
-                                                echo $this->url(array("controller" => $this->getRequest()->getControllerName(),
-                                                    "action" => "licencaeditar",
-                                                    "id_transporte" => $this->transporte->getId(), "id" => $registro->getId()));
-                                                ?>" class="btn" title="Editar">
+                                                            echo $this->url(array(
+                                                                "controller" => $this->getRequest()->getControllerName(),
+                                                                "action" => "licencaeditar",
+                                                                "id_transporte" => $this->transporte->getId(), "id" => $registro->getId()
+                                                            ));
+                                                            ?>" class="btn" title="Editar">
                                                     <i class="icon-cog"></i>
                                                 </a>
                                                 <a target="_blank" title="Cancelar Solicitação" href="<?php
-                                                echo $this->url(array("controller" => $this->getRequest()->getControllerName(),
-                                                    "action" => "licencacancelar",
-                                                    "id_transporte" => $this->transporte->getId(), "id" => $registro->getId()));
-                                                ?>" class="btn link_confirma">
+                                                                                                        echo $this->url(array(
+                                                                                                            "controller" => $this->getRequest()->getControllerName(),
+                                                                                                            "action" => "licencacancelar",
+                                                                                                            "id_transporte" => $this->transporte->getId(), "id" => $registro->getId()
+                                                                                                        ));
+                                                                                                        ?>" class="btn link_confirma">
                                                     <i class="icon-minus-sign"></i>
                                                 </a>
                                                 <?php if ($registro->pago()) { ?>
                                                     <a href="<?php
-                                                    echo $this->url(array("controller" => $this->getRequest()->getControllerName(),
-                                                        "action" => "cancelarpagamento",
-                                                        "id_transporte" => $this->transporte->getId(), "id" => $registro->getId()));
-                                                    ?>" class="btn link_confirma" title="Cancelar Pagamento">
+                                                                echo $this->url(array(
+                                                                    "controller" => $this->getRequest()->getControllerName(),
+                                                                    "action" => "cancelarpagamento",
+                                                                    "id_transporte" => $this->transporte->getId(), "id" => $registro->getId()
+                                                                ));
+                                                                ?>" class="btn link_confirma" title="Cancelar Pagamento">
                                                         <i class="icon-remove-circle"></i>
                                                     </a>
-                                                    <?php // if ($registro->valido()) { ?>
+                                                    <?php // if ($registro->valido()) { 
+                                                    ?>
                                                     <a href="<?php
-                                                    echo $this->url(array("controller" => $this->getRequest()->getControllerName(),
-                                                        "action" => "emitir",
-                                                        "id_transporte" => $this->transporte->getId(), "id" => $registro->getId()));
-                                                    ?>" class="btn" title="Emitir Documento">
+                                                                echo $this->url(array(
+                                                                    "controller" => $this->getRequest()->getControllerName(),
+                                                                    "action" => "emitir",
+                                                                    "id_transporte" => $this->transporte->getId(), "id" => $registro->getId()
+                                                                ));
+                                                                ?>" class="btn" title="Emitir Documento">
                                                         <i class="icon-print"></i>
                                                     </a>
-                                                    <?php // }  ?>
+                                                    <?php // }  
+                                                    ?>
                                                 <?php } else { ?>
-                                                       <?php // if ($registro->cancelado() || $registro->aguardando_pagamento()) { ?>
-            <?php //}  ?>
+                                                    <?php // if ($registro->cancelado() || $registro->aguardando_pagamento()) { 
+                                                    ?>
+                                                    <?php //}  
+                                                    ?>
                                                     <?php if ($registro->aguardando_pagamento()) { ?>
                                                         <a target="_blank" href="<?php
-                                                        echo $this->url(array("controller" => $this->getRequest()->getControllerName(),
-                                                            "action" => "boleto",
-                                                            "id_transporte" => $this->transporte->getId(), "id" => $registro->getId()));
-                                                        ?>" class="btn" title="Gerar Boleto">
+                                                                                    echo $this->url(array(
+                                                                                        "controller" => $this->getRequest()->getControllerName(),
+                                                                                        "action" => "boleto",
+                                                                                        "id_transporte" => $this->transporte->getId(), "id" => $registro->getId()
+                                                                                    ));
+                                                                                    ?>" class="btn" title="Gerar Boleto">
                                                             <i class="icon-credit-card"></i>
                                                         </a>
                                                         <a href="<?php
-                                                        echo $this->url(array("controller" => $this->getRequest()->getControllerName(),
-                                                            "action" => "licencapgto",
-                                                            "id_transporte" => $this->transporte->getId(), "id" => $registro->getId()));
-                                                        ?>" class="btn" title="Confirmar Pagamento">
+                                                                    echo $this->url(array(
+                                                                        "controller" => $this->getRequest()->getControllerName(),
+                                                                        "action" => "licencapgto",
+                                                                        "id_transporte" => $this->transporte->getId(), "id" => $registro->getId()
+                                                                    ));
+                                                                    ?>" class="btn" title="Confirmar Pagamento">
                                                             <i class="icon-money"></i>
                                                         </a>
-            <?php } ?>
-        <?php } ?>
+                                                    <?php } ?>
+                                                <?php } ?>
                                             </div>
                                         </td>
                                     </tr>
-    <?php } ?>
+                                <?php } ?>
                             </tbody>
-<?php } ?>
+                        <?php } ?>
                     </table>
-<?php
-if ($this->registros && count($this->registros)) {
-    echo $this->paginationControl($this->registros, "sliding", "minha_paginacao_control.phtml");
-}
-?>
+                    <?php
+                    if ($this->registros && count($this->registros)) {
+                        echo $this->paginationControl($this->registros, "sliding", "minha_paginacao_control.phtml");
+                    }
+                    ?>
                 </form>
             </div>
         </div>

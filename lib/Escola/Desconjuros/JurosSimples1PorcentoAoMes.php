@@ -31,20 +31,47 @@ class Escola_Desconjuros_JurosSimples1PorcentoAoMes implements Escola_Desconjuro
             return false;
         }
 
-        $diff = $dtHoje->sub($dtVencimento);
-        $days = $diff->toString(Zend_Date::DAY);
+        $diff = $dtHoje->sub($dtVencimento)->toValue();
+        $days = ceil($diff / 60 / 60 / 24) + 1;
 
         if (!$days) {
             return false;
         }
 
-        $quant = floor(30 / $days);
+        if ($days < 30) {
+            return false;
+        }
+
+        $quant = floor($days / 30);
         if (!$quant) {
             return false;
         }
+
+        return $quant;
     }
 
     public function calcular($ss)
     {
+
+        $valor = $ss->pega_valor();
+        if (!$valor) {
+            return null;
+        }
+
+        $vlr = $valor->valor;
+        if (!$vlr) {
+            return null;
+        }
+
+        $mesesAtraso = $this->validar($ss);
+        if (!$mesesAtraso) {
+            return null;
+        }
+
+        return [
+            "tipo" => $this->getTipo(),
+            "descricao" => $this->getDescricao(),
+            "valor" => $vlr * $mesesAtraso / 100
+        ];
     }
 }

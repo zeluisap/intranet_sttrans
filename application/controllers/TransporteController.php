@@ -721,124 +721,138 @@ class TransporteController extends Escola_Controller_Logado
 
     public function viewlicencaAction()
     {
-        $id = $this->_request->getParam("id");
-        if ($id) {
+
+        try {
+            $id = $this->_request->getParam("id");
+            if (!$id) {
+                throw new Escola_Exception("NENHUMA INFORMAÇÃO RECEBIDA!");
+            }
+
             $tb = new TbServicoSolicitacao();
             $ss = $tb->getPorId($id);
-            if ($ss) {
-                $transporte = false;
-                $this->view->registro = $ss;
-                $referencia = $ss->pegaReferencia();
-                if ($referencia) {
-                    if ($ss->transporte()) {
-                        $transporte = $referencia;
-                        $referencia = false;
-                    } elseif ($ss->veiculo() || $ss->pessoa()) {
-                        $transporte = $referencia->findParentRow("TbTransporte");
-                    }
-                }
-                $this->view->transporte = $transporte;
-                $this->view->referencia = $referencia;
-                $this->view->pagamento = $ss->pegaPagamento();
-                $this->view->ocorrencias = $ss->pegaOcorrencias();
+            if (!$ss) {
+                throw new Escola_Exception("INFORMAÇÃO RECEBIDA INVÁLIDA!");
+            }
 
-                $button = Escola_Button::getInstance();
-                $button->setTitulo("VISUALIZAR TRANSPORTE > SERVIÇO");
-                if ($ss->pago()) {
-                    if ($ss->valido()) {
-                        $button->addFromArray(array(
-                            "titulo" => "Emitir Documento",
-                            "controller" => $this->_request->getControllerName(),
-                            "action" => "emitir",
-                            "img" => "icon-print",
-                            "params" => array("id_transporte" => $ss->chave, "id" => $ss->getId()),
-                        ));
-                    }
-                } else {
+            $transporte = false;
+            $this->view->registro = $ss;
+            $this->view->desconjuros = TbDesconjuros::calcular($ss);
+
+            $referencia = $ss->pegaReferencia();
+            if ($referencia) {
+                if ($ss->transporte()) {
+                    $transporte = $referencia;
+                    $referencia = false;
+                } elseif ($ss->veiculo() || $ss->pessoa()) {
+                    $transporte = $referencia->findParentRow("TbTransporte");
+                }
+            }
+            $this->view->transporte = $transporte;
+            $this->view->referencia = $referencia;
+            $this->view->pagamento = $ss->pegaPagamento();
+            $this->view->ocorrencias = $ss->pegaOcorrencias();
+
+            $button = Escola_Button::getInstance();
+            $button->setTitulo("VISUALIZAR TRANSPORTE > SERVIÇO");
+            if ($ss->pago()) {
+                if ($ss->valido()) {
                     $button->addFromArray(array(
-                        "titulo" => "Gerar Boleto",
+                        "titulo" => "Emitir Documento",
                         "controller" => $this->_request->getControllerName(),
-                        "action" => "boleto",
-                        "img" => "icon-credit-card",
-                        "params" => array("target" => "_blank", "id_transporte" => $ss->chave, "id" => $ss->getId()),
-                    ));
-                    $button->addFromArray(array(
-                        "titulo" => "Confirmar Pagamento",
-                        "controller" => $this->_request->getControllerName(),
-                        "action" => "licencapgto",
-                        "img" => "icon-money",
+                        "action" => "emitir",
+                        "img" => "icon-print",
                         "params" => array("id_transporte" => $ss->chave, "id" => $ss->getId()),
                     ));
                 }
-                $button->addFromArray(array(
-                    "titulo" => "Voltar",
-                    "controller" => $this->_request->getControllerName(),
-                    "action" => "licenca",
-                    "img" => "icon-reply",
-                    "params" => array("id_transporte" => $ss->chave, "id" => 0),
-                ));
             } else {
-                $this->_flashMessage("INFORMAÇÃO RECEBIDA INVÁLIDA!");
-                $this->_redirect($this->_request->getControllerName() . "/index");
+                $button->addFromArray(array(
+                    "titulo" => "Gerar Boleto",
+                    "controller" => $this->_request->getControllerName(),
+                    "action" => "boleto",
+                    "img" => "icon-credit-card",
+                    "params" => array("target" => "_blank", "id_transporte" => $ss->chave, "id" => $ss->getId()),
+                ));
+                $button->addFromArray(array(
+                    "titulo" => "Confirmar Pagamento",
+                    "controller" => $this->_request->getControllerName(),
+                    "action" => "licencapgto",
+                    "img" => "icon-money",
+                    "params" => array("id_transporte" => $ss->chave, "id" => $ss->getId()),
+                ));
             }
-        } else {
-            $this->_flashMessage("NENHUMA INFORMAÇÃO RECEBIDA!");
+            $button->addFromArray(array(
+                "titulo" => "Voltar",
+                "controller" => $this->_request->getControllerName(),
+                "action" => "licenca",
+                "img" => "icon-reply",
+                "params" => array("id_transporte" => $ss->chave, "id" => 0),
+            ));
+        } catch (Exception $ex) {
+            $this->_flashMessage($ex->getMessage());
             $this->_redirect($this->_request->getControllerName() . "/index");
         }
     }
 
     public function licencapgtoAction()
     {
-        $id = $this->_request->getParam("id");
-        if ($id) {
+
+        try {
+
+            $id = $this->_request->getParam("id");
+            if (!$id) {
+                throw new Exception("NENHUMA INFORMAÇÃO RECEBIDA!");
+            }
+
             $tb = new TbServicoSolicitacao();
             $ss = $tb->getPorId($id);
-            if ($ss) {
-                if (!$ss->pago()) {
-                    $this->view->registro = $ss;
-                    $this->view->transporte = $ss->pegaTransporte();
-                    $this->view->referencia = $ss->pegaReferencia();
-                    $this->view->stg = $ss->findParentRow("TbServicoTransporteGrupo");
-                    if ($this->_request->isPost()) {
-                        try {
-                            $dados = $this->_request->getPost();
-                            $tb = new TbServicoSolicitacaoPagamento();
-                            $pgto = $tb->createRow();
-                            $pgto->setFromArray($dados);
-                            $errors = $pgto->getErrors();
-                            if ($errors) {
-                                throw new Exception("Falha ao Executar OPERAÇÃO: <ul><li>" . implode("</li><li>", $errors) . "</li></ul>");
-                            }
+            if (!$ss) {
+                throw new Exception("INFORMAÇÃO RECEBIDA INVÁLIDA!");
+            }
 
-                            $pgto->save();
+            if ($ss->pago()) {
+                throw new Escola_Exception("SOLICITAÇÃO DE SERVIÇO JÁ PAGA!");
+            }
 
-                            $this->_flashMessage("OPERAÇÃO EFETUADA COM SUCESSO!", "Messages");
-                            $this->_redirect($this->_request->getControllerName() . "/licenca/id/0/id_transporte/{$ss->chave}");
-                        } catch (Exception $ex) {
-                            $this->view->actionErrors[] = $ex->getMessage();
-                        }
+            $this->view->registro = $ss;
+            $this->view->desconjuros = TbDesconjuros::calcularGrupos($ss);
+            $this->view->transporte = $ss->pegaTransporte();
+            $this->view->referencia = $ss->pegaReferencia();
+            $this->view->stg = $ss->findParentRow("TbServicoTransporteGrupo");
+            if ($this->_request->isPost()) {
+                try {
+                    $dados = $this->_request->getPost();
+                    $tb = new TbServicoSolicitacaoPagamento();
+                    $pgto = $tb->createRow();
+                    $pgto->setFromArray($dados);
+                    $errors = $pgto->getErrors();
+                    if ($errors) {
+                        throw new Exception("Falha ao Executar OPERAÇÃO: <ul><li>" . implode("</li><li>", $errors) . "</li></ul>");
                     }
 
-                    $button = Escola_Button::getInstance();
-                    $button->setTitulo("VISUALIZAR TRANSPORTE > SERVIÇO > PAGAMENTO");
-                    $button->addScript("Confirmar Pagamento", "salvarFormulario('formulario')", "icon-save");
-                    $button->addFromArray(array(
-                        "titulo" => "Voltar",
-                        "controller" => $this->_request->getControllerName(),
-                        "action" => "licenca",
-                        "img" => "icon-reply",
-                        "params" => array("id" => 0, "id_transporte" => $ss->chave),
-                    ));
-                } else {
-                    $this->_flashMessage("SOLICITAÇÃO DE SERVIÇO JÁ PAGA!");
-                    $this->_redirect($this->_request->getControllerName() . "/licenca/id/0");
+                    $pgto->save();
+
+                    $this->_flashMessage("OPERAÇÃO EFETUADA COM SUCESSO!", "Messages");
+                    $this->_redirect($this->_request->getControllerName() . "/licenca/id/0/id_transporte/{$ss->chave}");
+                } catch (Exception $ex) {
+                    $this->view->actionErrors[] = $ex->getMessage();
                 }
-            } else {
-                $this->_flashMessage("INFORMAÇÃO RECEBIDA INVÁLIDA!");
-                $this->_redirect($this->_request->getControllerName() . "/index");
             }
-        } else {
-            $this->_flashMessage("NENHUMA INFORMAÇÃO RECEBIDA!");
+
+            $button = Escola_Button::getInstance();
+            $button->setTitulo("VISUALIZAR TRANSPORTE > SERVIÇO > PAGAMENTO");
+            $button->addScript("Confirmar Pagamento", "salvarFormulario('formulario')", "icon-save");
+            $button->addFromArray(array(
+                "titulo" => "Voltar",
+                "controller" => $this->_request->getControllerName(),
+                "action" => "licenca",
+                "img" => "icon-reply",
+                "params" => array("id" => 0, "id_transporte" => $ss->chave),
+            ));
+        } catch (Escola_Exception $ex) {
+            $this->_flashMessage($ex->getMessage());
+            $this->_redirect($this->_request->getControllerName() . "/licenca/id/0");
+        } catch (Exception $ex) {
+            $this->_flashMessage($ex->getMessage());
             $this->_redirect($this->_request->getControllerName() . "/index");
         }
     }
@@ -889,6 +903,7 @@ class TransporteController extends Escola_Controller_Logado
                     }
                 }
             }
+
             if (!$ids && !$boleto) {
                 throw new Exception("Falha ao Executar Operacao, Nenhuma Informacao Recebida!");
             }

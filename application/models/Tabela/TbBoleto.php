@@ -1,18 +1,26 @@
 <?php
 
-class TbBoleto extends Escola_Tabela {
+class TbBoleto extends Escola_Tabela
+{
 
     protected $_name = "boleto";
     protected $_rowClass = "Boleto";
     protected $_dependentTables = array("TbBoletoItem", "TbRetornoItem");
-    protected $_referenceMap = array("Pessoa" => array("columns" => array("id_pessoa"),
+    protected $_referenceMap = array(
+        "Pessoa" => array(
+            "columns" => array("id_pessoa"),
             "refTableClass" => "TbPessoa",
-            "refColumns" => array("id_pessoa")),
-        "BancoConvenio" => array("columns" => array("id_banco_convenio"),
+            "refColumns" => array("id_pessoa")
+        ),
+        "BancoConvenio" => array(
+            "columns" => array("id_banco_convenio"),
             "refTableClass" => "TbBancoConvenio",
-            "refColumns" => array("id_banco_convenio")));
+            "refColumns" => array("id_banco_convenio")
+        )
+    );
 
-    public function getSql($dados = array()) {
+    public function getSql($dados = array())
+    {
         $sql = $this->select();
         $sql->from(array("b" => "boleto"));
         if (isset($dados["filtro_id_boleto"]) && $dados["filtro_id_boleto"]) {
@@ -20,7 +28,7 @@ class TbBoleto extends Escola_Tabela {
         }
         if (isset($dados["filtro_nosso_numero"]) && $dados["filtro_nosso_numero"]) {
             $sql->where("lower(b.nosso_numero) = lower('{$dados["filtro_nosso_numero"]}')");
-        }        
+        }
         if (isset($dados["filtro_convenio"]) && $dados["filtro_convenio"]) {
             $sql->join(array("bc" => "banco_convenio"), "b.id_banco_convenio = bc.id_banco_convenio", array());
             $sql->where("bc.convenio = '{$dados["filtro_convenio"]}'");
@@ -40,7 +48,8 @@ class TbBoleto extends Escola_Tabela {
         return $sql;
     }
 
-    public function criaBoleto($sss, $id_pessoa, $data_vencimento_default = false) {
+    public function criaBoleto($sss, $id_pessoa, $data_vencimento_default = false)
+    {
         if (!$sss) {
             return false;
         }
@@ -66,6 +75,7 @@ class TbBoleto extends Escola_Tabela {
                 } else {
                     $dados["data_vencimento"] = $data_vencimento_default;
                 }
+
                 $bc = TbBancoConvenio::pegaPadrao();
                 if ($bc) {
                     $dados["id_banco_convenio"] = $bc->getId();
@@ -99,12 +109,7 @@ class TbBoleto extends Escola_Tabela {
                         $dados["id_boleto"] = $boleto->getId();
                         $dados["id_boleto_item_tipo"] = $bit->getId();
                         $dados["chave"] = $ss->getId();
-                        /*
-                          $valor = $ss->pega_valor();
-                          if ($valor) {
-                          $dados["valor"] = Escola_Util::number_format($valor->valor);
-                          }
-                         */
+
                         $dados["valor"] = Escola_Util::number_format($ss->pega_valor_pagar());
                         $bi = $tb->createRow();
                         $bi->setFromArray($dados);
@@ -114,6 +119,7 @@ class TbBoleto extends Escola_Tabela {
                         }
                     }
                 }
+
                 $db->commit();
                 return $boleto;
             }
@@ -124,5 +130,4 @@ class TbBoleto extends Escola_Tabela {
             throw $e;
         }
     }
-
 }

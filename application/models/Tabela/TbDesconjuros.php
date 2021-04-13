@@ -80,18 +80,58 @@ class TbDesconjuros extends Escola_Tabela
 		$sql->where("d.ativo = ?", true);
 
 		$djs = $tb->fetchAll($sql);
-		if (!($djs && is_array($djs) && count($djs))) {
+		if (!($djs->count())) {
 			return null;
 		}
 
 		$retorno = [];
-
 		foreach ($djs as $dj) {
-			if (!$dj->validar($ss)) {
+			$retorno[] = $dj->calcular($ss);
+		}
+
+		$retorno = array_filter($retorno, function ($item) {
+			return Escola_Util::valorOuNulo($item, "valor");
+		});
+
+		return $retorno;
+	}
+
+	public static function calcularBoleto($boleto)
+	{
+		if (!$boleto) {
+			return null;
+		}
+
+		return [
+			"juros" => 0,
+			"multas" => 0,
+			"desconto" => 0
+		];
+	}
+
+	public static function calcularGrupos($ss)
+	{
+		$desconjuros = self::calcular($ss);
+		if (!($desconjuros && count($desconjuros))) {
+			return null;
+		}
+		$retorno = [];
+		foreach ($desconjuros as $desconjuro) {
+			$tipo = Escola_Util::valorOuNulo($desconjuro, "tipo");
+			$valor = Escola_Util::valorOuNulo($desconjuro, "valor");
+			if (!($tipo && $valor)) {
 				continue;
 			}
 
-			$retorno[] = $dj->calcular($ss);
+			if (!isset($retorno[$tipo])) {
+				$retorno[$tipo] = 0;
+			}
+
+			$retorno[$tipo] += $valor;
+		}
+
+		if (!count($retorno)) {
+			return null;
 		}
 
 		return $retorno;
