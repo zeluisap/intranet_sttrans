@@ -1,11 +1,13 @@
 <?php
-class ServicoSolicitacaoPagamento extends Escola_Entidade {
+class ServicoSolicitacaoPagamento extends Escola_Entidade
+{
 
     protected $_valor_pago = false;
     protected $_valor_desconto = false;
     protected $_valor_juros = false;
-    
-    public function pega_valor_pago() {
+
+    public function pega_valor_pago()
+    {
         if ($this->_valor_pago) {
             return $this->_valor_pago;
         }
@@ -16,8 +18,9 @@ class ServicoSolicitacaoPagamento extends Escola_Entidade {
         }
         return $valor;
     }
-    
-    public function pega_valor_juros() {
+
+    public function pega_valor_juros()
+    {
         if ($this->_valor_juros) {
             return $this->_valor_juros;
         }
@@ -28,8 +31,9 @@ class ServicoSolicitacaoPagamento extends Escola_Entidade {
         }
         return $valor;
     }
-    
-    public function pega_valor_desconto() {
+
+    public function pega_valor_desconto()
+    {
         if ($this->_valor_desconto) {
             return $this->_valor_desconto;
         }
@@ -40,8 +44,9 @@ class ServicoSolicitacaoPagamento extends Escola_Entidade {
         }
         return $valor;
     }
-    
-    public function init() {
+
+    public function init()
+    {
         parent::init();
         $this->_valor_pago = $this->pega_valor_pago();
         $this->_valor_desconto = $this->pega_valor_desconto();
@@ -56,8 +61,9 @@ class ServicoSolicitacaoPagamento extends Escola_Entidade {
             $this->data_pagamento = $hoje->toString("YYYY-MM-dd");
         }
     }
-    
-    public function setFromArray(array $dados) {
+
+    public function setFromArray(array $dados)
+    {
         if (isset($dados["valor_pago"]) && $dados["valor_pago"]) {
             $this->_valor_pago->setFromArray(array("valor" => $dados["valor_pago"]));
         }
@@ -72,8 +78,9 @@ class ServicoSolicitacaoPagamento extends Escola_Entidade {
         }
         parent::setFromArray($dados);
     }
-     
-    public function save() {
+
+    public function save()
+    {
         $in_trans = true;
         $db = Zend_Registry::get("db");
         try {
@@ -90,57 +97,56 @@ class ServicoSolicitacaoPagamento extends Escola_Entidade {
             if (!$id) {
                 throw new Exception("Falha ao Executar Operação, Dados Inválidos!");
             }
-            
+
             $ss = $this->findParentRow("TbServicoSolicitacao");
             if (!$ss) {
                 throw new Exception("Falha ao Executar Operação, Solicitação de Serviço Inválido!");
             }
-            
+
             $tb = new TbServicoSolicitacaoStatus();
             $sss = $tb->getPorChave("PG");
             if (!$sss) {
                 throw new Exception("Falha ao Executar Operação, Status de Solicitação de Serviço Inválido!");
             }
-            
+
             $ss->id_servico_solicitacao_status = $sss->getId();
             if (!$ss->data_inicio) {
                 $ss->data_inicio = date("Y-m-d");
             }
             $ss->save();
-            
+
             $ss->gerarOcorrencia("P");
-                        
+
             if ($in_trans) {
                 $db->commit();
             }
-            
+
             return $id;
-            
         } catch (Exception $ex) {
-            
+
             if ($in_trans) {
                 $db->rollBack();
             }
-            
+
             throw $ex;
         }
-
     }
-    
-    public function getErrors() {
-		$msgs = array();
-		if (!trim($this->id_servico_solicitacao_pagamento_status)) {
-			$msgs[] = "CAMPO STATUS DA SOLICITAÇÃO DE SERVIÇO OBRIGATÓRIO!";
-		}
-		if (!trim($this->id_servico_solicitacao)) {
-			$msgs[] = "CAMPO SOLICITAÇÃO OBRIGATÓRIO!";
-		}
+
+    public function getErrors()
+    {
+        $msgs = array();
+        if (!trim($this->id_servico_solicitacao_pagamento_status)) {
+            $msgs[] = "CAMPO STATUS DA SOLICITAÇÃO DE SERVIÇO OBRIGATÓRIO!";
+        }
+        if (!trim($this->id_servico_solicitacao)) {
+            $msgs[] = "CAMPO SOLICITAÇÃO OBRIGATÓRIO!";
+        }
         if (!$this->_valor_pago->valor) {
-			$msgs[] = "CAMPO VALOR PAGO OBRIGATÓRIO!";
-		}
-		if (count($msgs)) {
-			return $msgs;
-		}
-		return false;        
+            // $msgs[] = "CAMPO VALOR PAGO OBRIGATÓRIO!";
+        }
+        if (count($msgs)) {
+            return $msgs;
+        }
+        return false;
     }
 }
