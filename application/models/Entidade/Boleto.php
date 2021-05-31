@@ -77,6 +77,12 @@ class Boleto extends Escola_Entidade
         foreach ($items as $item) {
             $valor += $item->valor;
         }
+
+        $correcao = $this->correcao;
+        if ($correcao && is_numeric($correcao)) {
+            $valor += $correcao;
+        }
+
         return $valor;
     }
 

@@ -36,9 +36,10 @@
                     <label for="filtro_mes_referencia" class="control-label">Mês Referência:</label>
                     <div class="controls">
                         <select name="filtro_mes_referencia" id="filtro_mes_referencia" class="filtro">
-                            <option value="" <?php echo (!$this->dados["filtro_mes_referencia"]) ? "selected" : ""; ?>>==> SELECIONE <==</option> <?php
+                            <option value="" <?php echo (!$this->dados["filtro_mes_referencia"]) ? "selected" : ""; ?>>==> SELECIONE <==< /option> <?php
                                                                                                                                                     foreach (Escola_Util::pegaMeses() as $mes => $desc_mes) {
-                                                                                                                                                    ?> <option value="<?php echo $mes; ?>" <?php echo ($mes == $this->dados["filtro_mes_referencia"]) ? "selected" : ""; ?>><?php echo $desc_mes; ?></option>
+                                                                                                                                                    ?>
+                            <option value="<?php echo $mes; ?>" <?php echo ($mes == $this->dados["filtro_mes_referencia"]) ? "selected" : ""; ?>><?php echo $desc_mes; ?></option>
                         <?php } ?>
                         </select>
                     </div>
@@ -222,13 +223,15 @@
                                                     <?php //}  
                                                     ?>
                                                     <?php if ($registro->aguardando_pagamento()) { ?>
-                                                        <a target="_blank" href="<?php
-                                                                                    echo $this->url(array(
-                                                                                        "controller" => $this->getRequest()->getControllerName(),
-                                                                                        "action" => "boleto",
-                                                                                        "id_transporte" => $this->transporte->getId(), "id" => $registro->getId()
-                                                                                    ));
-                                                                                    ?>" class="btn" title="Gerar Boleto">
+                                                        <a href="<?php
+                                                                    echo $this->url(array(
+                                                                        "controller" => $this->getRequest()->getControllerName(),
+                                                                        "action" => "boletovencimento",
+                                                                        "id_transporte" => $this->transporte->getId(),
+                                                                        "id" => $registro->getId(),
+                                                                        "id_pessoa" => $this->pessoa ? $this->pessoa->getId() : null
+                                                                    ));
+                                                                    ?>" class="btn" title="Gerar Boleto">
                                                             <i class="icon-credit-card"></i>
                                                         </a>
                                                         <a href="<?php

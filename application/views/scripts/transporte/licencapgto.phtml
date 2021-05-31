@@ -88,6 +88,15 @@ $valor_a_pagar = $this->registro->pega_valor_pagar();
                             $ctrl->set_moeda($moeda);
                         }
                         echo $ctrl->render($this);
+
+                        $ctrl = new Escola_Form_Element_Valor("valor_pago");
+                        $ctrl->setLabel("Valor pago:");
+                        $ctrl->setValue($valor_a_pagar);
+                        if ($moeda) {
+                            $ctrl->set_moeda($moeda);
+                        }
+                        echo $ctrl->render($this);
+
                         ?>
                     </fieldset>
                 </div>

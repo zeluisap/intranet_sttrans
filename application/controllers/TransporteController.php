@@ -813,9 +813,11 @@ class TransporteController extends Escola_Controller_Logado
                 throw new Escola_Exception("SOLICITAÇÃO DE SERVIÇO JÁ PAGA!");
             }
 
+            $transporte = $ss->pegaTransporte();
+
             $this->view->registro = $ss;
             $this->view->desconjuros = TbDesconjuros::calcularGrupos($ss);
-            $this->view->transporte = $ss->pegaTransporte();
+            $this->view->transporte = $transporte;
             $this->view->referencia = $ss->pegaReferencia();
             $this->view->stg = $ss->findParentRow("TbServicoTransporteGrupo");
             if ($this->_request->isPost()) {
@@ -832,7 +834,7 @@ class TransporteController extends Escola_Controller_Logado
                     $pgto->save();
 
                     $this->_flashMessage("OPERAÇÃO EFETUADA COM SUCESSO!", "Messages");
-                    $this->_redirect($this->_request->getControllerName() . "/licenca/id/0/id_transporte/{$ss->chave}");
+                    $this->_redirect($this->_request->getControllerName() . "/licenca/id/0/id_transporte/{$transporte->getId()}");
                 } catch (Exception $ex) {
                     $this->view->actionErrors[] = $ex->getMessage();
                 }
@@ -918,7 +920,12 @@ class TransporteController extends Escola_Controller_Logado
                 if (isset($dados["data_vencimento"]) && $dados["data_vencimento"]) {
                     $data_vencimento = $dados["data_vencimento"];
                 }
-                $boleto = $tb->criaBoleto($ids, $id_pessoa, $data_vencimento);
+
+                if (isset($dados["correcao"]) && $dados["correcao"]) {
+                    $correcao = $dados["correcao"];
+                }
+
+                $boleto = $tb->criaBoleto($ids, $id_pessoa, $data_vencimento, $correcao);
             }
 
             if (!$boleto) {
@@ -1240,13 +1247,24 @@ class TransporteController extends Escola_Controller_Logado
         try {
 
             if (!$this->_request->isPost()) {
-                throw new Exception("Falha ao Executar Operacao, Dados Invalidos!");
+                // throw new Exception("Falha ao Executar Operacao, Dados Invalidos!");
             }
 
             $dados = $this->_request->getPost();
 
+            $querys = $this->_request->getParams();
+
             $ids = array();
             $tb = new TbServicoSolicitacao();
+
+            $query_ss_id = Escola_Util::valorOuNulo($querys, "id");
+            if ($query_ss_id) {
+                $ss = $tb->getPorId($query_ss_id);
+                if ($ss) {
+                    $ids[] = $ss;
+                }
+            }
+
             if (isset($dados["lista"]) && is_array($dados["lista"]) && count($dados["lista"])) {
                 foreach ($dados["lista"] as $id) {
                     $ss = $tb->pegaPorId($id);
@@ -1305,6 +1323,10 @@ class TransporteController extends Escola_Controller_Logado
             $pessoa = false;
             if (isset($dados["id_pessoa"]) && $dados["id_pessoa"]) {
                 $pessoa = TbPessoa::pegaPorId($dados["id_pessoa"]);
+            }
+
+            if (!$pessoa && (isset($querys["id_pessoa"]) && $querys["id_pessoa"])) {
+                $pessoa = TbPessoa::pegaPorId($querys["id_pessoa"]);
             }
 
             if (!$pessoa) {

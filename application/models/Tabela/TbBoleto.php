@@ -48,7 +48,7 @@ class TbBoleto extends Escola_Tabela
         return $sql;
     }
 
-    public function criaBoleto($sss, $id_pessoa, $data_vencimento_default = false)
+    public function criaBoleto($sss, $id_pessoa, $data_vencimento_default = false, $correcao = 0)
     {
         if (!$sss) {
             return false;
@@ -62,6 +62,10 @@ class TbBoleto extends Escola_Tabela
             $db = Zend_Registry::get("db");
             $db->beginTransaction();
             $dados = array();
+            $dados["correcao"] = 0;
+            if ($correcao) {
+                $dados["correcao"] = Escola_Util::montaNumero($correcao);
+            }
             if (count($sss) > 1) {
                 if (!$data_vencimento_default) {
                     $data_vencimento = new Zend_Date();
