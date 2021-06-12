@@ -1310,7 +1310,7 @@ class TransporteController extends Escola_Controller_Logado
             $valor_total = 0;
             foreach ($ids as $ss) {
                 $vencimento = new Zend_Date($ss->data_vencimento);
-                if ($vencimento < $data_vencimento) {
+                if ($vencimento > $data_vencimento) {
                     $data_vencimento = $vencimento;
                 }
                 $valor = $ss->pega_valor();
