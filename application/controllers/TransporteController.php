@@ -1307,7 +1307,7 @@ class TransporteController extends Escola_Controller_Logado
             }
 
             $data_vencimento = new Zend_Date();
-            $valor_total = 0;
+            $valor_total = $total_juros = $total_multas = 0;
             foreach ($ids as $ss) {
                 $vencimento = new Zend_Date($ss->data_vencimento);
                 if ($vencimento > $data_vencimento) {
@@ -1317,9 +1317,23 @@ class TransporteController extends Escola_Controller_Logado
                 if ($valor) {
                     $valor_total += $valor->valor;
                 }
+
+                $juros = TbDesconjuros::pegaJuros($ss);
+                if ($juros) {
+                    $total_juros += $juros;
+                }
+                $multas = TbDesconjuros::pegaMultas($ss);
+                if ($multas) {
+                    $total_multas += $multas;
+                }
             }
+
             $this->view->data_vencimento = Escola_Util::formatData($data_vencimento->toString("dd/MM/YYYY"));
-            $this->view->valor_total = Escola_Util::number_format($valor_total);
+            $this->view->valor_total = $valor_total;
+            $this->view->juros = $total_juros;
+            $this->view->multas = $total_multas;
+            $this->view->valor_a_pagar = $valor_total + $total_juros + $total_multas;
+
             $pessoa = false;
             if (isset($dados["id_pessoa"]) && $dados["id_pessoa"]) {
                 $pessoa = TbPessoa::pegaPorId($dados["id_pessoa"]);

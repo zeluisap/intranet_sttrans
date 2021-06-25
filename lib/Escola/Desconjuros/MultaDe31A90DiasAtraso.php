@@ -19,7 +19,7 @@ class Escola_Desconjuros_MultaDe31A90DiasAtraso implements Escola_Desconjuros
             return false;
         }
 
-        $dataVencimento = $ss->data_vencimento;
+        $dataVencimento = TbDesconjuros::pegaDataVencimento($ss);
         if (!$dataVencimento) {
             return false;
         }

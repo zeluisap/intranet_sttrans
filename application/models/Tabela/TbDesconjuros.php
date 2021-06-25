@@ -136,4 +136,81 @@ class TbDesconjuros extends Escola_Tabela
 
 		return $retorno;
 	}
+
+
+	public static function pegaUltimoServicoPago($ss)
+	{
+		return Escola_DbUtil::first("
+            select ss.*
+            from servico_solicitacao ss 
+                left outer join servico_solicitacao_status sss on ss.id_servico_solicitacao_status = sss.id_servico_solicitacao_status
+				left outer join servico_transporte_grupo stg on ss.id_servico_transporte_grupo = stg.id_servico_transporte_grupo
+            where (stg.id_servico_transporte_grupo = :id_stg)
+            and (lower(sss.chave) = 'pg')
+			and (stg.id_periodicidade > 0)
+			and (ss.id_transporte = :id_transporte)
+			and (ss.tipo = :tipo)
+			and (ss.chave = :chave)
+			order by ss.data_validade desc
+        ", [
+			"id_stg" => $ss->id_servico_transporte_grupo,
+			"id_transporte" => $ss->id_transporte,
+			"tipo" => $ss->tipo,
+			"chave" => $ss->chave
+		]);
+	}
+
+	public static function pegaDataVencimento($ss)
+	{
+		if (!$ss) {
+			return null;
+		}
+
+		$ultimo = self::pegaUltimoServicoPago($ss);
+		if ($ultimo) {
+			return $ultimo->data_validade;
+		}
+
+		$dataVencimento = $ss->data_vencimento;
+		if ($dataVencimento) {
+			return $dataVencimento;
+		}
+
+		return null;
+	}
+
+	private static function pegaPorTipo($ss, $tipo)
+	{
+		if (!$ss) {
+			return 0;
+		}
+		$desconjuros = self::calcular($ss);
+		if (!Escola_Util::isResultado($desconjuros)) {
+			return 0;
+		}
+
+		$total = 0;
+		foreach ($desconjuros as $desconj) {
+			$descTipo = Escola_Util::valorOuNulo($desconj, "tipo");
+			if ($descTipo != $tipo) {
+				continue;
+			}
+			$valor = Escola_Util::valorOuNulo($desconj, "valor");
+			if (!$valor) {
+				continue;
+			}
+			$total += $valor;
+		}
+		return $total;
+	}
+
+	public static function pegaJuros($ss)
+	{
+		return self::pegaPorTipo($ss, "juros");
+	}
+
+	public static function pegaMultas($ss)
+	{
+		return self::pegaPorTipo($ss, "multa");
+	}
 }

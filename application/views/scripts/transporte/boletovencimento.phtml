@@ -13,10 +13,30 @@
                             <dt>Sacado:</dt>
                             <dd><?php echo $this->pessoa->toString(); ?></dd>
                         </dl>
+
                         <dl class="dl-horizontal">
                             <dt>Valor Total:</dt>
-                            <dd><?php echo $this->valor_total; ?></dd>
+                            <dd><?php echo Escola_Util::number_format($this->valor_total); ?></dd>
                         </dl>
+
+                        <?php if ($this->juros) { ?>
+                            <dl class="dl-horizontal">
+                                <dt>Juros:</dt>
+                                <dd><?php echo Escola_Util::number_format($this->juros); ?></dd>
+                            </dl>
+                        <?php } ?>
+                        <?php if ($this->multas) { ?>
+                            <dl class="dl-horizontal">
+                                <dt>Multas:</dt>
+                                <dd><?php echo Escola_Util::number_format($this->multas); ?></dd>
+                            </dl>
+                        <?php } ?>
+                        <?php if ($this->valor_total != $this->valor_a_pagar) { ?>
+                            <dl class="dl-horizontal">
+                                <dt>Valor a pagar:</dt>
+                                <dd><?php echo Escola_Util::number_format($this->valor_a_pagar); ?></dd>
+                            </dl>
+                        <?php } ?>
                         <div class="control-group">
                             <label for="codigo" class="control-label">Data de Vencimento:</label>
                             <div class="controls">

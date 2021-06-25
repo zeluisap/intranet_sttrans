@@ -19,7 +19,7 @@ class Escola_Desconjuros_JurosSimples1PorcentoAoMes implements Escola_Desconjuro
             return false;
         }
 
-        $dataVencimento = $ss->data_vencimento;
+        $dataVencimento = TbDesconjuros::pegaDataVencimento($ss);
         if (!$dataVencimento) {
             return false;
         }
