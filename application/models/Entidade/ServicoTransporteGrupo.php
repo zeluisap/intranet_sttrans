@@ -224,4 +224,13 @@ class ServicoTransporteGrupo extends Escola_Entidade
 
         return $relatorio->toPDF();
     }
+
+    public function pegaPeriodicidade()
+    {
+        $obj = $this->findParentRow("TbPeriodicidade");
+        if ($obj && $obj->getId()) {
+            return $obj;
+        }
+        return false;
+    }
 }

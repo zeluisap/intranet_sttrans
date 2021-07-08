@@ -1,3 +1,32 @@
+var formatarReal = n => {
+	return new Intl.NumberFormat('pt-BR', {
+		style: 'currency',
+		currency: 'BRL'
+	}).format(n);
+}
+
+var montaNumero = text => {
+	if (!text) {
+		return 0;
+	}
+
+	text = text.replace(".", "").replace(",", ".");
+
+	if (isNaN(text)) {
+		return 0;
+	}
+
+	return parseFloat(text);
+	
+}
+
+var somenteNumeros = text => {
+	if (!text) {
+		return '';
+	}
+	return text.replace(/[^\d]+/g,'');
+}
+
 $(document).ready(
     function() {
         $(".moeda").priceFormat({

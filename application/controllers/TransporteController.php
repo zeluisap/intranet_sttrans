@@ -1283,7 +1283,9 @@ class TransporteController extends Escola_Controller_Logado
                 $objs = $tb->listar($dados_filtro);
                 if ($objs && count($objs)) {
                     foreach ($objs as $obj) {
-                        $ids[] = $obj;
+                        if ($obj->aguardando_pagamento()) {
+                            $ids[] = $obj;
+                        }
                     }
                 }
             }

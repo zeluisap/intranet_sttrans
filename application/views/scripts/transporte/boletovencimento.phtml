@@ -15,7 +15,7 @@
                         </dl>
 
                         <dl class="dl-horizontal">
-                            <dt>Valor Total:</dt>
+                            <dt>Valor principal:</dt>
                             <dd><?php echo Escola_Util::number_format($this->valor_total); ?></dd>
                         </dl>
 
@@ -29,12 +29,6 @@
                             <dl class="dl-horizontal">
                                 <dt>Multas:</dt>
                                 <dd><?php echo Escola_Util::number_format($this->multas); ?></dd>
-                            </dl>
-                        <?php } ?>
-                        <?php if ($this->valor_total != $this->valor_a_pagar) { ?>
-                            <dl class="dl-horizontal">
-                                <dt>Valor a pagar:</dt>
-                                <dd><?php echo Escola_Util::number_format($this->valor_a_pagar); ?></dd>
                             </dl>
                         <?php } ?>
                         <div class="control-group">
@@ -52,9 +46,44 @@
                         echo $ctrl->render($this);
 
                         ?>
+
+                        <?php if ($this->valor_total != $this->valor_a_pagar) { ?>
+                            <dl class="dl-horizontal">
+                                <dt>Valor a pagar:</dt>
+                                <dd id="valor-a-pagar"><?php echo Escola_Util::number_format($this->valor_a_pagar); ?></dd>
+                            </dl>
+                        <?php } ?>
+
                     </fieldset>
                 </div>
             </form>
         </div>
     </div>
 </div>
+<script>
+    const valorTotal = <?= $this->valor_total ?>;
+    const juros = <?= $this->juros ?>;
+    const multas = <?= $this->multas ?>;
+
+    $(document).ready(function() {
+        $("#correcao").keyup(function() {
+            let vap = valorTotal + juros + multas;
+            const valor = montaNumero($(this).val());
+
+            console.log({
+                valorTotal,
+                juros,
+                multas,
+                vap,
+                valor
+            });
+
+            if (!isNaN(valor)) {
+                vap += valor;
+            }
+
+            $("#valor-a-pagar").text(formatarReal(vap));
+        });
+
+    });
+</script>

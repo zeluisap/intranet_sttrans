@@ -70,7 +70,10 @@ class TbDesconjuros extends Escola_Tabela
 			return null;
 		}
 
-		if (!$ss->aposVencimento()) {
+		$isPeriodico = $ss->isPeriodico();
+		$aposVencimento = $ss->aposVencimento();
+
+		if (!$isPeriodico && $aposVencimento) {
 			return null;
 		}
 

@@ -44,6 +44,16 @@ class ServicoSolicitacao extends Escola_Entidade
         return false;
     }
 
+    public function pegaPeriodicidade()
+    {
+        $stg = $this->getServicoTransporteGrupo();
+        if (!$stg) {
+            return false;
+        }
+
+        return $stg;
+    }
+
     public function pega_valor()
     {
         if ($this->_valor) {
@@ -983,5 +993,11 @@ class ServicoSolicitacao extends Escola_Entidade
         }
 
         $this->codigo = $this->pega_proximo_codigo();
+    }
+
+    public function isPeriodico()
+    {
+        $periodicidade = $this->pegaPeriodicidade();
+        return $periodicidade ? true : false;
     }
 }
